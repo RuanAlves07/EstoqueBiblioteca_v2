@@ -1,0 +1,14 @@
+body{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding: 40px;
+}
+
+form{
+    background-color: rgb(235, 235, 235);
+    padding: 40px;
+    max-width: 600px;
+    margin: auto;
+}
