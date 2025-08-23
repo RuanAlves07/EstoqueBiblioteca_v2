@@ -2,9 +2,9 @@
 session_start();
 require 'conexao.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST"){
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
 
     $sql = "SELECT * FROM usuario WHERE email = :email";
     $stmt = $pdo->prepare($sql);
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         // VERIFIVA SE A SENHA É TEMPORARIA
         if ($usuario['senha_temporaria']) {
             // Redireciona para a página de troca de senha
-            header("Location: alterar_senha.php");
+            header("Location: principal.php");
             exit();
         }else{
             //REDIRECIONA PARA A PAGINA PRINCIPAL   
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aroma Login</title>
+  <title>Login</title>
   <link rel="stylesheet" href="../CSS/login.css" />
 </head>
 <body>
@@ -62,20 +62,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
       <form action="login.php" method="POST">
         <div class="input-group">
-        <input type="email" name="nome" id="nome" placeholder="Email"/>
+        <input type="email" name="email" id="email" placeholder="Email" required/>
       </div>
       <div class="input-group">
-        <input type="password" name="senha" id="senha" placeholder="Senha"/>
+        <input type="password" name="senha" id="senha" placeholder="Senha" required/>
       </div>
 
       <div class="buttons">
         <button class="btn btn-login" href="principal.php">Login</button>
       </div>
-
-      <div class="forgot-password">Esqueci minha senha</div>
-
     </div>
-      </form>
+    </form>
+
+    <div class="forgot-password">
+      <a href="recuperar_senha.php">Esqueci minha senha</a>
+    </div>
      
     <!-- Lado direito: imagem e logo -->
     <div class="image-side">
