@@ -60,11 +60,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
       <h2>Bem-Vindo a nossa biblioteca</h2>
       <p class="subtitle">Bem vindo de volta. Por favor faça login na sua conta.</p>
 
-      <div class="input-group">
-        <input type="email" placeholder="Email"/>
+      <form action="login.php" method="POST">
+        <div class="input-group">
+        <input type="email" name="nome" id="nome" placeholder="Email"/>
       </div>
       <div class="input-group">
-        <input type="password" placeholder="Senha"/>
+        <input type="password" name="senha" id="senha" placeholder="Senha"/>
       </div>
 
       <div class="buttons">
@@ -74,7 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
       <div class="forgot-password">Esqueci minha senha</div>
 
     </div>
-
+      </form>
+     
     <!-- Lado direito: imagem e logo -->
     <div class="image-side">
         <img class="image" src="gato_feio.jpg" alt="Imagem de um gato feio" />
