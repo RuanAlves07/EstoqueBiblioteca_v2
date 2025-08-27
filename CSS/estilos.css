@@ -99,3 +99,21 @@
 .menu li:hover > a {
     background-color: #555;
 }
+
+.logout {
+    text-align: right;
+}
+
+.logout button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.logout button:hover {
+    background-color: #c9302c;
+}

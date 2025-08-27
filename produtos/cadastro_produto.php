@@ -50,20 +50,21 @@ $permissoes = [
 
 ];
 
-$opcoes_menu = $permissoes[$id_perfil];
-
 ?>
+
+$opcoes_menu = $permissoes[$id_perfil];
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal</title>
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="../CSS/estilos.css" />
 </head>
     <body>
+
         <nav>
             <ul class="menu">
                 <?php foreach($opcoes_menu as $categoria=>$arquivos): ?>
@@ -72,7 +73,7 @@ $opcoes_menu = $permissoes[$id_perfil];
                     <ul class="dropdown-menu">
                         <?php foreach($arquivos as $arquivo): ?>
                         <li>
-                            <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php"))) ?></a>
+                            <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
                         </li>
                             <?php endforeach; ?>
                     </ul>
@@ -80,28 +81,31 @@ $opcoes_menu = $permissoes[$id_perfil];
                 <?php endforeach; ?>
             </ul>
         </nav>
+        
+        <center><h2>Cadastrar Produtos</h2></center>
+        <form action="cadastro_produto.php" method="POST">
 
-    <header>
-        <div class="login">
-            <h4>Bem-Vindo(a), <?php echo $_SESSION["usuario"];?>! Perfil de acesso: <?php echo $nome_perfil;?></h4>
-        </div>
+            <label for="nome_produto">Nome Fornecedor:</label>
+            <input type="text" id="nome_produto" name="nome_produto" required>
 
-        <div class="logout">
-            <form action="logout.php" method="POST">
-                <button type="submit">Logout</button>
-            </form>
-        </div>
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" required>
 
-    </header>
-    <div class="box-container">
-        <div class="box-header">
-            <h5>Atualização de Versão</h5>
-        </div>
-        <div class="box-body">
-            <a href="documentacao.php" class="btn-documentacao">Ver documentação</a>
-        </div>
-    </div>
+            <label for="genero">Gênero:</label>
+            <input type="text" id="genero" name="genero" required>
+            
+            <label for="quantidade">Quantidade:</label>
+            <input type="text" id="quantidade" name="quantidade" required>
 
-    
-</body>
+            <label for="preco">Preço:</label>
+            <input type="text" id="preco" name="preco" required>
+            
+            <br>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <br>
+            <button type="reset" class="btn btn-primary">Cancelar</button>
+        </form>
+
+        <center><a href="principal.php" class="btn btn-primary" >Voltar</a></center>
+    </body>
 </html>

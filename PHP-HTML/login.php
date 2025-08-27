@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      
     <!-- Lado direito: imagem e logo -->
     <div class="image-side">
-       <img class="image" src="gato_feio.jpg" alt="Imagem de um gato feio" />
+       <img class="image" src="logo.png" alt="Imagem de um gato feio" />
     </div>
   </div>
 
