@@ -29,6 +29,10 @@ COMMIT;
 
 -- USAR ESSE ABAIXO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+-- Databse
+CREATE DATABASE biblioteca_estoquev2;
+
+
 -- Apagar tabelas se existirem
 DROP TABLE IF EXISTS `usuario`;
 DROP TABLE IF EXISTS `perfil`;
