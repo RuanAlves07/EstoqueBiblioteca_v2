@@ -60,14 +60,39 @@ $opcoes_menu = $permissoes[$id_perfil];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="../CSS/estilos.css" />
 </head>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-<body>
+    <body>
+        <nav>
+            <ul class="menu">
+                <?php foreach($opcoes_menu as $categoria=>$arquivos): ?>
+                <li class="dropdown">
+                    <a href="#"><?= $categoria ?></a>
+                    <ul class="dropdown-menu">
+                        <?php foreach($arquivos as $arquivo): ?>
+                        <li>
+                            <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
+                        </li>
+                            <?php endforeach; ?>
+                    </ul>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </nav>
+
     <header>
         <div class="login">
             <h2>Bem-Vindo(a), <?php echo $_SESSION["usuario"];?>! Perfil de acesso: <?php echo $nome_perfil;?></h2>
         </div>
-        </div>
     </header>
+    <div class="box-container">
+        <div class="box-header">
+            <h5>Atualização de Versão</h5>
+        </div>
+        <div class="box-body">
+            <a href="documentacao.php" class="btn-documentacao">Ver documentação</a>
+        </div>
+    </div>
 </body>
 </html>
