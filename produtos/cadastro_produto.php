@@ -49,10 +49,10 @@ $permissoes = [
     "Alterar"=>["alterar_cliente.php"]],
 
 ];
-
+$opcoes_menu = $permissoes[$id_perfil];
 ?>
 
-$opcoes_menu = $permissoes[$id_perfil];
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
