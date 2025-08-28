@@ -27,7 +27,7 @@
   .shape.yellow {
     width: 400px;
     height: 400px;
-    background: #FFD700;
+    background: #46f8f8;
     top: 20%;
     left: -100px;
   }
@@ -35,7 +35,7 @@
   .shape.pink {
     width: 200px;
     height: 200px;
-    background: #FF69B4;
+    background: #064dcf;
     top: 10%;
     right: 10%;
   }
@@ -43,7 +43,7 @@
   .shape.small-yellow {
     width: 80px;
     height: 80px;
-    background: #FFD700;
+    background: #00FFFF;
     bottom: 10%;
     right: 10%;
   }
@@ -51,7 +51,7 @@
   .shape.small-pink {
     width: 60px;
     height: 60px;
-    background: #FF69B4;
+    background: #064dcf; 
     top: 30%;
     left: 10%;
   }
@@ -264,6 +264,14 @@
   
   .nav-btn:hover {
     background: rgba(255, 255, 255, 0.3);
+  }
+
+  .esqueci-Senha{
+    text-align: right;
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
   }
   
   /* Responsivo */

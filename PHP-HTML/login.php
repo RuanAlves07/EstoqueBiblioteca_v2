@@ -67,7 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="input-group">
         <input type="password" name="senha" id="senha" placeholder="Senha" required/>
         <br>
-        <a href="recuperar_senha.php">Esqueci minha senha</a>
+        <br>
+        <div class="esqueci-Senha"> <a href="recuperar_senha.php">Esqueci minha senha</a> </div>
+        
 
       </div>
 
@@ -79,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      
     <!-- Lado direito: imagem e logo -->
     <div class="image-side">
-       <img class="image" src="logo.png" alt="Imagem de um gato feio" />
+       <img class="image" src="logoB.png" alt="Imagem de um gato feio" />
     </div>
   </div>
 
