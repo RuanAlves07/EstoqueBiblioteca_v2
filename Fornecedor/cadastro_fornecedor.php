@@ -1,12 +1,5 @@
 <?php
-session_start();
-require_once 'conexao.php';
 
-// verifica se o usuario tem permissao 
-if($_SESSION['perfil']!= 1) {
-    echo "Acesso negado. ";
-    exit();
-}
 
 $id_perfil = $_SESSION['perfil'];
 $sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
@@ -51,27 +44,6 @@ $permissoes = [
 // OBTENDO AS OPÇÕS DISPONIVEIS PARA O PERFIL LOGADO
 
 $opcoes_menu = $permissoes[$id_perfil];
-
-if ($_SERVER["REQUEST_METHOD"]=="POST") {
-    $nome_fornecedor = $_POST['nome_fornecedor'];
-    $endereco = $_POST['endereco'];
-    $telefone = $_POST['telefone'];
-    $email = $_POST['email'];
-    $contato = $_POST['contato'];
-    $sql = "INSERT INTO fornecedor (nome_fornecedor, endereco, telefone, email, contato) VALUES (:nome_fornecedor, :endereco, :telefone, :email, :contato)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':nome_fornecedor', $nome_fornecedor);
-    $stmt->bindParam(':endereco', $endereco);
-    $stmt->bindParam(':telefone', $telefone);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':contato', $contato);
-
-    if($stmt->execute()) {
-        echo "<script>alert('Fornecedor cadastrado com sucesso!');</script>";
-    }else{
-        echo "<script>alert('Erro ao cadastrar Fornecedor.');</script>";
-    }
-};
 ?>
 
 <!DOCTYPE html>
