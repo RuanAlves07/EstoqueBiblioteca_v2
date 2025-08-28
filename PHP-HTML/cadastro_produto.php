@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'conexao.php';
+require_once '..\PHP-HTML\conexao.php';
 
 
 if (!isset($_SESSION['usuario'])) {
@@ -49,18 +49,18 @@ $permissoes = [
     "Alterar"=>["alterar_cliente.php"]],
 
 ];
-
+$opcoes_menu = $permissoes[$id_perfil];
 ?>
 
-$opcoes_menu = $permissoes[$id_perfil];
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Cadastro Produtos</title>
+    <link rel="stylesheet" href="../CSS/estilos.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 </head>
     <body>
@@ -106,6 +106,6 @@ $opcoes_menu = $permissoes[$id_perfil];
             <button type="reset" class="btn btn-primary">Cancelar</button>
         </form>
 
-        <center><a href="principal.php" class="btn btn-primary" >Voltar</a></center>
+        <center><a href="../PHP-HTML/principal.php" class="btn btn-primary" >Voltar</a></center>
     </body>
 </html>

@@ -27,26 +27,30 @@ $permissoes = [
     "Cadastrar"=>["../produtos/cadastro_produto.php","cadastro_perfil.php","cadastro_cliente.php","cadastro_fornecedor.php","cadastro_produto.php","cadastro_funcionario.php"],
     "Buscar"=>["buscar_usuario.php","buscar_perfil.php","buscar_cliente.php","buscar_fornecedor.php","buscar_produto.php","buscar_funcionario.php"],
     "Alterar"=>["alterar_usuario.php","alterar_perfil.php","alterar_cliente.php","alterar_fornecedor.php","alterar_produto.php","alterar_funcionario.php"],
-    "Excluir"=>["excluir_usuario.php","excluir_perfil.php","excluir_cliente.php","excluir_fornecedor.php","excluir_produto.php","excluir_funcionario.php"]],
+    "Excluir"=>["excluir_usuario.php","excluir_perfil.php","excluir_cliente.php","excluir_fornecedor.php","excluir_produto.php","excluir_funcionario.php"],
+    "Emprestimo"=>["emprestimo_de_livros.php"]],
 
     2=>
 [
     "Cadastrar"=>["cadastro_cliente.php"],
     "Buscar"=>["buscar_cliente.php","buscar_fornecedor.php","buscar_produto.php"],
-    "Alterar"=>["alterar_cliente.php","alterar_fornecedor.php"]],
+    "Alterar"=>["alterar_cliente.php","alterar_fornecedor.php"],
+    "Emprestimo"=>["emprestimo.php"]],
 
     3=>
 [
     "Cadastrar"=>["cadastro_fornecedor.php","cadastro_produto.php"],
     "Buscar"=>["buscar_cliente.php","buscar_fornecedor.php","buscar_produto.php"],
-    "Alterar"=>["alterar_fornecedor.php","alterar_produto.php"]],
+    "Alterar"=>["alterar_fornecedor.php","alterar_produto.php"],
     "Excluir"=>["excluir_produto.php"],
+    "Emprestimo"=>["emprestimo.php"]],
 
     4=>
 [
     "Cadastrar"=>["cadastro_cliente.php"],
     "Buscar"=>["buscar_produto.php"],
-    "Alterar"=>["alterar_cliente.php"]],
+    "Alterar"=>["alterar_cliente.php"],
+    "Emprestimo"=>["emprestimo.php"]],
 
 ];
 
@@ -86,12 +90,6 @@ $opcoes_menu = $permissoes[$id_perfil];
             <h4>Bem-Vindo(a), <?php echo $_SESSION["usuario"];?>! Perfil de acesso: <?php echo $nome_perfil;?></h4>
         </div>
 
-        <div class="logout">
-            <form action="logout.php" method="POST">
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-
     </header>
     <div class="box-container">
         <div class="box-header">
@@ -101,6 +99,22 @@ $opcoes_menu = $permissoes[$id_perfil];
             <a href="documentacao.php" class="btn-documentacao">Ver documentação</a>
         </div>
     </div>
+
+    <div class="box-container">
+        <div class="box-header">
+            <h5>Livros emprestados</h5>
+        </div>
+        <div class="box-body">
+            
+            <a href="emprestimo_de_livros.php" class="btn-documentacao">Ver livros emprestados</a>
+        </div>
+    </div>
+
+        <div class="logout">
+            <form action="logout.php" method="POST">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
 
     
 </body>
