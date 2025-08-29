@@ -2,18 +2,19 @@
 session_start();
 require 'conexao.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
+// Verifica se os dados foram enviados pelo formulário
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'] ?? '';
+    $senha = $_POST['senha'] ?? '';
 
-    $sql = "SELECT * FROM usuario WHERE email = :email";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(":email", $email);
+    // Consulta o banco de dados para verificar o usuário
+    $stmt = $pdo->prepare("SELECT * FROM usuario WHERE email = :email");
+    $stmt->bindParam(':email', $email);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if($usuario && password_verify($senha, $usuario['senha'])) {
-       //LOGIN BEM SUCEDIDO, DEFINE VARIAVEIS DE SESÃO
+    if ($usuario && password_verify($senha, $usuario['senha'])) {
+        //LOGIN BEM SUCEDIDO, DEFINE VARIAVEIS DE SESÃO
         $_SESSION['usuario'] = $usuario['nome'];
         $_SESSION['perfil'] = $usuario['id_perfil'];
         $_SESSION['id_usuario'] = $usuario['id_usuario'];
@@ -21,18 +22,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // VERIFIVA SE A SENHA É TEMPORARIA
         if ($usuario['senha_temporaria']) {
             // Redireciona para a página de troca de senha
+            header("Location: alterar_senha.php");
+            exit();
+        } else {
+            //REDIRECIONA PARA A PAGINA PRINCIPAL   
             header("Location: principal.php");
             exit();
-        }else{
-            //REDIRECIONA PARA A PAGINA PRINCIPAL   
-        header("Location: principal.php");
-        exit();
         }
-    }else{
+    } else {
         //LOGIN INVALIDO
-        echo "<script>alert('E-mail ou senha incorretos!'); window.location.href='login.php';</script>";
+        echo "<script>alert('E-mail ou senha incorretos!'); window.location.href='index.php';</script>";
     }
-
 }
 ?>
 
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" name="senha" id="senha" placeholder="Senha" required/>
         <br>
         <br>
-        <div class="esqueci-Senha"> <a href="alterar_senha.php">Esqueci minha senha</a> </div>
+        <div class="esqueci-Senha"> <a href="recuperar_senha.php">Esqueci minha senha</a> </div>
         
 
       </div>
