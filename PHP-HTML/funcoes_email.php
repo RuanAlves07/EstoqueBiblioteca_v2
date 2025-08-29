@@ -65,5 +65,4 @@ simularEnvioEmail($emailUsuario, $novaSenha);
 
 echo "Senha temporária '$novaSenha' gerada para $emailUsuario e registrada em emails_simulados.txt";
 */
-
 ?>

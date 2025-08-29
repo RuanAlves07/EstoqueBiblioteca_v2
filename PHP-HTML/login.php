@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" name="senha" id="senha" placeholder="Senha" required/>
         <br>
         <br>
-        <div class="esqueci-Senha"> <a href="principal.php">Esqueci minha senha</a> </div>
+        <div class="esqueci-Senha"> <a href="alterar_senha.php">Esqueci minha senha</a> </div>
         
 
       </div>
