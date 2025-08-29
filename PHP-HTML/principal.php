@@ -78,7 +78,7 @@ $opcoes_menu = $permissoes[$id_perfil];
                         <li>
                             <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php"))) ?></a>
                         </li>
-                            <?php endforeach; ?>
+                        <?php endforeach; ?>
                     </ul>
                 </li>
                 <?php endforeach; ?>
