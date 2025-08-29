@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h2>Bem-Vindo a nossa biblioteca</h2>
       <p class="subtitle">Bem vindo de volta. Por favor faça login na sua conta.</p>
 
-      <form action="login.php" method="POST">
+      <form action="index.php" method="POST">
         <div class="input-group">
         <input type="email" name="email" id="email" placeholder="Email" required/>
       </div>

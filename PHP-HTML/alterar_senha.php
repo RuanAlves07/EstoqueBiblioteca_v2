@@ -60,28 +60,41 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             <p class="subtitle">Escolha sua nova senha</p>
         </div>
 
-        <!-- Formulário de recuperação de senha -->
+        <form method="POST" action="alterar_senha.php">
+        <div class="form-group">
+            <label for="nova_senha" class="label">Nova Senha</label>
+            <input type="password" id="nova_senha" name="nova_senha" class="input" required>
 
-        <form method="POST" action="recuperar_senha.php">
-            <div class="form-group">
-                <label for="nova_senha">Nova Senha</label>
-                <input type="password" id="nova_senha" name="nova_senha" required>
+            <label for="confirmar_senha" class="label">Confirmar Senha</label>
+            <input type="password" id="confirmar_senha" name="confirmar_senha" class="input" required>
+        </div>
 
-                <label for="nova_senha">Confirmar Senha</label>
-                <input type="password" id="confirmar_senha" name="confirmar_senha" required>
-            </div>
-
-            <label>
+        <label>
             <input type="checkbox" onclick="mostrarSenha()"> Mostrar Senha
-            </label>
+        </label>
 
-            <button type="submit" class="button">  
-                Salvar nova senha
-            </button>
-        </form>
+        <button type="submit" class="button">  
+            Salvar nova senha
+        </button>
+    </form>
+
+    <script>
+    function mostrarSenha() {
+        const senhaInput = document.getElementById("nova_senha");
+        const confirmarInput = document.getElementById("confirmar_senha");
+        
+        if (senhaInput.type === "password") {
+            senhaInput.type = "text";
+            confirmarInput.type = "text";
+        } else {
+            senhaInput.type = "password";
+            confirmarInput.type = "password";
+        }
+    }
+    </script>
 
         <div class="back-link">
-            <a href="login.php">← Voltar para o login</a>
+            <a href="index.php">← Voltar para o login</a>
         </div>
     </div>
 </body>
