@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
 
         <div class="back-link">
-            <a href="#" onclick="goBack()">← Voltar para o login</a>
+            <a href="login.php">← Voltar para o login</a>
         </div>
     </div>
 </body>
