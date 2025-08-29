@@ -10,13 +10,6 @@ if (!isset($_SESSION['usuario'])) {
 
 // OBTENDO O NOME DO PERFIL DO USUARIO LOGADO 
 
-$id_perfil = $_SESSION['perfil'];
-$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
-$stmtPerfil = $pdo->prepare($sqlPerfil);
-$stmtPerfil->bindParam(':id_perfil', $id_perfil);
-$stmtPerfil->execute();
-$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
-$nome_perfil = $perfil['nome_perfil'];
 
 // DEFINIÇÃO DAS PERMISSÕES POR PERFIL
 
