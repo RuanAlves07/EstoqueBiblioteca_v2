@@ -72,10 +72,13 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         <label>
             <input type="checkbox" onclick="mostrarSenha()"> Mostrar Senha
         </label>
+        <br>
+        <br>
 
         <button type="submit" class="button">  
             Salvar nova senha
         </button>
+        <br>
     </form>
 
     <script>

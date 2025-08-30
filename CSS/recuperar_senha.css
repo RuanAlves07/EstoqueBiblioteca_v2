@@ -15,7 +15,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Elementos decorativos */
+/* Bolas do fundo */
 .decoration {
     position: absolute;
     border-radius: 50%;
@@ -46,6 +46,7 @@ body {
     right: 10%;
 }
 
+/* Mini telinha no meio da tela */
 .container {
     background: white;
     padding: 40px;
@@ -57,11 +58,13 @@ body {
     z-index: 10;
 }
 
+/* Conteúdo da mini telinha */
 .header {
     text-align: center;
     margin-bottom: 30px;
 }
 
+/* titulo */
 .title {
     font-size: 24px;
     font-weight: 600;
@@ -69,6 +72,7 @@ body {
     margin-bottom: 8px;
 }
 
+/* subtitulo */
 .subtitle {
     font-size: 14px;
     color: #64748b;
