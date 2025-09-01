@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Bolas do fundo */
+.decoration {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.decoration-1 {
+    width: 200px;
+    height: 200px;
+    background: #a7f3d0;
+    top: 10%;
+    left: -50px;
+}
+
+.decoration-2 {
+    width: 150px;
+    height: 150px;
+    background: #93c5fd;
+    top: 15%;
+    right: -30px;
+}
+
+.decoration-3 {
+    width: 100px;
+    height: 100px;
+    background: #a7f3d0;
+    bottom: 20%;
+    right: 10%;
+}
+
+/* Mini telinha no meio da tela */
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Conteúdo da mini telinha */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* titulo */
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+/* subtitulo */
+.subtitle {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.button {
+    width: 100%;
+    padding: 12px;
+    background: #1e40af;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.button:hover {
+    background: #1d4ed8;
+}
+
+.back-link {
+    text-align: center;
+}
+
+.back-link a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+.success-message {
+    display: none;
+    text-align: center;
+    color: #059669;
+    background: #d1fae5;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #a7f3d0;
+}
+
+.success-message.show {
+    display: block;
+}
+
+.form-container.hide {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 20px;
+        padding: 30px 20px;
+    }
+    
+    .decoration-1,
+    .decoration-2,
+    .decoration-3 {
+        display: none;
+    }
+}

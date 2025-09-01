@@ -1,19 +1,19 @@
-<?php
-session_start();
-require_once 'conexao.php';
-require_once 'funcoes_email.php'; // Arquivo com funções que geram a senha e silulam o envio
-
-// Verifica se o usuário existe
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
-
-    // Verifica se o usuário existe
-    $sql ="SELECT * FROM usuario WHERE email = :email";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
+<?php 
+session_start(); 
+require_once 'conexao.php'; 
+require_once 'funcoes_email.php'; // Arquivo com funções que geram a senha e silulam o envio 
+ 
+// Verifica se o usuário existe 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
+    $email = $_POST['email']; 
+ 
+    // Verifica se o usuário existe 
+    $sql ="SELECT * FROM usuario WHERE email = :email"; 
+    $stmt = $pdo->prepare($sql); 
+    $stmt->bindParam(':email', $email); 
+    $stmt->execute(); 
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC); 
+ 
     if ($usuario) {
         // Gera uma nova senha temporária
         $senha_temporaria = gerarSenhaTemporaria();
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Envia a nova senha para o e-mail do usuário
         simularEnvioEmail($email, $senha_temporaria);
-        echo "<script>alert('Uma nova senha temporaria foi gerada e enviada (simulação). Verifique o arquivo emails_simulados.txt');window.location.href='login.php';</script>";
+        echo "<script>alert('Uma nova senha temporaria foi gerada e enviada (simulação). Verifique o arquivo emails_simulados.txt');window.location.href='index.php';</script>";
 
     } else {
         echo "<script>alert('E-mail não encontrado.');</script>";
@@ -37,22 +37,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar senha</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Esqueci Minha Senha - Biblioteca</title>
+    <link rel="stylesheet" href="../CSS/recuperar_senha.css">
 </head>
 <body>
-    <h2>Recuperar Senha</h2>
-    <form action="recuperar_senha.php" method="POST">
-        <label for="email">Digite seu E-mail cadastrado:</label>
-        <input type="email" name="email" id="email" required>
-        
-        <button type="submit">Enviar nova senha</button>
-    </form>
-    <p><a href="login.php">Voltar para o login</a></p>
-    
+    <!-- Elementos decorativos -->
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="decoration decoration-3"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Esqueci Minha Senha</h1>
+            <p class="subtitle">Digite seu email para receber as instruções de recuperação de senha</p>
+        </div>
+
+        <form method="POST" action="recuperar_senha.php">
+            <div class="form-group">
+                <input type="email" id="email" name="email" class="input" placeholder="Digite seu email" required>
+            </div>
+
+            <button type="submit" class="button">
+                Enviar Instruções
+            </button>
+        </form>
+
+        <div class="back-link">
+            <a href="index.php">← Voltar para o login</a>
+        </div>
+    </div>
 </body>
 </html>

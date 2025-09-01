@@ -10,6 +10,13 @@ if (!isset($_SESSION['usuario'])) {
 
 // OBTENDO O NOME DO PERFIL DO USUARIO LOGADO 
 
+$id_perfil = $_SESSION['perfil'];
+$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
+$stmtPerfil = $pdo->prepare($sqlPerfil);
+$stmtPerfil->bindParam(':id_perfil', $id_perfil);
+$stmtPerfil->execute();
+$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
+$nome_perfil = $perfil['nome_perfil'];
 
 // DEFINIÇÃO DAS PERMISSÕES POR PERFIL
 
@@ -56,11 +63,14 @@ $opcoes_menu = $permissoes[$id_perfil];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Principal</title>
+    <title>Cadastro de fornecedor</title>
+    <link rel="stylesheet" href="CSS\styles.css">
+    <script src="scripts.js"></script>
+    <script src="validacoes.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link rel="stylesheet" href="../CSS/estilos.css" />
 </head>
-    <body>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
         <nav>
             <ul class="menu">
                 <?php foreach($opcoes_menu as $categoria=>$arquivos): ?>
@@ -77,38 +87,28 @@ $opcoes_menu = $permissoes[$id_perfil];
                 <?php endforeach; ?>
             </ul>
         </nav>
+        <br>
+    <center><h2>Cadastro de Fornecedor</h2></center>
+    <form method="POST" action="cadastro_fornecedor.php">
+        <label for="nome_fornecedor">Nome Fornecedor:</label>
+        <input type="text" id="nome_fornecedor" name="nome_fornecedor" required onkeyup="validarNomeFornecedor()">
+        
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" name="endereco" required>
+        
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required onkeyup="validarTelefone()" >
 
-    <header>
-        <div class="login">
-            <h4>Bem-Vindo(a), <?php echo $_SESSION["usuario"];?>! Perfil de acesso: <?php echo $nome_perfil;?></h4>
-        </div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-    </header>
-    <div class="box-container">
-        <div class="box-header">
-            <h5>Atualização de Versão</h5>
-        </div>
-        <div class="box-body">
-            <a href="documentacao.php" class="btn-documentacao">Ver documentação</a>
-        </div>
-    </div>
+        <label for="contato">Contato:</label>
+        <input type="text" id="contato" name="contato" required>
 
-    <div class="box-container">
-        <div class="box-header">
-            <h5>Livros emprestados</h5>
-        </div>
-        <div class="box-body">
-            
-            <a href="emprestimo_de_livros.php" class="btn-documentacao">Ver livros emprestados</a>
-        </div>
-    </div>
+        <button type="submit"class = "btn btn-primary">Cadastrar</button>
 
-        <div class="logout">
-            <form action="logout.php" method="POST">
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-
-    
+        <button type="reset"class = "btn btn-danger">Cancelar</button>
+    </form>
+    <center><a href="principal.php"class = "btn btn-primary">Voltar</a></center>
 </body>
 </html>
