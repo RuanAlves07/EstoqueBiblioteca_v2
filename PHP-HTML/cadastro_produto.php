@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'conexao.php';
-require_once 'Menu.php'
+require_once 'Menu.php';
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: index.php");
