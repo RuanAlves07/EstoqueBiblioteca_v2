@@ -74,7 +74,7 @@ Para: super@biblioteca.com
 Olá! Sua nova senha temporária é: egotBrHD
 
 ----------------------
-Para: super@biblioteca.com
-Olá! Sua nova senha temporária é: K6B5ruC0
+Para: admin@biblioteca.com
+Olá! Sua nova senha temporária é: 7zCcpNbk
 
 ----------------------
