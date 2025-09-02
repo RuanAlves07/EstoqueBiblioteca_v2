@@ -246,7 +246,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     <!-- Conteúdo Principal -->
     <div class="container">
-        <h2>🗑️ Excluir Fornecedor</h2>
+        <h2>Excluir Fornecedor</h2>
 
         <?php if (!empty($erro)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
