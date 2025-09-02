@@ -127,8 +127,8 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Exibir resultados -->
         <?php if (!empty($fornecedores)): ?>
             <center>
-                <table class="table table-striped table-bordered">
-                    <thead class="table-dark">
+                <table class="table table-hover table-bordered">
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
@@ -138,7 +138,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Contato</th>
                             <th>Ações</th>
                         </tr>
-                    </thead>
+                    </thead> 
                     <tbody>
                         <?php foreach ($fornecedores as $fornecedor): ?>
                         <tr>

@@ -87,7 +87,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $stmt_delete->bindParam(':id', $id_fornecedor, PDO::PARAM_INT);
 
             if ($stmt_delete->execute()) {
-                $_SESSION['mensagem'] = "Fornecedor <strong>" . htmlspecialchars($fornecedor['nome_empresa']) . "</strong> excluído com sucesso!";
+                $_SESSION['mensagem'] = "Fornecedor <strong><center>" . htmlspecialchars($fornecedor['nome_empresa']) . "</center></strong> excluído com sucesso!";
                 $_SESSION['msg_tipo'] = "success";
             } else {
                 $_SESSION['mensagem'] = "Erro ao excluir fornecedor.";
@@ -175,7 +175,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             margin: 20px auto;
         }
         h2 {
-            color: #d9534f;
+            color:#001f3f;
             text-align: center;
             margin-bottom: 20px;
         }
@@ -210,10 +210,12 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         .alert {
             max-width: 600px;
             margin: 20px auto;
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    
 
     <!-- Menu Superior com Dropdown -->
     <nav class="navbar">
