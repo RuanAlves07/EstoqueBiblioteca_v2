@@ -21,27 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // VERIFICA SE A BUSCA É UM NÚMERO (ID) OU UM NOME
     if ($busca !== null && is_numeric($busca)) {
-        $sql = "SELECT p.*, 
-                       c.nome_categoria,
-                       a.nome_autor,
-                       e.nome_editora
-                FROM produto p
-                LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
-                LEFT JOIN autor a ON p.id_autor = a.id_autor
-                LEFT JOIN editora e ON p.id_editora = e.id_editora
-                WHERE p.id_produto = :busca";
+        $sql = "SELECT p.*, c.nome_categoria,a.nome_autor,e.nome_editora FROM produto p LEFT JOIN categoria c ON p.id_categoria = c.id_categoria LEFT JOIN autor a ON p.id_autor = a.id_autor LEFT JOIN editora e ON p.id_editora = e.id_editora WHERE p.id_produto = :busca";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
     } elseif ($busca !== null) {
-        $sql = "SELECT p.*, 
-                       c.nome_categoria,
-                       a.nome_autor,
-                       e.nome_editora
-                FROM produto p
-                LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
-                LEFT JOIN autor a ON p.id_autor = a.id_autor
-                LEFT JOIN editora e ON p.id_editora = e.id_editora
-                WHERE p.titulo LIKE :busca_nome";
+        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora FROM produto p LEFT JOIN categoria c ON p.id_categoria = c.id_categoria LEFT JOIN autor a ON p.id_autor = a.id_autor LEFT JOIN editora e ON p.id_editora = e.id_editora WHERE p.titulo LIKE :busca_nome";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':busca_nome', "$busca%", PDO::PARAM_STR);
     }
@@ -83,27 +67,9 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
 </head>
 <body>
 
-    <!-- MENU -->
-    <nav>
-        <ul class="menu">
-            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
-            <li class="dropdown">
-                <a href="#"><?= $categoria ?></a>
-                <ul class="dropdown-menu">
-                    <?php foreach ($arquivos as $arquivo): ?>
-                    <li>
-                        <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_", " ", basename($arquivo, ".php"))) ?></a>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
 
     <center><h2>Alterar Produto</h2></center>
 
-    <!-- FORMULÁRIO DE BUSCA -->
     <div class="container mt-4">
         <form method="POST" action="alterar_produto.php">
             <label for="busca_produto">Digite o ID ou Título do Produto:</label>
@@ -111,19 +77,22 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
             <button type="submit" class="btn btn-primary">Buscar</button>
         </form>
 
-        <!-- FORMULÁRIO DE ALTERAÇÃO (exibido apenas se produto for encontrado) -->
         <?php if ($usuario): ?>
         <form action="processa_alteracao_produto.php" method="POST" onsubmit="return validarUsuario();">
             <input type="hidden" name="id_produto" value="<?= htmlspecialchars($usuario['id_produto']) ?>">
 
+            <!-- Titulo -->
             <label for="titulo">Título:</label>
             <input type="text" name="titulo" id="titulo" value="<?= htmlspecialchars($usuario['titulo']) ?>" required>
 
+
+            <!-- ISBN -->
             <?php if (!empty($usuario['isbn'])): ?>
                 <label for="isbn">ISBN:</label>
                 <input type="text" name="isbn" id="isbn" value="<?= htmlspecialchars($usuario['isbn']) ?>" required>
             <?php endif; ?>
 
+            <!-- Categoria -->
             <label for="id_categoria">Categoria:</label>
             <select id="id_categoria" name="id_categoria" required>
                 <option value="">Selecione uma categoria...</option>
@@ -134,20 +103,25 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
                 <?php endforeach; ?>
             </select>
 
-            <!-- Autor (input de texto com ID oculto) -->
+            <!-- Autor -->
             <label for="nome_autor">Autor:</label>
-            <input type="text" id="nome_autor" name="nome_autor" value="<?= htmlspecialchars($usuario['nome_autor'] ?? '') ?>" required readonly>
+            <input type="text" id="nome_autor" name="nome_autor" value="<?= htmlspecialchars($usuario['nome_autor'] ?? '') ?>" required>
             <input type="hidden" name="id_autor" value="<?= htmlspecialchars($usuario['id_autor'] ?? '') ?>">
 
-            <!-- Editora (input de texto com ID oculto) -->
+            <!-- Editora -->
             <label for="nome_editora">Editora:</label>
-            <input type="text" name="nome_editora" id="nome_editora" value="<?= htmlspecialchars($usuario['nome_editora'] ?? '') ?>" required readonly>
+            <input type="text" name="nome_editora" id="nome_editora" value="<?= htmlspecialchars($usuario['nome_editora'] ?? '') ?>" required>
             <input type="hidden" name="id_editora" value="<?= htmlspecialchars($usuario['id_editora'] ?? '') ?>">
 
             <!-- Ano de Publicação -->
             <label for="ano_publicacao">Ano de Publicação:</label>
             <input type="number" name="ano_publicacao" id="ano_publicacao" 
                    value="<?= htmlspecialchars($usuario['ano_publicacao'] ?? '') ?>" required>
+
+            <!-- Edição -->
+            <label for="edicao">Edição:</label>
+            <input type="text" name="edicao" id="edicao" 
+                   value="<?= htmlspecialchars($usuario['edicao'] ?? '') ?>" required>
 
             <!-- Quantidade em Estoque -->
             <label for="quantidade_estoque">Quantidade em Estoque:</label>
