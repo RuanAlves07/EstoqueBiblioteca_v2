@@ -62,25 +62,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 </head>
     <body>
 
-
-
-        <nav>
-            <ul class="menu">
-                <?php foreach($opcoes_menu as $categoria=>$arquivos): ?>
-                <li class="dropdown">
-                    <a href="#"><?= $categoria ?></a>
-                    <ul class="dropdown-menu">
-                        <?php foreach($arquivos as $arquivo): ?>
-                        <li>
-                            <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
-                        </li>
-                            <?php endforeach; ?>
-                    </ul>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
-
         <center><h2>Excluir produto</h2></center>
 
         <?php if(!empty($usuarios)):?>
