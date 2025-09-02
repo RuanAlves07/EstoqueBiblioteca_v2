@@ -20,6 +20,35 @@ $perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
 $nome_perfil = $perfil['nome_perfil'];
 
 
+// INICIALIZA AS VARIAVEIS
+$usuario = null;
+
+// BUSCA TODOS OS USUARIOS CADASTRADOS EM ORDEM ALFABETICA
+
+$sql = "SELECT * FROM produto ORDER BY titulo ASC";
+$stmt = $pdo->prepare($sql);
+$stmt -> execute();
+$usuarios = $stmt ->fetchAll(PDO::FETCH_ASSOC);
+
+// SE UM ID FOR PASSADO VIA GET, EXCLUI O USUARIO 
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])){
+    $id_usuario = $_GET['id'];
+
+    // EXCLUI O PRODUTO DO BANCO DE DADOS
+
+    $sql = "DELETE FROM produto WHERE id_produto = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt ->bindParam(':id', $id_usuario, PDO::PARAM_INT);
+
+    if ($stmt->execute()) {
+        echo"<script>alert('Produto excluido com sucesso!');window.location.href='excluir_produto.php';</script>";
+    } else {
+        echo"<script>alert('Erro ao excluir o Produto!');</script>";
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -58,27 +87,36 @@ $nome_perfil = $perfil['nome_perfil'];
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
             <center><table border="1" class="table table-bordered">
                 <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Perfil</th>
-                    <th>Ações</th>
+                    <th>ID Produto</th>
+                    <th>Titulo do livro</th>
+                    <th>ISBN</th>
+                    <th>Categoria</th>
+                    <th>Autor</th>
+                    <th>Editora</th>
+                    <th>Ano de publicação</th>
+                    <th>Edição</th>
+                    <th>Quantidade no estoque</th>
                 </tr>
                 <?php foreach($usuarios as $usuario):?>
                     <tr>
-                        <td><?= htmlspecialchars($usuario['id_usuario'])?></td>
-                        <td><?= htmlspecialchars($usuario['nome'])?></td>
-                        <td><?= htmlspecialchars($usuario['email'])?></td>
-                        <td><?= htmlspecialchars($usuario['id_perfil'])?></td>
+                        <td><?= htmlspecialchars($usuario['id_produto'])?></td>
+                        <td><?= htmlspecialchars($usuario['titulo'])?></td>
+                        <td><?= htmlspecialchars($usuario['isbn'])?></td>
+                        <td><?= htmlspecialchars($usuario['id_categoria'])?></td>
+                        <td><?= htmlspecialchars($usuario['id_autor'])?></td>
+                        <td><?= htmlspecialchars($usuario['id_editora'])?></td>
+                        <td><?= htmlspecialchars($usuario['ano_publicacao'])?></td>
+                        <td><?= htmlspecialchars($usuario['edicao'])?></td>
+                        <td><?= htmlspecialchars($usuario['quantidade_estoque'])?></td>
                         <td>
-                            <a href="excluir_usuario.php?id=<?= htmlspecialchars($usuario['id_usuario']) ?>" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
+                            <a href="excluir_produto.php?id=<?= htmlspecialchars($usuario['id_produto']) ?>" onclick="return confirm('Tem certeza que deseja excluir este produto?')">Excluir</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
             </table></center>
             
                 <?php else: ?>
-                    <p>Nenhum usuário encontrado!</p>
+                    <center><p>Nenhum usuário encontrado!</p></center>
                 <?php endif; ?>
                 <br>
 

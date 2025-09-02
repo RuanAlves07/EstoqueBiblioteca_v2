@@ -49,6 +49,9 @@ $nome_perfil = $perfil['nome_perfil'];
 
 // Carregar categorias para o select
 $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria ORDER BY nome_categoria")->fetchAll(PDO::FETCH_ASSOC);
+$autores = $pdo->query("SELECT id_autor, nome_autor FROM autor ORDER BY nome_autor")->fetchAll(PDO::FETCH_ASSOC);
+$editoras = $pdo->query("SELECT id_editora, nome_editora FROM editora ORDER BY nome_editora")->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -117,10 +120,11 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
             <?php endforeach; ?>
         </select>
 
-        <!-- Autor -->
         <label for="nome_autor">Autor:</label>
-        <input type="text" name="nome_autor" id="nome_autor" 
-            value="<?= htmlspecialchars($usuario['nome_autor'] ?? '') ?>" required>
+        <input type="text" id="nome_autor" name="nome_autor" required>
+            <?php foreach ($autores as $aut): ?> value="<?= $aut['id_autor'] ?>" <?= $aut['id_autor'] == $usuario['id_autor'] ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($aut['nome_autor']) ?>
+            <?php endforeach; ?>
 
         <!-- Editora -->
         <label for="nome_editora">Editora:</label>
