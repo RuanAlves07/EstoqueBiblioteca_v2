@@ -55,23 +55,6 @@ $nome_perfil = $perfil['nome_perfil'];
 </head>
 <body>
 
-        <nav>
-            <ul class="menu">
-                <?php foreach($opcoes_menu as $categoria=>$arquivos): ?>
-                <li class="dropdown">
-                    <a href="#"><?= $categoria ?></a>
-                    <ul class="dropdown-menu">
-                        <?php foreach($arquivos as $arquivo): ?>
-                        <li>
-                            <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
-                        </li>
-                            <?php endforeach; ?>
-                    </ul>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
-
     <center><h2>Lista de Usuários</h2></center>
 
     <!-- FORMULARIO PARA BUSCAR PRODUTO -->
