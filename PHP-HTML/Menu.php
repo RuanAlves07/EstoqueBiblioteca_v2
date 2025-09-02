@@ -52,3 +52,24 @@ $permissoes = [
 
 $opcoes_menu = $permissoes[$id_perfil];
 ?>
+
+<nav class="navbar">
+        <ul class="menu">
+            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
+                <li class="dropdown">
+                    <a href="#"><?= htmlspecialchars($categoria) ?></a>
+                    <ul class="dropdown-menu">
+                        <?php foreach ($arquivos as $arquivo): ?>
+                            <li>
+                                <a href="<?= htmlspecialchars($arquivo) ?>">
+                                    <?= ucfirst(str_replace(['_', '.php'], [' ', ''], basename($arquivo))) ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </nav>
+</body>
+</html>

@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Estilo personalizado -->
     <style>
         body {
-            background-color: #003366;
+            background-color: #f8f9fa;
             font-family: 'Segoe UI', sans-serif;
         }
         .navbar {
@@ -256,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Formulário de Alteração -->
     <div class="container">
-        <h2>Alterar Fornecedor</h2>
+        <h2> Alterar Fornecedor</h2>
 
         <form method="POST" action="">
             <div class="mb-3">

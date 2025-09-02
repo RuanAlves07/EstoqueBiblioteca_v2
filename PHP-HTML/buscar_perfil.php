@@ -50,32 +50,30 @@ $permissoes = [
 $opcoes_menu = $permissoes[$id_perfil] ?? [];
 
 // Processar a busca
-$fornecedores = [];
+$usuarios = [];
 $busca = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $busca = trim($_POST['busca']);
     if (!empty($busca)) {
         // Busca por ID ou nome
-        $sql = "SELECT * FROM fornecedor 
-                WHERE id_fornecedor = :busca 
-                OR nome_empresa LIKE :nome_busca";
+        $sql = "SELECT * FROM usuario WHERE id_usuario = :busca OR nome LIKE :nome_busca";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':busca', $busca, PDO::PARAM_INT);
         $stmt->bindValue(':nome_busca', "%$busca%", PDO::PARAM_STR);
     } else {
         // Se não houver busca, traz todos
-        $sql = "SELECT * FROM fornecedor";
+        $sql = "SELECT * FROM usuario";
         $stmt = $pdo->prepare($sql);
     }
 } else {
     // Se não for POST, traz todos os fornecedores
-    $sql = "SELECT * FROM fornecedor";
+    $sql = "SELECT * FROM usuario";
     $stmt = $pdo->prepare($sql);
 }
 
 $stmt->execute();
-$fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +81,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Fornecedor</title>
+    <title>Buscar Usuarios</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Corrigido: removido espaços no final do URL -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -111,12 +109,12 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </nav>
 
     <div class="container mt-4">
-        <center><h2>Lista de Fornecedores</h2></center>
+        <center><h2>Lista de Usuarios</h2></center>
 
         <!-- Formulário de busca -->
         <form method="POST" action="">
             <div class="mb-3">
-                <label for="busca" class="form-label">Digite o ID ou Nome do fornecedor (opcional)</label>
+                <label for="busca" class="form-label">Digite o ID ou Nome do usuario (opcional)</label>
                 <input type="text" class="form-control" id="busca" name="busca" value="<?= htmlspecialchars($busca) ?>">
             </div>
             <center><button type="submit" class="btn btn-primary">Pesquisar</button></center>
@@ -125,37 +123,31 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <br>
 
         <!-- Exibir resultados -->
-        <?php if (!empty($fornecedores)): ?>
+        <?php if (!empty($usuarios)): ?>
             <center>
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
-                            <th>Endereço</th>
-                            <th>Telefone</th>
                             <th>Email</th>
-                            <th>Contato</th>
                             <th>Ações</th>
                         </tr>
                     </thead> 
                     <tbody>
-                        <?php foreach ($fornecedores as $fornecedor): ?>
+                        <?php foreach ($usuarios as $usuario): ?>
                         <tr>
-                            <td><?= htmlspecialchars($fornecedor['id_fornecedor']) ?></td>
-                            <td><?= htmlspecialchars($fornecedor['nome_empresa']) ?></td>
-                            <td><?= htmlspecialchars($fornecedor['endereco']) ?></td>
-                            <td><?= htmlspecialchars($fornecedor['telefone']) ?></td>
-                            <td><?= htmlspecialchars($fornecedor['email']) ?></td>
-                            <td><?= htmlspecialchars($fornecedor['contato']) ?></td>
+                            <td><?= htmlspecialchars($usuario['id_usuario']) ?></td>
+                            <td><?= htmlspecialchars($usuario['nome']) ?></td>
+                            <td><?= htmlspecialchars($usuario['email']) ?></td>
                             <td>
                                 <a class="btn btn-sm btn-warning" 
-                                   href="alterar_fornecedor.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>">
+                                   href="alterar_usuario.php?id=<?= (int)$usuario['id_usuario'] ?>">
                                    Alterar
                                 </a>
                                 <a class="btn btn-sm btn-danger" 
-                                   href="excluir_fornecedor.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')">
+                                   href="excluir_usuario.php?id=<?= (int)$usuario['id_usuario'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir este Usuario?')">
                                    Excluir
                                 </a>
                             </td>
@@ -165,7 +157,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </table>
             </center>
         <?php else: ?>
-            <center><p class="text-muted">Nenhum fornecedor encontrado.</p></center>
+            <center><p class="text-muted">Nenhum usuario encontrado.</p></center>
         <?php endif; ?>
 
         <br>
