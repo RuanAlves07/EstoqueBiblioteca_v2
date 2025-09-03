@@ -59,6 +59,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="mb-3">
+                <label for="nome_fantasia" class="form-label">Nome Fantasia:</label>
+                <input type="text" class="form-control" id="nome_fantasia" name="nome_fantasia" required onkeyup="validarNomeFornecedor()">
+            </div>
+
+            <div class="mb-3">
+                <label for="cnpj" class="form-label">CNPJ:</label>
+                <input type="text" class="form-control" id="cnpj" name="cnpj">
+            </div>
+
+            <div class="mb-3">
                 <label for="endereco" class="form-label">Endereço:</label>
                 <input type="text" class="form-control" id="endereco" name="endereco" required>
             </div>

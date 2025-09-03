@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 OR nome_empresa LIKE :nome_busca";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':busca', $busca, PDO::PARAM_INT);
-        $stmt->bindValue(':nome_busca', "%$busca%", PDO::PARAM_STR);
+        $stmt->bindValue(':nome_busca', "$busca%", PDO::PARAM_STR);
     } else {
         // Se não houver busca, traz todos
         $sql = "SELECT * FROM fornecedor";
@@ -57,7 +57,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- Formulário de busca -->
         <form method="POST" action="">
-            <div class="mb-3">
+            <div class="mb-3">  
                 <label for="busca" class="form-label">Digite o ID ou Nome do fornecedor (opcional)</label>
                 <input type="text" class="form-control" id="busca" name="busca" value="<?= htmlspecialchars($busca) ?>">
             </div>
