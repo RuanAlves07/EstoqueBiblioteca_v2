@@ -27,7 +27,7 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
     </header>
-    <div class="box-container">
+    <div class="box-container"> 
         <div class="box-header">
             <h5>Atualização de Versão</h5>
         </div>
