@@ -69,10 +69,7 @@ CREATE TABLE IF NOT EXISTS `funcionario` (
   `cargo` VARCHAR(100),
   `telefone` VARCHAR(20),
   `data_admissao` DATE,
-  `id_usuario` INT,
-  PRIMARY KEY (`id_funcionario`),
-  KEY `fk_funcionario_usuario` (`id_usuario`),
-  CONSTRAINT `fk_funcionario_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE SET NULL
+  PRIMARY KEY (`id_funcionario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela de fornecedores
