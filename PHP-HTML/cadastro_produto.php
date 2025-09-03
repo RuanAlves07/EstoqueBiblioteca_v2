@@ -8,18 +8,6 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Obter perfil do usuário
-$id_perfil = $_SESSION['perfil'];
-$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
-$stmtPerfil = $pdo->prepare($sqlPerfil);
-$stmtPerfil->bindParam(':id_perfil', $id_perfil);
-$stmtPerfil->execute();
-$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
-$nome_perfil = $perfil['nome_perfil'];
-
-
-$opcoes_menu = $permissoes[$id_perfil] ?? [];
-
 // Processar o formulário quando enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = trim($_POST['titulo']);
