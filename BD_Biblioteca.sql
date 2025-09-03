@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `funcionario` (
 CREATE TABLE IF NOT EXISTS `fornecedor` (
   `id_fornecedor` INT NOT NULL AUTO_INCREMENT,
   `nome_empresa` VARCHAR(150) NOT NULL,
+  `nome_fantasia` VARCHAR(150) NOT NULL,
   `cnpj` VARCHAR(18) UNIQUE,
   `contato` VARCHAR(100),
   `telefone` VARCHAR(20),
