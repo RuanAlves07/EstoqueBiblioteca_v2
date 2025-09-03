@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" ){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alterar usuário</title>
+    <title>Alterar cliente</title>
     <link rel="stylesheet" href="styles.css">
     <script src="validacoes.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -57,24 +57,9 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" ){
 
 
 
-        <nav>
-            <ul class="menu">
-                <?php foreach($opcoes_menu as $categoria=>$arquivos): ?>
-                <li class="dropdown">
-                    <a href="#"><?= $categoria ?></a>
-                    <ul class="dropdown-menu">
-                        <?php foreach($arquivos as $arquivo): ?>
-                        <li>
-                            <a href="<?= $arquivo ?>"><?= ucfirst(str_replace("_"," ",basename($arquivo,".php")))?></a>
-                        </li>
-                            <?php endforeach; ?>
-                    </ul>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
 
-        <center><h2>Alterar Fornecedor</h2></center>
+
+        <center><h2>Alterar cliente</h2></center>
 
     <!-- FORMULARIO PARA ALTERAR FORNECEDOR -->
 
