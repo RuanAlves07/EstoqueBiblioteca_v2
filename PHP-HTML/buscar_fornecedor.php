@@ -112,7 +112,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <br>
         <center>
-            <a href="principal.php" class="btn btn-secondary">Voltar</a>
+            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
         </center>
     </div>
 

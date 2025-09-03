@@ -50,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" ){
     <link rel="stylesheet" href="styles.css">
     <script src="validacoes.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <!-- CERTIFIQUE-SE DE QUE O JAVASCRIPT ESTÁ SENDO CARREGADO CORRETAMENTE  -->
      <script src="scripts.js"></script>
+     <link rel="stylesheet" href="../CSS/styles.css">
 </head>
     <body>
 
@@ -62,13 +62,12 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" ){
         <center><h2>Alterar cliente</h2></center>
 
     <!-- FORMULARIO PARA ALTERAR FORNECEDOR -->
-
-    <form action="alterar_cliente.php" method="POST">
-        <label for="busca_cliente">Digite o ID ou NOME do cliente:</label>
-        <input type="text" id="busca_cliente" name="busca_cliente" required>
-        <div id="sugestoes"></div>
-        <button type="submit" class="btn btn-primary" >Buscar</button>
-    </form>
+    <div class="container mt-4">
+        <form method="POST" action="alterar_cliente.php">
+            <label for="busca_cliente">Digite o ID ou Título do Produto:</label>
+            <input type="text" id="busca_cliente" name="busca_cliente" value="<?= htmlspecialchars($busca ?? '') ?>" required>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
 
     <?php if ($usuario): ?>
         <form action="processa_alteracao_cliente.php" method="POST" >
@@ -96,6 +95,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" ){
                     <button type="submit">Logout</button>
                 </form>
                 </div>
-            <center><a href="principal.php" class="btn btn-primary">Voltar</a></center>
+            <center><a href="dashboard.php" class="btn btn-primary">Voltar</a></center>
     </body>
 </html>
