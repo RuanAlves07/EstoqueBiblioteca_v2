@@ -63,23 +63,102 @@ $opcoes_menu = $permissoes[$id_perfil];
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-<nav class="navbar">
-        <ul class="menu">
-            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
-                <li class="dropdown">
-                    <a href="#"><?= htmlspecialchars($categoria) ?></a>
-                    <ul class="dropdown-menu">
-                        <?php foreach ($arquivos as $arquivo): ?>
-                            <li>
-                                <a href="<?= htmlspecialchars($arquivo) ?>">
-                                    <?= ucfirst(str_replace(['_', '.php'], [' ', ''], basename($arquivo))) ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </li>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-book"></i> Biblioteca</h4>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu">
+            <?php foreach($opcoes_menu as $categoria => $arquivos): ?>
+            <div class="menu-category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <i class="fas fa-<?= getCategoryIcon($categoria) ?>"></i>
+                    <span><?= $categoria ?></span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="category-items">
+                    <?php foreach($arquivos as $arquivo): ?>
+                    <a href="<?= $arquivo ?>" class="menu-item">
+                        <i class="fas fa-circle"></i>
+                        <?= ucfirst(str_replace("_", " ", basename($arquivo, ".php"))) ?>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
             <?php endforeach; ?>
-        </ul>
-    </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="sidebar-toggle mobile-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Dashboard</h2>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-details">
+                        <span class="user-name"><?php echo $_SESSION["usuario"]; ?></span>
+                        <span class="user-role"><?php echo $nome_perfil; ?></span>
+                    </div>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                <form action="logout.php" method="POST" class="logout-form">
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </form>
+            </div>
+        </header>
+<script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function toggleCategory(element) {
+            const category = element.parentElement;
+            const items = category.querySelector('.category-items');
+            const icon = element.querySelector('.toggle-icon');
+            
+            category.classList.toggle('active');
+            
+            if (category.classList.contains('active')) {
+                items.style.maxHeight = items.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                items.style.maxHeight = '0';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Auto-collapse sidebar on mobile
+        if (window.innerWidth <= 768) {
+            document.getElementById('sidebar').classList.add('collapsed');
+        }
+    </script>
 </body>
 </html>
+<?php
+function getCategoryIcon($categoria) {
+    switch($categoria) {
+        case 'Cadastrar': return 'plus';
+        case 'Buscar': return 'search';
+        case 'Alterar': return 'edit';
+        case 'Excluir': return 'trash';
+        case 'Emprestimo': return 'handshake';
+        default: return 'cog';
+    }
+}
+?>
