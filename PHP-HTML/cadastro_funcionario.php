@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $sql = "INSERT INTO funcionario (nome_completo, cpf, cargo, telefone, data_admissao) VALUES (:nome_completo, :cpf, :cargo, :telefone, :data_admissao)";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(['nome_completo' => $nome,'cpf' => $cpf,'cargo' => $cargo, 'telefone' => $telefone,'data_nascimento' => $data_nascimento]);
+            $stmt->execute(['nome_completo' => $nome_completo,'cpf' => $cpf,'cargo' => $cargo, 'telefone' => $telefone,'data_admissao' => $data_admissao]);
             $sucesso = "Cliente cadastrado com sucesso!";
             $_POST = [];
         } catch (PDOException $e) {
@@ -41,31 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Cliente</title>
+    <title>Cadastro de funcionarios</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav>
-        <ul class="menu">
-            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
-            <li class="dropdown">
-                <a href="#"><?= htmlspecialchars($categoria) ?></a>
-                <ul class="dropdown-menu">
-                    <?php foreach ($arquivos as $arquivo): ?>
-                    <li>
-                        <a href="<?= htmlspecialchars($arquivo) ?>">
-                            <?= ucfirst(str_replace(['_', '.php'], [' ', ''], basename($arquivo))) ?>
-                        </a>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
-
-        <center><h2>Cadastro de Cliente</h2></center>
+        <br>
+        <center><h2>Cadastro de funcionarios</h2></center>
 
         <!-- Exibir mensagens -->
         <?php if ($erro): ?>
@@ -75,24 +57,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div>
         <?php endif; ?>
 
-        <form action="cadastro_cliente.php" method="POST">
+        <form action="cadastro_funcionario.php" method="POST">
 
-                <label for="nome_completo" class="form-label">Nome completo:</label>
-                <input type="text" class="form-control" id="nome_completo" name="nome_completo"
+                <label for="nome_completo">Nome completo:</label>
+                <input type="text" id="nome_completo" name="nome_completo"
                        value="<?= htmlspecialchars($_POST['nome_completo'] ?? '') ?>" required>
 
-                <label for="cpf" class="form-label">CPF (apenas números):</label>
-                <input type="text" class="form-control" id="cpf" name="cpf"
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf"
                        value="<?= htmlspecialchars($_POST['cpf'] ?? '') ?>" required>
 
-                <label for="telefone" class="form-label">Telefone:</label>
-                <input type="text" class="form-control" id="telefone" name="telefone"
+                <label for="cargo" >cargo:</label>
+                <input type="text"  id="cargo" name="cargo"
+                        value="<?= htmlspecialchars($_POST['cargo'] ?? '') ?>" required>
+
+                <label for="telefone">Telefone:</label>
+                <input type="text" id="telefone" name="telefone"
                        value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>" required>
 
-
-                <label for="data_nascimento" class="form-label">Data de nascimento:</label>
-                <input type="date" class="form-control" id="data_nascimento" name="data_nascimento"
-                       value="<?= htmlspecialchars($_POST['data_nascimento'] ?? '') ?>" required>
+                <label for="data_admissao" >Data de Admissão:</label>
+                <input type="date" id="data_admissao" name="data_admissao"
+                       value="<?= htmlspecialchars($_POST['data_admissao'] ?? '') ?>" required>
 
             <button type="submit" class="btn btn-primary">Salvar</button>
             <button type="reset" class="btn btn-secondary">Cancelar</button>
