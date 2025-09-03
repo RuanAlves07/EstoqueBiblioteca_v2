@@ -22,7 +22,7 @@ $opcoes_menu = $permissoes[$id_perfil] ?? [];
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $_SESSION['mensagem'] = "ID do usuario não informado.";
     $_SESSION['msg_tipo'] = "danger";
-    header("Location: buscar_usuario.php");
+    header("Location: buscar_usuarior.php");
     exit();
 }
 
@@ -37,13 +37,12 @@ $stmt->execute();
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$usuario) {
-    $_SESSION['mensagem'] = "Usuario não encontrado.";
+    $_SESSION['mensagem'] = "Fornecedor não encontrado.";
     $_SESSION['msg_tipo'] = "danger";
-    header("Location: buscar_usuario.php");
+    header("Location: buscar_fornecedor.php");
     exit();
 }
 
-// Processa o formulário quando enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = trim($_POST['nome']);
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
@@ -54,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erro = "Todos os campos são obrigatórios e o e-mail deve ser válido.";
     } else {
         try {
-            $sql_update = "UPDATE usuuario SET nome = :nome,  email = :email, senha = :senha WHERE id_usuario = :id";
+            $sql_update = "UPDATE usuario SET nome = :nome,  email = :email, senha = :senha WHERE id_usuario = :id";
 
             $stmt_update = $pdo->prepare($sql_update);
             $stmt_update->execute([':nome' => $nome,':email' => $email,':contato' => $contato,':id' => $id_usuario]);
@@ -78,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alterar Usuario</title>
+    <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Formulário de Alteração -->
     <div class="container">
-        <h2> Alterar Usuario</h2>
+        <center><h2> Alterar Usuario</h2></center>
 
         <form method="POST" action="">
             <div class="mb-3">
@@ -113,11 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="senha" class="form-label">Senha:</label>
                 <input type="password" class="form-control" id="senha" name="senha" required>
             </div>
-
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                <a href="buscar_usuario.php" class="btn btn-secondary">Cancelar</a>
+                <center><button type="submit" class="btn btn-primary">Salvar Alterações</button></center>
+                <br>
+                <br>
             </div>
+            <center><a href="buscar_usuario.php" class="btn btn-secondary">Cancelar</a></center>
         </form>
     </div>
 
