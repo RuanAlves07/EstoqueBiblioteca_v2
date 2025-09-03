@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'conexao.php';
+require_once 'Menu.php';
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuario'])) {
@@ -45,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Define mensagem de sucesso e redireciona
         $_SESSION['sucesso'] = "Usuário cadastrado com sucesso!";
-        header("Location: cadastro_perfil.php");
+        header("Location: cadastro_usuario.php");
         exit();
 
     } catch (PDOException $e) {
@@ -55,51 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $_SESSION['erro'] = "Erro ao cadastrar usuário: " . htmlspecialchars($e->getMessage());
         }
-        header("Location: cadastro_perfil.php");
+        header("Location: cadastro_usuario.php");
         exit();
     }
 }
-
-// OBTENDO O NOME DO PERFIL DO USUÁRIO LOGADO
-$id_perfil_logado = $_SESSION['perfil'];
-$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
-$stmtPerfil = $pdo->prepare($sqlPerfil);
-$stmtPerfil->bindParam(':id_perfil', $id_perfil_logado);
-$stmtPerfil->execute();
-$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
-$nome_perfil = $perfil['nome_perfil'] ?? 'Perfil Desconhecido';
-
-// MENU DE PERMISSÕES POR PERFIL
-$permissoes = [
-    1 => [
-        "Cadastrar" => ["cadastro_produto.php", "cadastro_perfil.php", "cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_funcionario.php"],
-        "Buscar" => ["buscar_usuario.php", "buscar_perfil.php", "buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php", "buscar_funcionario.php"],
-        "Alterar" => ["alterar_usuario.php", "alterar_perfil.php", "alterar_cliente.php", "alterar_fornecedor.php", "alterar_produto.php", "alterar_funcionario.php"],
-        "Excluir" => ["excluir_usuario.php", "excluir_perfil.php", "excluir_cliente.php", "excluir_fornecedor.php", "excluir_produto.php", "excluir_funcionario.php"],
-        "Empréstimo" => ["emprestimo_de_livros.php"],
-    ],
-    2 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php", "alterar_fornecedor.php"],
-        "Empréstimo" => ["emprestimo.php"],
-    ],
-    3 => [
-        "Cadastrar" => ["cadastro_fornecedor.php", "cadastro_produto.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
-        "Excluir" => ["excluir_produto.php"],
-        "Empréstimo" => ["emprestimo.php"],
-    ],
-    4 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php"],
-        "Empréstimo" => ["emprestimo.php"],
-    ],
-];
-
-$opcoes_menu = $permissoes[$id_perfil_logado] ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -112,25 +72,6 @@ $opcoes_menu = $permissoes[$id_perfil_logado] ?? [];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav>
-        <ul class="menu">
-            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
-                <li class="dropdown">
-                    <a href="#"><?= htmlspecialchars($categoria) ?></a>
-                    <ul class="dropdown-menu">
-                        <?php foreach ($arquivos as $arquivo): ?>
-                            <li>
-                                <a href="<?= htmlspecialchars($arquivo) ?>">
-                                    <?= ucfirst(str_replace(['_', '.php'], [' ', ''], basename($arquivo))) ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
-
     <div class="container">
         <center><h2>Cadastro de Usuário</h2></center>
 
