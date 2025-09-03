@@ -45,24 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav>
-        <ul class="menu">
-            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
-            <li class="dropdown">
-                <a href="#"><?= htmlspecialchars($categoria) ?></a>
-                <ul class="dropdown-menu">
-                    <?php foreach ($arquivos as $arquivo): ?>
-                    <li>
-                        <a href="<?= htmlspecialchars($arquivo) ?>">
-                            <?= ucfirst(str_replace(['_', '.php'], [' ', ''], basename($arquivo))) ?>
-                        </a>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
+
 
         <center><h2>Cadastro de Cliente</h2></center>
 
