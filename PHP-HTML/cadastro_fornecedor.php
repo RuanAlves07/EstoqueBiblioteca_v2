@@ -11,6 +11,8 @@ if (!isset($_SESSION['usuario'])) {
 // Processar o formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = trim($_POST['nome_empresa']);
+    $nome_fantasia = trim($_POST['nome_fantasia']);
+    $cnpj = trim($_POST['cnpj']);
     $endereco = trim($_POST['endereco']);
     $telefone = trim($_POST['telefone']);
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
@@ -23,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "INSERT INTO fornecedor (nome_empresa, endereco, telefone, email, contato) 
                     VALUES (:nome, :endereco, :telefone, :email, :contato)";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(compact('nome', 'endereco', 'telefone', 'email', 'contato'));
+            $stmt->execute(compact('nome', 'nome_fantasia','endereco', 'telefone', 'email', 'contato'));
             $sucesso = "Fornecedor cadastrado com sucesso!";
         } catch (PDOException $e) {
             $erro = "Erro ao cadastrar: " . $e->getMessage();
