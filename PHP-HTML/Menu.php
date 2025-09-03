@@ -113,32 +113,7 @@ function getCategoryIcon($categoria) {
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Header -->
-        <header class="top-header">
-            <div class="header-left">
-                <button class="sidebar-toggle mobile-toggle" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h2>Dashboard</h2>
-            </div>
-            <div class="header-right">
-                <div class="user-info">
-                    <div class="user-details">
-                        <span class="user-name"><?php echo htmlspecialchars($_SESSION["usuario"]); ?></span>
-                        <span class="user-role"><?php echo htmlspecialchars($nome_perfil); ?></span>
-                    </div>
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                </div>
-                <form action="logout.php" method="POST" class="logout-form">
-                    <button type="submit" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </form>
-            </div>
-        </header>
+
 
         <!-- Área de conteúdo principal -->
     <script>

@@ -1,49 +1,12 @@
 <?php
 session_start();
 require_once 'conexao.php';
+require_once 'Menu.php';
 
-// Verifica se o usuário está logado
 if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
-
-// Obtém o perfil do usuário
-$id_perfil = $_SESSION['perfil'];
-
-// Busca nome do perfil
-$sqlPerfil = "SELECT nome_perfil FROM perfil WHERE id_perfil = :id_perfil";
-$stmtPerfil = $pdo->prepare($sqlPerfil);
-$stmtPerfil->bindParam(':id_perfil', $id_perfil, PDO::PARAM_INT);
-$stmtPerfil->execute();
-$perfil = $stmtPerfil->fetch(PDO::FETCH_ASSOC);
-$nome_perfil = $perfil['nome_perfil'] ?? 'Perfil';
-
-// Definição das permissões por perfil
-$permissoes = [
-    1 => [
-        "Cadastrar" => ["cadastro_usuario.php", "cadastro_perfil.php", "cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_produto.php", "cadastro_funcionario.php"],
-        "Buscar" => ["buscar_usuario.php", "buscar_perfil.php", "buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php", "buscar_funcionario.php"],
-        "Alterar" => ["alterar_usuario.php", "alterar_perfil.php", "alterar_cliente.php", "alterar_fornecedor.php", "alterar_produto.php", "alterar_funcionario.php"],
-        "Excluir" => ["excluir_usuario.php", "excluir_perfil.php", "excluir_cliente.php", "excluir_fornecedor.php", "excluir_produto.php", "excluir_funcionario.php"]
-    ],
-    2 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php", "alterar_fornecedor.php"]
-    ],
-    3 => [
-        "Cadastrar" => ["cadastro_fornecedor.php", "cadastro_produto.php"],
-        "Buscar" => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar" => ["alterar_fornecedor.php", "alterar_produto.php"],
-        "Excluir" => ["excluir_produto.php"]
-    ],
-    4 => [
-        "Cadastrar" => ["cadastro_cliente.php"],
-        "Buscar" => ["buscar_produto.php"],
-        "Alterar" => ["alterar_cliente.php"]
-    ]
-];
 
 // Verifica se o perfil tem permissão para excluir fornecedores
 if (!isset($permissoes[$id_perfil]['Excluir']) || !in_array('excluir_fornecedor.php', $permissoes[$id_perfil]['Excluir'])) {
@@ -218,24 +181,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     
 
     <!-- Menu Superior com Dropdown -->
-    <nav class="navbar">
-        <ul class="menu">
-            <?php foreach ($opcoes_menu as $categoria => $arquivos): ?>
-                <li class="dropdown">
-                    <a href="#"><?= htmlspecialchars($categoria) ?></a>
-                    <ul class="dropdown-menu">
-                        <?php foreach ($arquivos as $arquivo): ?>
-                            <li>
-                                <a href="<?= htmlspecialchars($arquivo) ?>">
-                                    <?= ucfirst(str_replace(['_', '.php'], [' ', ''], basename($arquivo))) ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
+
 
     <!-- Mensagem de feedback -->
     <?php if (isset($_SESSION['mensagem'])): ?>

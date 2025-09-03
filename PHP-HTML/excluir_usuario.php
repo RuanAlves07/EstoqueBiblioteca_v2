@@ -9,14 +9,6 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Verifica se o perfil tem permissão para excluir fornecedores
-if (!isset($permissoes[$id_perfil]['Excluir']) || !in_array('excluir_usuario.php', $permissoes[$id_perfil]['Excluir'])) {
-    echo "<script>alert('Acesso negado.'); window.location.href='principal.php';</script>";
-    exit();
-}
-
-// Opções do menu
-$opcoes_menu = $permissoes[$id_perfil] ?? [];
 
 // Busca todos os fornecedores
 try {
@@ -39,7 +31,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $stmt_check->execute();
     $usuarios = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-    if (!$usuario) {
+    if (!$usuarios) {
         $_SESSION['mensagem'] = "Usuario não encontrado.";
         $_SESSION['msg_tipo'] = "warning";
     } else {
@@ -49,7 +41,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $stmt_delete->bindParam(':id', $id_usuario, PDO::PARAM_INT);
 
             if ($stmt_delete->execute()) {
-                $_SESSION['mensagem'] = "usuario <strong>" . htmlspecialchars($usuario['nome']) . "</strong> excluído com sucesso!";
+                $_SESSION['mensagem'] = "usuario <strong>" . htmlspecialchars($usuarios['nome']) . "</strong> excluído com sucesso!";
                 $_SESSION['msg_tipo'] = "success";
             } else {
                 $_SESSION['mensagem'] = "Erro ao excluir usuario.";
