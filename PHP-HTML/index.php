@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         } else {
             //REDIRECIONA PARA A PAGINA PRINCIPAL   
-            header("Location: principal.php");
+            header("Location: dashboard.php");
             exit();
         }
     } else {
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div class="buttons">
-        <button class="btn btn-login" href="principal.php">Login</button>
+        <button class="btn btn-login" href="dashboard.php">Login</button>
       </div>
     </div>
     </form>

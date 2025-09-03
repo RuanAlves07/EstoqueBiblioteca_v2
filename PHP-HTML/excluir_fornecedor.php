@@ -87,7 +87,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $stmt_delete->bindParam(':id', $id_fornecedor, PDO::PARAM_INT);
 
             if ($stmt_delete->execute()) {
-                $_SESSION['mensagem'] = "Fornecedor <strong><center>" . htmlspecialchars($fornecedor['nome_empresa']) . "</center></strong> excluído com sucesso!";
+                $_SESSION['mensagem'] = "Fornecedor <strong>" . htmlspecialchars($fornecedor['nome_empresa']) . "</strong> excluído com sucesso!";
                 $_SESSION['msg_tipo'] = "success";
             } else {
                 $_SESSION['mensagem'] = "Erro ao excluir fornecedor.";
