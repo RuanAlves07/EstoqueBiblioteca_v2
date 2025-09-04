@@ -55,10 +55,9 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container mt-4">
         <center><h2>Lista de Fornecedores</h2></center>
 
-        <!-- Formulário de busca -->
         <form method="POST" action="">
-            <div class="mb-3">  
-                <label for="busca" class="form-label">Digite o ID ou Nome do fornecedor (opcional)</label>
+            <div class="mb-3">
+                <label for="busca" class="form-label">Digite o ID ou Nome do usuario (opcional)</label>
                 <input type="text" class="form-control" id="busca" name="busca" value="<?= htmlspecialchars($busca) ?>">
             </div>
             <center><button type="submit" class="btn btn-primary">Pesquisar</button></center>

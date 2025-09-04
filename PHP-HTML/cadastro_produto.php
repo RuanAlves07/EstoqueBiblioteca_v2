@@ -104,7 +104,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         <input type="text" id="titulo" name="titulo" required>
 
         <label for="isbn">ISBN:</label>
-        <input type="text" id="isbn" name="isbn" required>
+        <input type="text" id="isbn" name="isbn" placeholder="EX: 978-0-7334-2609-4" required>
 
         <label for="id_categoria">Categoria:</label>
         <select id="id_categoria" name="id_categoria" required>
@@ -133,6 +133,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
 
         <br>
         <button type="submit" class="btn btn-primary">Salvar</button>
+        <br>
         <br>
         <button type="reset" class="btn btn-secondary">Cancelar</button>
     </form>
