@@ -3,99 +3,131 @@ session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
 
+// Verifica se o usuário está logado
 if (!isset($_SESSION['usuario'])) {
     header("Location: index.php");
     exit();
 }
 
-$usuarios = [];
+// Busca funcionarios
+$busca = null;
+$funcionarios = [];
 
-// SE O FORMULARIO FOR ENVIADO, BUSCA O USUARIO PELO ID OU NOME
-
-if ($_SERVER["REQUEST_METHOD"]=="POST" && !empty($_POST['busca'])){
- $busca = trim($_POST['busca']);
- 
- // VERIFICA SE A BUSCA É UM NUMERO (ID) OU UM NOME
-
- if(is_numeric($busca)){
-    $sql =  "SELECT * FROM funcionario WHERE id_funcionario = :busca ORDER BY nome_completo ASC";
-    $stmt =$pdo->prepare($sql);
-    $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
- } else {
-    $sql = "SELECT * FROM funcionario WHERE nome_completo LIKE :busca_nome ORDER BY nome_completo ASC";
-    $stmt =$pdo->prepare($sql);
-    $stmt->bindValue(':busca_nome', "$busca%", PDO::PARAM_STR);
- }
-} else{
+if (isset($_GET['busca']) && !empty($_GET['busca'])) {
+    $busca = trim($_GET['busca']);
+    
+    // Se for número, busca por ID; senão, busca por nome
+    if (is_numeric($busca)) {
+        $sql = "SELECT * FROM funcionario WHERE id_funcionario = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $busca, PDO::PARAM_INT);
+    } else {
+        $sql = "SELECT * FROM funcionario WHERE nome_completo LIKE :nome";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':nome', "%$busca%", PDO::PARAM_STR);
+    }
+    
+    $stmt->execute();
+    $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    // Busca todos os funcionários
     $sql = "SELECT * FROM funcionario ORDER BY nome_completo ASC";
-    $stmt =$pdo->prepare($sql);
+    $stmt = $pdo->query($sql);
+    $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-$stmt->execute();
-$usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
 ?>
-
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar funcionario</title>
-    <link rel="stylesheet" href="../CSS/styles.css">
+    <title>Buscar Funcionários</title>
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .table th,
+        .table td {
+            white-space: normal; /* Permite quebra de linha */
+            word-wrap: break-word; /* Quebra palavras longas */
+            padding: 12px 15px;
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+        .form-control {
+            width: 300px;
+        }
+    </style>
 </head>
 <body>
 
-    <center><h2>Lista de funcionarios</h2></center>
-
-    <!-- FORMULARIO PARA BUSCAR FUNCIONARIO -->
-
-    <form action="buscar_funcionario.php" method="POST">
-        <label for="busca">Digite o ID ou NOME do funcionario (opcional)</label>
-        <input type="text" id="busca" name="busca">
-        <button type="submit" class="btn btn-primary">Pesquisar</button>
-    </form>
-
-    <?php if(!empty($usuarios)):?>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <center><table border="1" class="table table-bordered"> 
-            <tr>
-                <th>ID do funcionario</th>
-                <th>Nome completo</th>
-                <th>CPF</th>
-                <th>Cargo</th>
-                <th>Telefone</th>
-                <th>Data de admissão</th>
-
-            </tr>
-
-            <?php foreach($usuarios as $usuario): ?>
-                <tr>
-                    <td><?=htmlspecialchars($usuario['id_funcionario']) ?></td>
-                    <td><?=htmlspecialchars($usuario['nome_completo']) ?></td> 
-                    <td><?=htmlspecialchars($usuario['cpf']) ?></td>
-                    <td><?=htmlspecialchars($usuario['cargo']) ?></td>
-                    <td><?=htmlspecialchars($usuario['telefone']) ?></td>
-                    <td><?=htmlspecialchars($usuario['data_admissao']) ?></td>
-                    <td>
-                        <a href="alterar_funcionario.php?id=<?=htmlspecialchars($usuario['id_funcionario'])?>">Alterar</a>
-                        <a href="excluir_funcionario.php?id=<?=htmlspecialchars($usuario['id_funcionario'])?>"onclick="return confirm('Tem certeza que deseja excluir esse funcionario?')">Excluir</a>
-                    </td> 
-                </tr>
-            <?php endforeach; ?>
-        </table></center>
-    <?php else: ?>
-        <center><p> Nenhum funcionario encontrado.</p></center>
+    <!-- Mensagem de feedback -->
+    <?php if (isset($_SESSION['mensagem'])): ?>
+        <div class="alert alert-<?= $_SESSION['msg_tipo'] ?> alert-dismissible fade show mx-4 mt-3 text-center" role="alert">
+            <?= $_SESSION['mensagem'] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['mensagem'], $_SESSION['msg_tipo']); ?>
     <?php endif; ?>
-    <br>
-    <div class="logout">
-                <form action="logout.php" method="POST">
-                    <button type="submit">Logout</button>
-                </form>
-                </div>
-    <center><a href="dashboard.php" class="btn btn-primary" >Voltar</a></center>
 
+    <!-- Conteúdo Principal -->
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Lista de Funcionários</h2>
+
+        <!-- Formulário de Busca -->
+        <form method="GET" action="" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="busca" class="form-control" placeholder="Digite o ID ou NOME do funcionário (opcional)" 
+                       value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
+                <button class="btn btn-primary" type="submit">Pesquisar</button>
+            </div>
+        </form>
+
+        <!-- Tabela -->
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome Completo</th> <!-- Largura fixa para evitar corte -->
+                        <th>CPF</th>
+                        <th>Cargo</th>
+                        <th>Telefone</th>
+                        <th>Data de Admissão</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($funcionarios as $f): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($f['id_funcionario']) ?></td>
+                            <td><?= htmlspecialchars($f['nome_completo']) ?></td>
+                            <td><?= htmlspecialchars($f['cpf']) ?></td>
+                            <td><?= htmlspecialchars($f['cargo']) ?></td>
+                            <td><?= htmlspecialchars($f['telefone']) ?></td>
+                            <td><?= htmlspecialchars($f['data_admissao']) ?></td>
+                            <td>
+                                <a href="alterar_funcionario.php?id=<?= $f['id_funcionario'] ?>" class="btn btn-sm btn-warning">Alterar</a>
+                                <a href="excluir_funcionario.php?id=<?= $f['id_funcionario'] ?>" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Tem certeza que deseja excluir <?= addslashes($f['nome_completo']) ?>?')">Excluir</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+        <div class="text-center mt-4">
+            <a href="principal.php" class="btn btn-primary">Voltar</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
