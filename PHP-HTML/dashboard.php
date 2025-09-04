@@ -22,27 +22,28 @@ try {
     $sqlProdutos = "SELECT COUNT(*) as total FROM produto";
     $stmtProdutos = $pdo->prepare($sqlProdutos);
     $stmtProdutos->execute();
-    $totalProdutos = $stmtProdutos->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalProdutos = $stmtProdutos->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
     // Total de fornecedores
     $sqlFornecedores = "SELECT COUNT(*) as total FROM fornecedor";
     $stmtFornecedores = $pdo->prepare($sqlFornecedores);
     $stmtFornecedores->execute();
-    $totalFornecedores = $stmtFornecedores->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalFornecedores = $stmtFornecedores->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
     // Total de usuários
     $sqlUsuarios = "SELECT COUNT(*) as total FROM usuario";
     $stmtUsuarios = $pdo->prepare($sqlUsuarios);
     $stmtUsuarios->execute();
-    $totalUsuarios = $stmtUsuarios->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalUsuarios = $stmtUsuarios->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
     // Produtos com estoque baixo (menos de 5)
-    $sqlEstoqueBaixo = "SELECT COUNT(*) as total FROM produto WHERE quantidade < 5";
+    $sqlEstoqueBaixo = "SELECT COUNT(*) as total FROM produto WHERE quantidade_estoque < 5";
     $stmtEstoqueBaixo = $pdo->prepare($sqlEstoqueBaixo);
     $stmtEstoqueBaixo->execute();
-    $estoqueBaixo = $stmtEstoqueBaixo->fetch(PDO::FETCH_ASSOC)['total'];
+    $estoqueBaixo = $stmtEstoqueBaixo->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
 } catch (PDOException $e) {
+    error_log("Erro ao buscar estatísticas: " . $e->getMessage());
     $totalProdutos = 0;
     $totalFornecedores = 0;
     $totalUsuarios = 0;

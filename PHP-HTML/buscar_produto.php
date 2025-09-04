@@ -86,8 +86,8 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?=htmlspecialchars($usuario['quantidade_estoque']) ?></td>
 
                     <td>
-                        <a href="alterar_produto.php?id=<?=htmlspecialchars($usuario['id_produto'])?>">Alterar</a>
-                        <a href="excluir_produto.php?id=<?=htmlspecialchars($usuario['id_produto'])?>"onclick="return confirm('Tem certeza que deseja excluir esse usuario?')">Excluir</a>
+                        <a class="btn btn-sm btn-warning" href="alterar_produto.php?id=<?=htmlspecialchars($usuario['id_produto'])?>">Alterar</a>
+                        <a class="btn btn-sm btn-danger" href="excluir_produto.php?id=<?=htmlspecialchars($usuario['id_produto'])?>"onclick="return confirm('Tem certeza que deseja excluir esse usuario?')">Excluir</a>
                     </td> 
                 </tr>
             <?php endforeach; ?>
