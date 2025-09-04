@@ -86,3 +86,11 @@ Para: admin@biblioteca.com
 Olá! Sua nova senha temporária é: M12tsc3E
 
 ----------------------
+Para: super@biblioteca.com
+Olá! Sua nova senha temporária é: Y2ZVaSXz
+
+----------------------
+Para: admin@biblioteca.com
+Olá! Sua nova senha temporária é: 263viX4R
+
+----------------------

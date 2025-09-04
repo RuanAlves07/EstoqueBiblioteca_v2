@@ -75,13 +75,24 @@ function getCategoryIcon($categoria) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../CSS/dashboard.css">
+    <style>
+        .white-link {
+            color: white;
+            text-decoration: none;
+        }
+        .white-link:hover {
+            color: #f8f9fa; /* Cor mais clara ao passar o mouse */
+        }
+    </style>
 </head>
 <body>
-
+    
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h4><i class="fas fa-book"></i> <span class="sidebar-title">Biblioteca</span></h4>
+            <a href="dashboard.php" class="white-link">
+                <h4><i class="fas fa-book"></i> <span class="sidebar-title">Biblioteca</span></h4>
+            </a>
             <button class="sidebar-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </button>

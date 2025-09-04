@@ -73,6 +73,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
+                            <th>CNPJ</th>
                             <th>Endereço</th>
                             <th>Telefone</th>
                             <th>Email</th>
@@ -85,6 +86,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr>
                             <td><?= htmlspecialchars($fornecedor['id_fornecedor']) ?></td>
                             <td><?= htmlspecialchars($fornecedor['nome_empresa']) ?></td>
+                            <td><?= htmlspecialchars($fornecedor['cnpj']) ?></td>
                             <td><?= htmlspecialchars($fornecedor['endereco']) ?></td>
                             <td><?= htmlspecialchars($fornecedor['telefone']) ?></td>
                             <td><?= htmlspecialchars($fornecedor['email']) ?></td>

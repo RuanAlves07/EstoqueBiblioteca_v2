@@ -37,97 +37,82 @@ if (isset($_GET['busca']) && !empty($_GET['busca'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Funcionários</title>
-    <!-- Bootstrap -->
+    <title>Buscar Funcionário</title>
+    <link rel="stylesheet" href="../CSS/styles.css">
+    <!-- Corrigido: removido espaços no final do URL -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .table-responsive {
-            overflow-x: auto;
-        }
-        .table th,
-        .table td {
-            white-space: normal; /* Permite quebra de linha */
-            word-wrap: break-word; /* Quebra palavras longas */
-            padding: 12px 15px;
-        }
-        .table thead th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-        .table tbody tr:hover {
-            background-color: #f1f3f5;
-        }
-        .form-control {
-            width: 300px;
-        }
-    </style>
 </head>
 <body>
 
-    <!-- Mensagem de feedback -->
-    <?php if (isset($_SESSION['mensagem'])): ?>
-        <div class="alert alert-<?= $_SESSION['msg_tipo'] ?> alert-dismissible fade show mx-4 mt-3 text-center" role="alert">
-            <?= $_SESSION['mensagem'] ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <?php unset($_SESSION['mensagem'], $_SESSION['msg_tipo']); ?>
-    <?php endif; ?>
-
-    <!-- Conteúdo Principal -->
     <div class="container mt-4">
-        <h2 class="text-center mb-4">Lista de Funcionários</h2>
+        <center><h2>Lista de Funcionários</h2></center>
 
-        <!-- Formulário de Busca -->
-        <form method="GET" action="" class="mb-4">
-            <div class="input-group">
-                <input type="text" name="busca" class="form-control" placeholder="Digite o ID ou NOME do funcionário (opcional)" 
-                       value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>">
-                <button class="btn btn-primary" type="submit">Pesquisar</button>
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="busca" class="form-label">Digite o ID ou Nome do funcionário (opcional)</label>
+                <input type="text" class="form-control" id="busca" name="busca" value="<?= htmlspecialchars($busca) ?>">
             </div>
+            <center><button type="submit" class="btn btn-primary">Pesquisar</button></center>
         </form>
 
-        <!-- Tabela -->
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome Completo</th> <!-- Largura fixa para evitar corte -->
-                        <th>CPF</th>
-                        <th>Cargo</th>
-                        <th>Telefone</th>
-                        <th>Data de Admissão</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($funcionarios as $f): ?>
+        <br>
+
+        <!-- Exibir resultados -->
+        <?php if (!empty($funcionarios)): ?>
+            <center>
+                <table class="table table-hover table-bordered">
+                    <thead>
                         <tr>
-                            <td><?= htmlspecialchars($f['id_funcionario']) ?></td>
-                            <td><?= htmlspecialchars($f['nome_completo']) ?></td>
-                            <td><?= htmlspecialchars($f['cpf']) ?></td>
-                            <td><?= htmlspecialchars($f['cargo']) ?></td>
-                            <td><?= htmlspecialchars($f['telefone']) ?></td>
-                            <td><?= htmlspecialchars($f['data_admissao']) ?></td>
+                            <th>ID</th>
+                            <th>Nome Completo</th>
+                            <th>CPF</th>
+                            <th>Cargo</th>
+                            <th>Telefone</th>
+                            <th>Data de Admissão</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <?php foreach ($funcionarios as $funcionario): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($funcionario['id_funcionario']) ?></td>
+                            <td><?= htmlspecialchars($funcionario['nome_completo']) ?></td>
+                            <td><?= htmlspecialchars($funcionario['cpf']) ?></td>
+                            <td><?= htmlspecialchars($funcionario['cargo']) ?></td>
+                            <td><?= htmlspecialchars($funcionario['telefone']) ?></td>
+                            <td><?= htmlspecialchars($funcionario['data_admissao']) ?></td>
                             <td>
-                                <a href="alterar_funcionario.php?id=<?= $f['id_funcionario'] ?>" class="btn btn-sm btn-warning">Alterar</a>
-                                <a href="excluir_funcionario.php?id=<?= $f['id_funcionario'] ?>" class="btn btn-sm btn-danger"
-                                   onclick="return confirm('Tem certeza que deseja excluir <?= addslashes($f['nome_completo']) ?>?')">Excluir</a>
+                                <a class="btn btn-sm btn-warning" 
+                                   href="alterar_funcionario.php?id=<?= (int)$funcionario['id_funcionario'] ?>">
+                                   Alterar
+                                </a>
+                                <a class="btn btn-sm btn-danger" 
+                                   href="excluir_funcionario.php?id=<?= (int)$funcionario['id_funcionario'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir <?= addslashes($funcionario['nome_completo']) ?>?')">
+                                   Excluir
+                                </a>
                             </td>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </center>
+        <?php else: ?>
+            <center><p class="text-muted">Nenhum funcionário encontrado.</p></center>
+        <?php endif; ?>
 
-        <div class="text-center mt-4">
-            <a href="principal.php" class="btn btn-primary">Voltar</a>
-        </div>
+        <br>
+        <center>
+            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
+        </center>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts no final -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
