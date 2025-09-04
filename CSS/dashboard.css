@@ -401,6 +401,13 @@
     font-size: 0.8rem;
     color: #666;
   }
+  .white-link {
+    color: white;
+    text-decoration: none;
+  }
+  .white-link:hover {
+    text-decoration: underline;
+  }
   
   /* Responsive Design */
   @media (max-width: 768px) {
