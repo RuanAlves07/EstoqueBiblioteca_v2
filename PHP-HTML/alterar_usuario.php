@@ -3,39 +3,55 @@ session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
 
-// VERIFICA SE O USUÁRIO TEM PERMISSÃO DE ADM (perfil 1)
-if ($_SESSION['perfil'] != 1) {
-    echo "<script>alert('Acesso Negado'); window.location.href='principal.php';</script>";
+// VERIFICA SE O USUÁRIO ESTÁ LOGADO
+if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['perfil'])) { 
+    echo "<script>alert('Você precisa estar logado.'); window.location.href='index.php';</script>";
     exit;
 }
 
-// INICIALIZA AS VARIÁVEIS
 $usuario = null;
 $busca = null;
+$usuario_logado_id = $_SESSION['id_usuario'];
+$perfil_logado = $_SESSION['perfil']; 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!empty($_POST['busca_usuario'])) {
-        $busca = trim($_POST['busca_usuario']);
+// SE O USUÁRIO FOR PERFIL 4 (CLIENTE), FORÇA O CARREGAMENTO DO PRÓPRIO USUÁRIO
+if ($perfil_logado == 4) {
+    $sql = "SELECT * FROM usuario WHERE id_usuario = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $usuario_logado_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        echo "<script>alert('Erro: Usuário não encontrado.'); window.location.href='principal.php';</script>";
+        exit;
     }
+} 
+// CASO CONTRÁRIO, PERMITE A BUSCA NORMAL
+else {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (!empty($_POST['busca_usuario'])) {
+            $busca = trim($_POST['busca_usuario']);
+        }
 
-    // VERIFICA SE A BUSCA É UM NÚMERO (ID) OU UM NOME
-    if ($busca !== null && is_numeric($busca)) {
-        $sql = "SELECT * FROM usuario WHERE id_usuario = :busca";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
-    } elseif ($busca !== null) {
-        $sql = "SELECT * FROM usuario WHERE nome LIKE :busca_nome";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
-    }
+        // VERIFICA SE A BUSCA É POR ID OU NOME
+        if ($busca !== null && is_numeric($busca)) {
+            $sql = "SELECT * FROM usuario WHERE id_usuario = :busca";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+        } elseif ($busca !== null) {
+            $sql = "SELECT * FROM usuario WHERE nome LIKE :busca_nome";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+        }
 
-    if (isset($stmt)) {
-        $stmt->execute();
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (isset($stmt)) {
+            $stmt->execute();
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // SE O USUÁRIO NÃO FOR ENCONTRADO, EXIBE UM ALERTA
-        if (!$usuario) {
-            echo "<script>alert('Usuário não encontrado');</script>";
+            if (!$usuario) {
+                echo "<script>alert('Usuário não encontrado');</script>";
+            }
         }
     }
 }
@@ -61,7 +77,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <center><h2 class="mb-4">Alterar Usuário</h2></center>
 
     <div class="container mt-4">
-        <!-- FORMULÁRIO DE BUSCA -->
+
+        <!-- FORMULÁRIO DE BUSCA (SÓ MOSTRA SE NÃO FOR PERFIL 4) -->
+        <?php if ($perfil_logado != 4): ?>
         <form method="POST" action="">
             <div class="form-group">
                 <label for="busca_usuario">Buscar por ID ou Nome:</label>
@@ -75,10 +93,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="btn btn-primary">Buscar Usuário</button>
         </form>
-
-        <!-- FORMULÁRIO DE ALTERAÇÃO (APARECE SE ENCONTRAR) -->
-        <?php if ($usuario): ?>
         <hr>
+        <?php endif; ?>
+
+        <!-- FORMULÁRIO DE ALTERAÇÃO -->
+        <?php if ($usuario): ?>
         <form action="processa_alteracao_usuario.php" method="POST" onsubmit="return validarUsuario();">
             <input type="hidden" name="id_usuario" value="<?= htmlspecialchars($usuario['id_usuario']) ?>">
 
@@ -104,18 +123,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        required>
             </div>
 
-            <!-- Perfil -->
+            <!-- Perfil (BLOQUEADO PARA PERFIL 4) -->
             <div class="form-group">
                 <label for="id_perfil">Perfil:</label>
-                <select name="id_perfil" id="id_perfil" class="form-control" required>
+                <select name="id_perfil" id="id_perfil" class="form-control" 
+                    <?= $perfil_logado == 4 ? 'disabled' : '' ?> required>
                     <option value="1" <?= $usuario['id_perfil'] == 1 ? 'selected' : '' ?>>Administrador</option>
                     <option value="2" <?= $usuario['id_perfil'] == 2 ? 'selected' : '' ?>>Gerente</option>
                     <option value="3" <?= $usuario['id_perfil'] == 3 ? 'selected' : '' ?>>Operador</option>
-                    <option value="4" <?= $usuario['id_perfil'] == 4 ? 'selected' : '' ?>>Visualizador</option>
+                    <option value="4" <?= $usuario['id_perfil'] == 4 ? 'selected' : '' ?>>Cliente</option>
                 </select>
+                <?php if ($perfil_logado == 4): ?>
+                    <input type="hidden" name="id_perfil" value="4">
+                <?php endif; ?>
             </div>
 
-            <!-- Nova Senha (opcional) -->
+            <!-- Nova Senha -->
             <div class="form-group">
                 <label for="senha">Nova Senha (opcional):</label>
                 <input type="password"

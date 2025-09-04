@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($usuario && password_verify($senha, $usuario['senha'])) {
         //LOGIN BEM SUCEDIDO, DEFINE VARIAVEIS DE SESÃO
         $_SESSION['usuario'] = $usuario['nome'];
+        $_SESSION['email'] = $usuario['email'];
         $_SESSION['perfil'] = $usuario['id_perfil'];
         $_SESSION['id_usuario'] = $usuario['id_usuario'];
 
