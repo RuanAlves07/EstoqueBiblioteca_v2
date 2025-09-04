@@ -126,9 +126,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        value="<?= htmlspecialchars($_POST['contato'] ?? '') ?>" required>
             </div>
 
-            <center><button type="submit" class="btn btn-primary">Cadastrar</button></center>
-            <br>
-            <center><button type="reset" class="btn btn-secondary">Limpar</button></center>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <button type="reset" class="btn btn-danger">Cancelar</button>
+            </div>
         </form>
 
         <div class="text-center mt-3">
