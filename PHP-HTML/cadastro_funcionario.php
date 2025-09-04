@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="data_admissao" >Data de Admissão:</label>
                 <input type="date" id="data_admissao" name="data_admissao"
                        value="<?= htmlspecialchars($_POST['data_admissao'] ?? '') ?>" required>
-
+            <br>
             <button type="submit" class="btn btn-primary">Salvar</button>
             <button type="reset" class="btn btn-secondary">Cancelar</button>
         </form>
