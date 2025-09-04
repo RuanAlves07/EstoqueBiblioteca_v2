@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
@@ -59,6 +60,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     // Redireciona para evitar reexclusão ao atualizar
     header("Location: excluir_usuario.php");
+    ob_end_clean();
     exit();
 }
 ?>
@@ -127,7 +129,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         <?php endif; ?>
 
         <div class="text-center mt-4">
-            <a href="principal.php" class="btn btn-primary">Voltar</a>
+            <a href="dashboard.php" class="btn btn-primary">Voltar</a>
         </div>
     </div>
 

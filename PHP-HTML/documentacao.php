@@ -40,7 +40,7 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
             </div>
         </div>
-        <a href="principal.php" class="btn-back">Voltar</a>
+        <a href="dashboard.php" class="btn-back">Voltar</a>
 
 </body>
 </html>

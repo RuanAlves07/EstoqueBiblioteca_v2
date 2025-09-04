@@ -129,7 +129,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
 
     <!-- BOTÃO DE VOLTAR -->
     <center>
-        <a href="principal.php" class="btn btn-secondary mt-3">Voltar</a>
+        <a href="dashboard.php" class="btn btn-secondary mt-3">Voltar</a>
     </center>
 
     <!-- BOTÃO DE LOGOUT -->

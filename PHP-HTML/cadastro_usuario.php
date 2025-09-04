@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
@@ -27,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($nome) || !$email || empty($senha) || empty($id_perfil)) {
         $_SESSION['erro'] = "Todos os campos são obrigatórios e o e-mail deve ser válido.";
         header("Location: cadastro_perfil.php");
+        ob_end_clean();
         exit();
     }
 
@@ -47,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Define mensagem de sucesso e redireciona
         $_SESSION['sucesso'] = "Usuário cadastrado com sucesso!";
         header("Location: cadastro_usuario.php");
+        ob_end_clean();
         exit();
 
     } catch (PDOException $e) {
@@ -57,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['erro'] = "Erro ao cadastrar usuário: " . htmlspecialchars($e->getMessage());
         }
         header("Location: cadastro_usuario.php");
+        ob_end_clean();
         exit();
     }
 }
@@ -120,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div class="text-center mt-3">
-            <a href="principal.php" class="btn btn-secondary">Voltar ao Início</a>
+            <a href="dashboard.php" class="btn btn-secondary">Voltar ao Início</a>
         </div>
     </div>
 
