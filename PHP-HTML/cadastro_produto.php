@@ -138,7 +138,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         <button type="reset" class="btn btn-secondary">Cancelar</button>
     </form>
 
-    <center><a href="../PHP-HTML/principal.php" class="btn btn-primary">Voltar</a></center>
+    <center><a href="dashboard.php" class="btn btn-primary">Voltar</a></center>
 
 </body>
 </html>

@@ -178,3 +178,10 @@ CREATE TABLE IF NOT EXISTS `item_emprestimo` (
   CONSTRAINT `fk_item_emprestimo` FOREIGN KEY (`id_emprestimo`) REFERENCES `emprestimo` (`id_emprestimo`) ON DELETE CASCADE,
   CONSTRAINT `fk_item_produto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_produto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Atualiza a tabela emprestimo para usar id_usuario diretamente
+ALTER TABLE emprestimo DROP FOREIGN KEY fk_emprestimo_cliente;
+ALTER TABLE emprestimo CHANGE COLUMN id_cliente id_usuario INT NOT NULL;
+
+ALTER TABLE emprestimo 
+MODIFY COLUMN id_funcionario INT NULL DEFAULT NULL;

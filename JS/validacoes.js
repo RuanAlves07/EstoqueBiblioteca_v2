@@ -12,3 +12,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+function mostrarSenha() {
+    const senhaInput = document.getElementById("senha");
+    
+    if (senhaInput.type === "password") {
+        senhaInput.type = "text";   
+    } else {
+        senhaInput.type = "password"; 
+    }
+}
+
+function atualizaEstoque(select) {
+    const quantidade = select.selectedOptions[0].getAttribute('data-quantidade');
+    document.getElementById('quantidade_estoque').value = quantidade;
+}

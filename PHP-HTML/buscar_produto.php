@@ -48,7 +48,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <center><h2>Lista de Usuários</h2></center>
+    <center><h2>Lista de produtos</h2></center>
 
     <!-- FORMULARIO PARA BUSCAR PRODUTO -->
 

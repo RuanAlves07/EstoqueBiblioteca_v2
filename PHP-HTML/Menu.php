@@ -45,7 +45,7 @@ $permissoes = [
     ],
     4 => [
         "Buscar"      => ["buscar_produto.php"],
-        "Alterar"     => ["alterar_cliente.php"],
+        "Alterar"     => ["alterar_usuario.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
 ];

@@ -167,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- BOTÃO DE VOLTAR -->
     <div class="text-center mt-4">
-        <a href="principal.php" class="btn btn-secondary">Voltar para o Início</a>
+        <a href="dashboard.php" class="btn btn-secondary">Voltar para o Início</a>
     </div>
 
     <!-- BOTÃO DE LOGOUT -->
