@@ -80,8 +80,8 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?=htmlspecialchars($usuario['telefone']) ?></td>
                     <td><?=htmlspecialchars($usuario['data_admissao']) ?></td>
                     <td>
-                        <a href="alterar_funcionario.php?id=<?=htmlspecialchars($usuario['id_funcionario'])?>">Alterar</a>
-                        <a href="excluir_funcionario.php?id=<?=htmlspecialchars($usuario['id_funcionario'])?>"onclick="return confirm('Tem certeza que deseja excluir esse funcionario?')">Excluir</a>
+                        <a class="btn btn-sm btn-warning" href="alterar_funcionario.php?id=<?=htmlspecialchars($usuario['id_funcionario'])?>">Alterar</a>
+                        <a class="btn btn-sm btn-danger" href="excluir_funcionario.php?id=<?=htmlspecialchars($usuario['id_funcionario'])?>"onclick="return confirm('Tem certeza que deseja excluir esse funcionario?')">Excluir</a>
                     </td> 
                 </tr>
             <?php endforeach; ?>
