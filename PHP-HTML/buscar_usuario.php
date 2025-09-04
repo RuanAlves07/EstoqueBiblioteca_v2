@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
