@@ -17,6 +17,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empréstimo de Livros</title>
     <link rel="stylesheet" href="../CSS/styles.css">
+    <script src="../JS/validacoes.js"></script>
 </head>
 <body>
 
@@ -44,6 +45,10 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <label for="senha">Repita sua senha:</label>
             <input type="password" id="senha" name="senha" required>
+
+            <label>
+                <input type="checkbox" onclick="mostrarSenha()"> Mostrar Senha
+            </label>
         </div>
 
         <div class="text-center mt-3">
@@ -51,13 +56,6 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="reset" class="btn btn-danger">Cancelar</button>
         </div>
     </form>
-
-    <script>
-        function atualizaEstoque(select) {
-            const quantidade = select.selectedOptions[0].getAttribute('data-quantidade');
-            document.getElementById('quantidade_estoque').value = quantidade;
-        }
-    </script>
 
 </body>
 </html>

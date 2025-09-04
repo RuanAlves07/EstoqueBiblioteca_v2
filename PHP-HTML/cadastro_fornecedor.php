@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
     <script src="validacoes.js"></script>
 
-    <!-- Máscara opcional para CNPJ (se quiser deixar bonitinho) -->
+    <!-- Máscara opcional para CNPJ  -->
     <script>
         document.getElementById('cnpj').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
