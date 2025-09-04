@@ -46,10 +46,10 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 
 -- Usuários de exemplo
 INSERT INTO `usuario` (`nome`, `email`, `senha`, `id_perfil`, `senha_temporaria`) VALUES
-('Admin Geral', 'admin@biblioteca.com', '$2y$10$exemplohashseguro', 1, 0),
-('Super User', 'super@biblioteca.com', '$2y$10$exemplohashseguro', 2, 1),
-('Funcionario 1', 'func@biblioteca.com', '$2y$10$exemplohashseguro', 3, 1),
-('Cliente 1', 'cliente@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1);
+('Admin ', 'admin@biblioteca.com', '$2y$10$exemplohashseguro', 1, 0),
+('Superior', 'super@biblioteca.com', '$2y$10$exemplohashseguro', 2, 1),
+('Funcionario', 'func@biblioteca.com', '$2y$10$exemplohashseguro', 3, 1),
+('Cliente', 'cliente@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1);
 
 -- Tabela de clientes
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -93,6 +93,21 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   PRIMARY KEY (`id_categoria`),
   UNIQUE KEY `uk_categoria_nome` (`nome_categoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Usuários de exemplo
+INSERT INTO `categoria` (`id_categoria`, `nome_categoria`, `descricao`) VALUES
+('1', 'ficção', 'livros sobre ficção'),
+('2', 'Romance', 'livros sobre romance'),
+('3', 'conto', 'livros sobre conto'),
+('4', 'fantasia', 'livros sobre fantasia'),
+('5', 'Terror', 'livros sobre terror'),
+('6', 'Horror', 'livros sobre horror'),
+('7', 'Biografia', 'livros sobre biografia'),
+('8', 'História', 'livros sobre história'),
+('9', 'AutoAjuda', 'livros sobre AutoAjuda'),
+('10', 'Outros', 'outros livros');
+
+
 
 -- Autor
 CREATE TABLE IF NOT EXISTS `autor` (
