@@ -3,25 +3,15 @@ session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
 
+// Verifica se o usuário está logado
 if (!isset($_SESSION['usuario'])) {
     header("Location: index.php");
     exit();
 }
 
-// Verifica se o perfil tem permissão para excluir fornecedores
-if (!isset($permissoes[$id_perfil]['Excluir']) || !in_array('excluir_fornecedor.php', $permissoes[$id_perfil]['Excluir'])) {
-    echo "<script>alert('Acesso negado.'); window.location.href='principal.php';</script>";
-    exit();
-}
-
-// Opções do menu
-$opcoes_menu = $permissoes[$id_perfil] ?? [];
-
 // Busca todos os fornecedores
 try {
-    $sql = "SELECT id_fornecedor, nome_empresa, endereco, telefone, email, contato 
-            FROM fornecedor 
-            ORDER BY nome_empresa ASC";
+    $sql = "SELECT * FROM fornecedor ORDER BY nome_empresa ASC";
     $stmt = $pdo->query($sql);
     $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -66,122 +56,59 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         }
     }
 
-    // Redireciona para evitar reexclusão ao atualizar
+    // Redireciona para evitar reexclusão
     header("Location: excluir_fornecedor.php");
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excluir Fornecedor</title>
+    <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <!-- Estilo personalizado -->
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .navbar {
-            background-color: #003366;
-            color: white;
-            padding: 0;
-            margin-bottom: 20px;
-        }
-        .menu {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-        .menu li {
-            position: relative;
-            margin-right: 1rem;
-        }
-        .menu a {
-            color: white;
-            text-decoration: none;
-            padding: 1rem 0.8rem;
-            display: block;
-            transition: background 0.3s;
-        }
-        .menu a:hover {
-            background-color: #002b55;
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #002b55;
-            min-width: 200px;
-            z-index: 1000;
-            list-style: none;
-            padding: 0;
-        }
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-        .dropdown-menu li a {
-            color: white;
-            padding: 10px 15px;
-            display: block;
-            text-decoration: none;
-        }
-        .dropdown-menu li a:hover {
-            background-color: #001f3f;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 20px auto;
-        }
-        h2 {
-            color:#001f3f;
-            text-align: center;
-            margin-bottom: 20px;
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 12px 15px;
+            text-align: left;
         }
         .table th {
-            background-color: #003366;
+            font-weight: bold;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .btn-excluir {
+            background-color: #dc3545;
             color: white;
-            font-weight: 600;
-        }
-        .table td {
-            padding: 12px;
-        }
-        .btn-danger {
-            background-color: #d9534f;
             border: none;
-            color: white;
             padding: 6px 12px;
             border-radius: 4px;
+            cursor: pointer;
             font-size: 12px;
-        }
-        .btn-danger:hover {
-            background-color: #c9302c;
-        }
-        .btn-primary {
-            background-color: #003366;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-        }
-        .text-center {
             text-align: center;
         }
-        .alert {
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: center;
+        .btn-excluir:hover {
+            background-color: #c82333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .text-truncate {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 </head>
 <body>
-    
-
-    <!-- Menu Superior com Dropdown -->
-
 
     <!-- Mensagem de feedback -->
     <?php if (isset($_SESSION['mensagem'])): ?>
@@ -193,8 +120,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <?php endif; ?>
 
     <!-- Conteúdo Principal -->
-    <div class="container">
-        <h2>Excluir Fornecedor</h2>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Excluir Fornecedor</h2>
 
         <?php if (!empty($erro)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
@@ -202,43 +129,45 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         <?php if (!empty($fornecedores)): ?>
             <div class="table-responsive">
-                <table class="table table-hover table-bordered">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nome</th>
-                            <th>Endereço</th>
+                            <th>Nome Empresa</th>
+                            <th>Nome Fantasia</th>
+                            <th>CNPJ</th>
+                            <th>Contato</th>
                             <th>Telefone</th>
                             <th>Email</th>
-                            <th>Contato</th>
+                            <th>Endereço</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($fornecedores as $f): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($f['id_fornecedor']) ?></td>
-                                <td><?= htmlspecialchars($f['nome_empresa']) ?></td>
-                                <td><?= htmlspecialchars($f['endereco']) ?></td>
-                                <td><?= htmlspecialchars($f['telefone']) ?></td>
-                                <td><?= htmlspecialchars($f['email']) ?></td>
-                                <td><?= htmlspecialchars($f['contato']) ?></td>
-                                <td class="text-center">
-                                    <a href="excluir_fornecedor.php?id=<?= $f['id_fornecedor'] ?>"
-                                       class="btn btn-danger btn-sm"
-                                       onclick="return confirm('Tem certeza que deseja excluir <?= addslashes($f['nome_empresa']) ?>?');">
-                                        Excluir
-                                    </a>
-                                </td>
-                            </tr>
+                        <?php foreach ($fornecedores as $fornecedor): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($fornecedor['id_fornecedor']) ?></td>
+                            <td class="text-truncate"><?= htmlspecialchars($fornecedor['nome_empresa']) ?></td>
+                            <td class="text-truncate"><?= htmlspecialchars($fornecedor['nome_fantasia']) ?></td>
+                            <td class="text-truncate"><?= htmlspecialchars($fornecedor['cnpj']) ?></td>
+                            <td class="text-truncate"><?= htmlspecialchars($fornecedor['contato']) ?></td>
+                            <td class="text-truncate"><?= htmlspecialchars($fornecedor['telefone']) ?></td>
+                            <td class="text-truncate"><?= htmlspecialchars($fornecedor['email']) ?></td>
+                            <td class="text-truncate"><?= htmlspecialchars($fornecedor['endereco']) ?></td>
+                            <td class="text-center">
+                                <a class="btn-excluir"
+                                   href="excluir_fornecedor.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')">
+                                   Excluir
+                                </a>
+                            </td>
+                        </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         <?php else: ?>
-            <div class="text-center text-muted mt-4">
-                <p>Nenhum fornecedor encontrado.</p>
-            </div>
+            <center><p class="text-muted">Nenhum fornecedor encontrado.</p></center>
         <?php endif; ?>
 
         <div class="text-center mt-4">
@@ -249,9 +178,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
 </body>
 </html>
