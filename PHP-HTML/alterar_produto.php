@@ -5,7 +5,7 @@ require_once 'Menu.php';
 
 // VERIFICA SE O USUÁRIO TEM PERMISSÃO DE ADM
 if ($_SESSION['perfil'] != 1) {
-    echo "<script>alert('Acesso Negado'); window.location.href='principal.php';</script>";
+    echo "<script>alert('Acesso Negado'); window.location.href='dashboard.php';</script>";
     exit;
 }
 
@@ -199,7 +199,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
 
     <!-- BOTÃO DE VOLTAR -->
     <div class="text-center mt-4">
-        <a href="principal.php" class="btn btn-secondary">Voltar para o Início</a>
+        <a href="dashboard.php" class="btn btn-secondary">Voltar para o Início</a>
     </div>
 
     <!-- BOTÃO DE LOGOUT -->

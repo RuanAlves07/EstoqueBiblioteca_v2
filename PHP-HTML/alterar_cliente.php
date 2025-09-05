@@ -5,7 +5,7 @@ require_once 'Menu.php';
 
 // VERIFICA SE O USUÁRIO TEM PERMISSÃO DE ADM (perfil 1)
 if ($_SESSION['perfil'] != 1) {
-    echo "<script>alert('Acesso Negado'); window.location.href='principal.php';</script>";
+    echo "<script>alert('Acesso Negado'); window.location.href='dashboard.php';</script>";
     exit;
 }
 
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- BOTÃO DE VOLTAR -->
     <div class="text-center mt-4">
-        <a href="principal.php" class="btn btn-secondary">Voltar para o Início</a>
+        <a href="dashboard.php" class="btn btn-secondary">Voltar para o Início</a>
     </div>
 
     <!-- BOTÃO DE LOGOUT -->

@@ -23,7 +23,7 @@ if ($perfil_logado == 4) {
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$usuario) {
-        echo "<script>alert('Erro: Usuário não encontrado.'); window.location.href='principal.php';</script>";
+        echo "<script>alert('Erro: Usuário não encontrado.'); window.location.href='dashboard.php';</script>";
         exit;
     }
 } 
@@ -159,7 +159,7 @@ else {
 
     <!-- BOTÃO DE VOLTAR -->
     <div class="text-center mt-4">
-        <a href="principal.php" class="btn btn-secondary">Voltar para o Início</a>
+        <a href="dashboard.php" class="btn btn-secondary">Voltar para o Início</a>
     </div>
 
     <!-- BOTÃO DE LOGOUT -->

@@ -5,7 +5,7 @@ require_once 'Menu.php';
 
 // VERIFICA SE O USUÁRIO TEM PERMISSÃO DE ADM
 if ($_SESSION['perfil'] != 1) {
-    echo "<script>alert('Acesso Negado');window.location.href='principal.php';</script>";
+    echo "<script>alert('Acesso Negado');window.location.href='dashboard.php';</script>";
     exit;
 }
 
