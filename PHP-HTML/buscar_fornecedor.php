@@ -111,10 +111,6 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <center><p class="text-muted">Nenhum fornecedor encontrado.</p></center>
         <?php endif; ?>
 
-        <br>
-        <center>
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-        </center>
     </div>
 
     <!-- Scripts no final -->

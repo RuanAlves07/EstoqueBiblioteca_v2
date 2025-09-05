@@ -82,9 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
 
-        <center>
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-        </center>
 
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>

@@ -137,7 +137,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         </div>
     </form>
 
-    <center><a href="dashboard.php" class="btn btn-primary">Voltar</a></center>
+
 
 </body>
 </html>

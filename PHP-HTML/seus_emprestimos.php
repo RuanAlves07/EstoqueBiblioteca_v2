@@ -70,10 +70,7 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </div>
 
-    <div class="text-center mt-4">
-        
-        <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-    </div>
+
 
 </body>
 </html>

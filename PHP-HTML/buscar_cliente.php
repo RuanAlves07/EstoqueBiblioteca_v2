@@ -106,10 +106,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <center><p class="text-muted">Nenhum cliente encontrado.</p></center>
         <?php endif; ?>
 
-        <br>
-        <center>
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-        </center>
+
     </div>
 
     <!-- Scripts no final -->

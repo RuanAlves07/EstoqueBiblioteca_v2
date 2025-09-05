@@ -105,10 +105,7 @@ if (isset($_GET['busca']) && !empty($_GET['busca'])) {
             <center><p class="text-muted">Nenhum funcionário encontrado.</p></center>
         <?php endif; ?>
 
-        <br>
-        <center>
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-        </center>
+
     </div>
 
     <!-- Scripts no final -->

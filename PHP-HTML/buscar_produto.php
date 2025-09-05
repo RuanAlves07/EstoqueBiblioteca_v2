@@ -101,7 +101,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <button type="submit">Logout</button>
                 </form>
                 </div>
-    <center><a href="dashboard.php" class="btn btn-primary" >Voltar</a></center>
+    
 
 </body>
 </html>

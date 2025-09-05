@@ -197,10 +197,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         <?php endif; ?>
     </div>
 
-    <!-- BOTÃO DE VOLTAR -->
-    <div class="text-center mt-4">
-        <a href="dashboard.php" class="btn btn-secondary">Voltar para o Início</a>
-    </div>
+
 
     <!-- BOTÃO DE LOGOUT -->
     <div class="logout text-center mt-3">

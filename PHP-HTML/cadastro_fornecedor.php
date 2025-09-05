@@ -132,9 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
 
-        <div class="text-center mt-3">
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-        </div>
+
     </div>
 
     <!-- Scripts -->

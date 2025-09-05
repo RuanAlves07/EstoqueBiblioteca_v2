@@ -137,10 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
     </div>
 
-    <!-- BOTÃO DE VOLTAR -->
-    <div class="text-center mt-4">
-        <a href="dashboard.php" class="btn btn-secondary">Voltar para o Início</a>
-    </div>
+
 
     <!-- BOTÃO DE LOGOUT -->
     <div class="logout text-center mt-3">
