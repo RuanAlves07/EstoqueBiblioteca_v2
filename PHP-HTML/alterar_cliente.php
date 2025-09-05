@@ -50,12 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="scripts.js"></script>
-    <style>
-        .container { max-width: 800px; }
-        .form-group { margin-bottom: 1rem; }
-        .logout { margin-top: 20px; }
-        .text-muted { font-size: 0.875em; }
-    </style>
+
 </head>
 <body>
 
@@ -86,47 +81,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Nome Completo -->
             <div class="form-group">
                 <label for="nome_completo">Nome Completo:</label>
-                <input type="text"
-                       name="nome_completo"
-                       id="nome_completo"
-                       value="<?= htmlspecialchars($cliente['nome_completo']) ?>"
-                       class="form-control"
-                       required>
+                <input type="text" name="nome_completo" id="nome_completo"
+                    value="<?= htmlspecialchars($cliente['nome_completo']) ?>" class="form-control" required>
             </div>
 
             <!-- CPF -->
             <div class="form-group">
                 <label for="cpf">CPF:</label>
-                <input type="text"
-                       name="cpf"
-                       id="cpf"
-                       value="<?= htmlspecialchars($cliente['cpf']) ?>"
-                       class="form-control"
-                       placeholder="000.000.000-00"
-                       required>
+                <input type="text" name="cpf" id="cpf"
+                    value="<?= htmlspecialchars($cliente['cpf']) ?>" class="form-control" placeholder="000.000.000-00" required>
             </div>
 
             <!-- Telefone -->
             <div class="form-group">
                 <label for="telefone">Telefone:</label>
-                <input type="text"
-                       name="telefone"
-                       id="telefone"
-                       value="<?= htmlspecialchars($cliente['telefone']) ?>"
-                       class="form-control"
-                       placeholder="(00) 00000-0000"
-                       required>
+                <input type="text" name="telefone" id="telefone"
+                    value="<?= htmlspecialchars($cliente['telefone']) ?>" class="form-control" placeholder="(00) 00000-0000" required>
             </div>
 
             <!-- Data de Nascimento -->
             <div class="form-group">
                 <label for="data_nascimento">Data de Nascimento:</label>
-                <input type="date"
-                       name="data_nascimento"
-                       id="data_nascimento"
-                       value="<?= htmlspecialchars($cliente['data_nascimento']) ?>"
-                       class="form-control"
-                       required>
+                <input type="date" name="data_nascimento" id="data_nascimento"
+                       value="<?= htmlspecialchars($cliente['data_nascimento']) ?>" class="form-control" required>
             </div>
 
             <div class="text-center mt-4">
@@ -137,10 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
     </div>
 
-    <!-- BOTÃO DE VOLTAR -->
-    <div class="text-center mt-4">
-        <a href="dashboard.php" class="btn btn-secondary">Voltar para o Início</a>
-    </div>
+
 
     <!-- BOTÃO DE LOGOUT -->
     <div class="logout text-center mt-3">

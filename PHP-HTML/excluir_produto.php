@@ -151,9 +151,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <center><p class="text-muted">Nenhum produto encontrado.</p></center>
         <?php endif; ?>
 
-        <div class="text-center mt-4">
-            <a href="dashboard.php" class="btn btn-primary">Voltar para o Início</a>
-        </div>
+
     </div>
 
     <!-- Scripts -->

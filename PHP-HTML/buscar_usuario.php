@@ -101,9 +101,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <br>
-        <center>
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-        </center>
+
     </div>
 
     <!-- Scripts no final -->

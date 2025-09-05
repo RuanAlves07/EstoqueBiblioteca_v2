@@ -97,9 +97,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     }
     </script>
 
-        <div class="back-link">
-            <a href="index.php">← Voltar para o login</a>
-        </div>
+
     </div>
 </body>
 </html>
