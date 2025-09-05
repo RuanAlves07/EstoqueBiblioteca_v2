@@ -404,11 +404,10 @@
   .white-link {
     color: white;
     text-decoration: none;
-  }
+}
   .white-link:hover {
-    text-decoration: underline;
-  }
-  
+    color: #f8f9fa; /* Cor mais clara ao passar o mouse */
+    }
   /* Responsive Design */
   @media (max-width: 768px) {
     .sidebar {
