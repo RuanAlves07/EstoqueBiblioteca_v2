@@ -122,3 +122,7 @@ Para: cliente@biblioteca.com
 Olá! Sua nova senha temporária é: wUNY8GKg
 
 ----------------------
+Para: admin@biblioteca.com
+Olá! Sua nova senha temporária é: njq7BEaG
+
+----------------------
