@@ -89,7 +89,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     <!-- Conteúdo Principal -->
     <div class="container">
-        <h2>Excluir Usuario</h2>
+        <center><h2>Excluir Usuario</h2></center>
 
         <?php if (!empty($erro)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>

@@ -1,100 +1,206 @@
 <?php
-
 session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
 
-// VERIFICA SE O USUARIO TEM PERMISSAO DE ADM
-if ($_SESSION['perfil'] != 1){
-    echo"<script>alert('Acesso Negado');window.location.href='principal.php';</script>";
+// VERIFICA SE O USUÁRIO TEM PERMISSÃO DE ADM (perfil 1)
+if ($_SESSION['perfil'] != 1) {
+    echo "<script>alert('Acesso Negado'); window.location.href='principal.php';</script>";
     exit;
 }
 
-// INICIALIZA AS VARIAVEIS
-$usuario = null;
-$busca = null; 
+// INICIALIZA AS VARIÁVEIS
+$cliente = null;
+$busca = null;
 
-if ($_SERVER["REQUEST_METHOD"]=="POST" ){
-    if (!empty($_POST['busca_cliente'])) 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!empty($_POST['busca_cliente'])) {
         $busca = trim($_POST['busca_cliente']);
-
-    // VERIFICA SE A BUSCA É UM NUMERO (ID) OU UM NOME
-    if($busca !== null && is_numeric($busca)){ 
-       $sql =  "SELECT * FROM cliente WHERE id_cliente = :busca";
-       $stmt =$pdo->prepare($sql);
-       $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
-    } elseif($busca !== null) { 
-       $sql = "SELECT * FROM cliente WHERE nome_completo LIKE :busca_nome";
-       $stmt =$pdo->prepare($sql);
-       $stmt->bindValue(':busca_nome', "$busca%", PDO::PARAM_STR);
     }
+
+    // VERIFICA SE A BUSCA É UM NÚMERO (ID) OU UM NOME
+    if ($busca !== null && is_numeric($busca)) {
+        $sql = "SELECT * FROM cliente WHERE id_cliente = :busca";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+    } elseif ($busca !== null) {
+        $sql = "SELECT * FROM cliente WHERE nome_completo LIKE :busca_nome";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+    }
+
     if (isset($stmt)) {
         $stmt->execute();
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // SE O USUARIO NÃO FOR ENCONTRADO, EXIBE UM ALERTA 
-        if (!$usuario) {
-            echo"<script>alert('cliente não encontrado');</script>";
+        // SE O CLIENTE NÃO FOR ENCONTRADO, EXIBE UM ALERTA
+        if (!$cliente) {
+            echo "<script>alert('Cliente não encontrado');</script>";
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alterar cliente</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="validacoes.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-     <script src="scripts.js"></script>
-     <link rel="stylesheet" href="../CSS/styles.css">
+    <title>Alterar Cliente</title>
+    <link rel="stylesheet" href="../CSS/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="scripts.js"></script>
+    <style>
+        .container { max-width: 800px; }
+        .form-group { margin-bottom: 1rem; }
+        .logout { margin-top: 20px; }
+        .text-muted { font-size: 0.875em; }
+    </style>
 </head>
-    <body>
+<body>
 
+    <center><h2 class="mb-4">Alterar Cliente</h2></center>
 
-
-
-
-        <center><h2>Alterar cliente</h2></center>
-
-    <!-- FORMULARIO PARA ALTERAR FORNECEDOR -->
     <div class="container mt-4">
-        <form method="POST" action="alterar_cliente.php">
-            <label for="busca_cliente">Digite o ID ou Título do Produto:</label>
-            <input type="text" id="busca_cliente" name="busca_cliente" value="<?= htmlspecialchars($busca ?? '') ?>" required>
-            <button type="submit" class="btn btn-primary">Buscar</button>
+        <!-- FORMULÁRIO DE BUSCA -->
+        <form method="POST" action="">
+            <div class="form-group">
+                <label for="busca_cliente">Buscar por ID ou Nome:</label>
+                <input type="text"
+                       id="busca_cliente"
+                       name="busca_cliente"
+                       value="<?= htmlspecialchars($busca ?? '') ?>"
+                       class="form-control"
+                       placeholder="Digite o ID ou nome completo do cliente"
+                       required>
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar Cliente</button>
         </form>
 
-    <?php if ($usuario): ?>
-        <form action="processa_alteracao_cliente.php" method="POST" >
+        <!-- FORMULÁRIO DE ALTERAÇÃO (APARECE SE ENCONTRAR) -->
+        <?php if ($cliente): ?>
+        <hr>
+        <form action="processa_alteracao_cliente.php" method="POST" onsubmit="return validarCliente();">
+            <input type="hidden" name="id_cliente" value="<?= htmlspecialchars($cliente['id_cliente']) ?>">
 
-            <input type="hidden" name="id_cliente" value="<?=htmlspecialchars($usuario['id_cliente'])?>">
+            <!-- Nome Completo -->
+            <div class="form-group">
+                <label for="nome_completo">Nome Completo:</label>
+                <input type="text"
+                       name="nome_completo"
+                       id="nome_completo"
+                       value="<?= htmlspecialchars($cliente['nome_completo']) ?>"
+                       class="form-control"
+                       required>
+            </div>
 
-            <label for="nome_completo">Nome completo:</label>
-            <input type="text" name="nome_completo" id="nome_completo" value="<?=htmlspecialchars($usuario['nome_completo'])?>" required>
+            <!-- CPF -->
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text"
+                       name="cpf"
+                       id="cpf"
+                       value="<?= htmlspecialchars($cliente['cpf']) ?>"
+                       class="form-control"
+                       placeholder="000.000.000-00"
+                       required>
+            </div>
 
-            <label for="cpf">CPF:</label>
-            <input type="text" name="cpf" id="cpf" value="<?=htmlspecialchars($usuario['cpf'])?>" required>
+            <!-- Telefone -->
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="text"
+                       name="telefone"
+                       id="telefone"
+                       value="<?= htmlspecialchars($cliente['telefone']) ?>"
+                       class="form-control"
+                       placeholder="(00) 00000-0000"
+                       required>
+            </div>
 
-            <label for="telefone">Telefone:</label>
-            <input type="text" name="telefone" id="telefone" value="<?=htmlspecialchars($usuario['telefone'])?>" required>
+            <!-- Data de Nascimento -->
+            <div class="form-group">
+                <label for="data_nascimento">Data de Nascimento:</label>
+                <input type="date"
+                       name="data_nascimento"
+                       id="data_nascimento"
+                       value="<?= htmlspecialchars($cliente['data_nascimento']) ?>"
+                       class="form-control"
+                       required>
+            </div>
 
-            <label for="data_nascimento">Data de nascimento:</label>
-            <input type="date" name="data_nascimento" id="data_nascimento" value="<?=htmlspecialchars($usuario['data_nascimento'])?>" required> 
-
-            <button type="submit" class="btn btn-primary" >Alterar</button>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success">Atualizar Cliente</button>
+                <button type="reset" class="btn btn-secondary">Limpar</button>
+            </div>
         </form>
-        
-            <?php endif; ?>
-            <div class="logout">
-                <form action="logout.php" method="POST">
-                    <button type="submit">Logout</button>
-                </form>
-                </div>
-            <center><a href="dashboard.php" class="btn btn-primary">Voltar</a></center>
-    </body>
+        <?php endif; ?>
+    </div>
+
+    <!-- BOTÃO DE VOLTAR -->
+    <div class="text-center mt-4">
+        <a href="principal.php" class="btn btn-secondary">Voltar para o Início</a>
+    </div>
+
+    <!-- BOTÃO DE LOGOUT -->
+    <div class="logout text-center mt-3">
+        <form action="logout.php" method="POST">
+            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+        </form>
+    </div>
+
+    <!-- VALIDAÇÃO JS -->
+    <script>
+        function validarCliente() {
+            const nome = document.getElementById('nome_completo').value.trim();
+            const cpf = document.getElementById('cpf').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const dataNasc = document.getElementById('data_nascimento').value;
+
+            if (nome === '') {
+                alert('O nome completo é obrigatório.');
+                return false;
+            }
+            if (cpf === '' || !validarCPF(cpf)) {
+                alert('CPF inválido.');
+                return false;
+            }
+            if (telefone === '') {
+                alert('O telefone é obrigatório.');
+                return false;
+            }
+            if (dataNasc === '') {
+                alert('A data de nascimento é obrigatória.');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Função simples de validação de CPF (opcional)
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+            let soma = 0, resto;
+            for (let i = 1; i <= 9; i++) {
+                soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+            }
+            resto = (soma * 10) % 11;
+            if ((resto === 10) || (resto === 11)) resto = 0;
+            if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+            soma = 0;
+            for (let i = 1; i <= 10; i++) {
+                soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+            }
+            resto = (soma * 10) % 11;
+            if ((resto === 10) || (resto === 11)) resto = 0;
+            if (resto !== parseInt(cpf.substring(10, 11))) return false;
+
+            return true;
+        }
+    </script>
+
+</body>
 </html>

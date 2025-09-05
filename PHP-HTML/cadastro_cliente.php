@@ -76,8 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="date" class="form-control" id="data_nascimento" name="data_nascimento"
                        value="<?= htmlspecialchars($_POST['data_nascimento'] ?? '') ?>" required>
 
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <button type="reset" class="btn btn-secondary">Cancelar</button>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <button type="reset" class="btn btn-danger">Cancelar</button>
+            </div>
         </form>
 
         <center>

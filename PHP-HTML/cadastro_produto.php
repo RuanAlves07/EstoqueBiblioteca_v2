@@ -131,11 +131,10 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         <label for="quantidade_estoque">Quantidade em Estoque:</label>
         <input type="number" id="quantidade_estoque" name="quantidade_estoque" value="1" min="1" required>
 
-        <br>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <br>
-        <br>
-        <button type="reset" class="btn btn-secondary">Cancelar</button>
+        <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <button type="reset" class="btn btn-danger">Cancelar</button>
+        </div>
     </form>
 
     <center><a href="dashboard.php" class="btn btn-primary">Voltar</a></center>
