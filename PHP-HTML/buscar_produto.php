@@ -96,7 +96,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <center><p> Nenhum produto encontrado.</p></center>
     <?php endif; ?>
     <br>
-    <div class="logout">
+    <div class="logout text-center mt-3">
                 <form action="logout.php" method="POST">
                     <button type="submit">Logout</button>
                 </form>

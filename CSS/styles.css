@@ -163,3 +163,8 @@ a.btn-primary:hover {
   color: white;
   font-weight: 600;
 }
+
+.container { max-width: 800px; }
+.form-group { margin-bottom: 1rem; }
+.logout { margin-top: 20px; }
+.text-muted { font-size: 0.875em; }
