@@ -143,13 +143,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         </div>
     </div>
 
-    <!-- Logout -->
-    <div class="logout text-center mt-3">
-        <form action="logout.php" method="POST">
-            <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
-        </form>
-    </div>
-
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
