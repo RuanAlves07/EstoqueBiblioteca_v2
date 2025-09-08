@@ -25,9 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_perfil = $_POST['id_perfil'];
 
     // Validação básica
-    if (empty($nome) || !$email || empty($senha) || empty($id_perfil)) {
+    if (empty($nome) || empty($email) || empty($senha) || empty($id_perfil)) {
         $_SESSION['erro'] = "Todos os campos são obrigatórios e o e-mail deve ser válido.";
-        header("Location: cadastro_perfil.php");
+        header("Location: cadastro_usuario.php");
         ob_end_clean();
         exit();
     }
