@@ -10,7 +10,7 @@ $id_produto = $_POST['id_produto'] ?? null;
 
 // Verifica se o email digitado é o do usuário logado
 if ($email_digitado !== $_SESSION['email']) {
-    die("<script>alert('Email incorreto.'); window.location.href='emprestimos_de_livros.php';</script>");
+    die("<script>alert('Email incorreto.'); window.location.href='emprestimo_de_livros.php';</script>");
 }
 
 // Verifica a senha no banco
@@ -20,7 +20,7 @@ $stmt->execute();
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$usuario || !password_verify($senha_digitada, $usuario['senha'])) {
-    die("<script>alert('Senha incorreta.'); window.location.href='emprestimos_de_livros.php';</script>");
+    die("<script>alert('Senha incorreta.'); window.location.href='emprestimo_de_livros.php';</script>");
 }
 
 // Verifica se o produto existe e tem estoque
@@ -30,7 +30,7 @@ $stmt->execute();
 $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$produto || $produto['quantidade_estoque'] <= 0) {
-    die("<script>alert('Livro indisponível no estoque.'); window.location.href='emprestimos_de_livros.php';</script>");
+    die("<script>alert('Livro indisponível no estoque.'); window.location.href='emprestimo_de_livros.php';</script>");
 }
 
 // Define data de devolução (14 dias depois)
@@ -75,7 +75,7 @@ try {
     $msg = addslashes($e->getMessage()); 
     echo "<script>
         alert('Erro ao realizar empréstimo: $msg');
-        window.location.href = 'emprestimos_de_livros.php';
+        window.location.href = 'emprestimo_de_livros.php';
     </script>";
 }
 ?>

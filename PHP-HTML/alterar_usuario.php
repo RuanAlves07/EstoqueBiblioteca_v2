@@ -140,13 +140,9 @@ else {
 
             <!-- Nova Senha -->
             <div class="form-group">
-                <label for="senha">Nova Senha (opcional):</label>
-                <input type="password"
-                       name="senha"
-                       id="senha"
-                       class="form-control"
-                       placeholder="Deixe em branco para manter a senha atual">
-                <small class="text-muted">Se preenchida, a senha será criptografada.</small>
+                <label for="senha">Nova Senha:</label>
+                <input type="password" name="senha" id="senha" class="form-control">
+                
             </div>
 
             <div class="text-center mt-4">

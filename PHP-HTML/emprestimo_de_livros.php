@@ -1,4 +1,4 @@
-<!-- emprestimos_de_livros.php -->
+<!-- emprestimo_de_livros.php -->
 <?php
 session_start();
 require_once 'conexao.php';

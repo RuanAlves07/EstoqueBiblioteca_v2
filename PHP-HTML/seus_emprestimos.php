@@ -9,13 +9,7 @@ require_once 'Menu.php';
 $id_usuario = $_SESSION['id_usuario'];
 
 // Busca os empréstimos e os livros associados
-$sql = "
-    SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao_prevista, e.data_devolucao_real, e.status, p.id_produto, p.titulo FROM emprestimo e
-    INNER JOIN item_emprestimo i ON e.id_emprestimo = i.id_emprestimo
-    INNER JOIN produto p ON i.id_produto = p.id_produto
-    WHERE e.id_usuario = :id_usuario
-    ORDER BY e.data_emprestimo DESC
-";
+$sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao_prevista, e.data_devolucao_real, e.status, p.id_produto, p.titulo FROM emprestimo e INNER JOIN item_emprestimo i ON e.id_emprestimo = i.id_emprestimo INNER JOIN produto p ON i.id_produto = p.id_produto WHERE e.id_usuario = :id_usuario ORDER BY e.data_emprestimo DESC";
 
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
