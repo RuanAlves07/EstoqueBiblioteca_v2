@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':contato' => $contato
                 ]);
                 
-                $sucesso = "Fornecedor cadastrado com sucesso!";
+                $sucesso = "Distribuidor cadastrado com sucesso!";
                 // Limpa os campos após sucesso (opcional)
                 $_POST = array();
             }
@@ -68,13 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Fornecedor</title>
+    <title>Cadastro de Distribuidor</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-4">
-        <center><h2>Cadastro de Fornecedor</h2></center>
+        <center><h2>Cadastro de Distribuidor</h2></center>
 
         <?php if (!empty($erro)): ?>
             <center><div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div></center>

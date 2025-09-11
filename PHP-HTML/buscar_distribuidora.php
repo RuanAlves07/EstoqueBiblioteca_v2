@@ -44,7 +44,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Fornecedor</title>
+    <title>Buscar Distribuidora</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Corrigido: removido espaços no final do URL -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     
     <div class="container mt-4">
-        <center><h2>Lista de Fornecedores</h2></center>
+        <center><h2>Lista de Distribuidora</h2></center>
 
         <form method="POST" action="">
             <div class="mb-3">
@@ -93,12 +93,12 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($fornecedor['contato']) ?></td>
                             <td>
                                 <a class="btn btn-sm btn-warning" 
-                                   href="alterar_fornecedor.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>">
+                                   href="alterar_distribuidora.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>">
                                    Alterar
                                 </a>
                                 <a class="btn btn-sm btn-danger" 
-                                   href="excluir_fornecedor.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')">
+                                   href="excluir_distribuidora.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir esta distribuidora?')">
                                    Excluir
                                 </a>
                             </td>
@@ -108,7 +108,7 @@ $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </table>
             </center>
         <?php else: ?>
-            <center><p class="text-muted">Nenhum fornecedor encontrado.</p></center>
+            <center><p class="text-muted">Nenhum distribuidor encontrado.</p></center>
         <?php endif; ?>
 
     </div>

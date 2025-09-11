@@ -23,7 +23,7 @@ $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
 
 if ($stmt->rowCount() > 0) {
-    echo "<script>alert('CNPJ já cadastrado para outro fornecedor.');window.location.href='alterar_fornecedor.php';</script>";
+    echo "<script>alert('CNPJ já cadastrado para outro distribuidor.');window.location.href='alterar_fornecedor.php';</script>";
     exit;
 }
 
@@ -49,9 +49,9 @@ try {
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Fornecedor atualizado com sucesso!');window.location.href='alterar_fornecedor.php';</script>";
+        echo "<script>alert('Distribuidor atualizado com sucesso!');window.location.href='alterar_distribuidora.php';</script>";
     } else {
-        echo "<script>alert('Erro ao atualizar fornecedor.');</script>";
+        echo "<script>alert('Erro ao atualizar distribuidor.');</script>";
     }
 } catch (Exception $e) {
     echo "<script>alert('Erro: " . $e->getMessage() . "');</script>";

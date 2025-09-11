@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // SE NÃO ENCONTRAR
         if (!$fornecedor) {
-            echo "<script>alert('Fornecedor não encontrado');</script>";
+            echo "<script>alert('Distribuidora não encontrado');</script>";
         }
     }
 }
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alterar Fornecedor</title>
+    <title>Alterar Distribuidora</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="scripts.js"></script>
@@ -57,11 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-    <center><h2 class="mb-4">Alterar Fornecedor</h2></center>
+    <center><h2 class="mb-4">Alterar Distribuidora</h2></center>
 
     <div class="container mt-4">
         <!-- FORMULÁRIO DE BUSCA -->
-        <form method="POST" action="alterar_fornecedor.php">
+        <form method="POST" action="alterar_distribuidora.php">
             <div class="form-group">
                 <label for="busca_fornecedor">Buscar por ID, Nome Empresarial ou Fantasia:</label>
                 <input type="text" 
@@ -72,13 +72,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        placeholder="Digite ID, empresa ou nome fantasia"
                        required>
             </div>
-            <button type="submit" class="btn btn-primary">Buscar Fornecedor</button>
+            <button type="submit" class="btn btn-primary">Buscar Distribuidora</button>
         </form>
 
         <!-- FORMULÁRIO DE ALTERAÇÃO -->
         <?php if ($fornecedor): ?>
         <hr>
-        <form action="processa_alteracao_fornecedor.php" method="POST" onsubmit="return validarFornecedor();">
+        <form action="processa_alteracao_distribuidora.php" method="POST" onsubmit="return validarFornecedor();">
             <input type="hidden" name="id_fornecedor" value="<?= htmlspecialchars($fornecedor['id_fornecedor']) ?>">
 
             <!-- Nome Empresarial -->
@@ -159,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success">Atualizar Fornecedor</button>
+                <button type="submit" class="btn btn-success">Atualizar Distribuidora</button>
                 <button type="reset" class="btn btn-secondary">Limpar</button>
             </div>
         </form>
