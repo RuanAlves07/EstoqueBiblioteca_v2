@@ -29,28 +29,42 @@ if ($perfil_logado == 4) {
 } 
 // CASO CONTRÁRIO, PERMITE A BUSCA NORMAL
 else {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (!empty($_POST['busca_usuario'])) {
-            $busca = trim($_POST['busca_usuario']);
+    // Verifica se foi passado ID via GET (do link do buscar_usuario.php)
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $id = (int)$_GET['id'];
+        $sql = "SELECT * FROM usuario WHERE id_usuario = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$usuario) {
+            echo "<script>alert('Usuário não encontrado');</script>";
         }
+    } else {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (!empty($_POST['busca_usuario'])) {
+                $busca = trim($_POST['busca_usuario']);
+            }
 
-        // VERIFICA SE A BUSCA É POR ID OU NOME
-        if ($busca !== null && is_numeric($busca)) {
-            $sql = "SELECT * FROM usuario WHERE id_usuario = :busca";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
-        } elseif ($busca !== null) {
-            $sql = "SELECT * FROM usuario WHERE nome LIKE :busca_nome";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
-        }
+            // VERIFICA SE A BUSCA É POR ID OU NOME
+            if ($busca !== null && is_numeric($busca)) {
+                $sql = "SELECT * FROM usuario WHERE id_usuario = :busca";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+            } elseif ($busca !== null) {
+                $sql = "SELECT * FROM usuario WHERE nome LIKE :busca_nome";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+            }
 
-        if (isset($stmt)) {
-            $stmt->execute();
-            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (isset($stmt)) {
+                $stmt->execute();
+                $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$usuario) {
-                echo "<script>alert('Usuário não encontrado');</script>";
+                if (!$usuario) {
+                    echo "<script>alert('Usuário não encontrado');</script>";
+                }
             }
         }
     }
@@ -64,7 +78,7 @@ else {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alterar Usuário</title>
     <link rel="stylesheet" href="../CSS/styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet">
     <script src="scripts.js"></script>
     <style>
         .container { max-width: 800px; }
@@ -123,7 +137,7 @@ else {
                        required>
             </div>
 
-            <!-- Perfil (BLOQUEADO PARA PERFIL 4) -->
+            <!-- Perfil (BLOQUEADO PARA PERFIL DE CLIENTE) -->
             <div class="form-group">
                 <label for="id_perfil">Perfil:</label>
                 <select name="id_perfil" id="id_perfil" class="form-control" 
@@ -152,8 +166,6 @@ else {
         </form>
         <?php endif; ?>
     </div>
-
-
 
     <!-- BOTÃO DE LOGOUT -->
     <div class="logout text-center mt-3">

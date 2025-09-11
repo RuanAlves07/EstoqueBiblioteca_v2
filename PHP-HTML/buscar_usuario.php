@@ -82,8 +82,8 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($usuario['email']) ?></td>
                             <td>
                                 <a class="btn btn-sm btn-warning" 
-                                   href="alterar_usuario.php?id=<?= (int)$usuario['id_usuario'] ?>">
-                                   Alterar
+                                href="alterar_usuario.php?id=<?= (int)$usuario['id_usuario'] ?>">
+                                Alterar
                                 </a>
                                 <a class="btn btn-sm btn-danger" 
                                    href="excluir_usuario.php?id=<?= (int)$usuario['id_usuario'] ?>"

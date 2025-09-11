@@ -13,40 +13,65 @@ if ($_SESSION['perfil'] != 1) {
 $produto = null;
 $busca = null;
 
-// BUSCA DE PRODUTO
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca_produto'])) {
-    $busca = trim($_POST['busca_produto']);
-
-    if (is_numeric($busca)) {
-        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora 
-                FROM produto p 
-                LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
-                LEFT JOIN autor a ON p.id_autor = a.id_autor 
-                LEFT JOIN editora e ON p.id_editora = e.id_editora 
-                WHERE p.id_produto = :busca";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
-    } else {
-        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora 
-                FROM produto p 
-                LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
-                LEFT JOIN autor a ON p.id_autor = a.id_autor 
-                LEFT JOIN editora e ON p.id_editora = e.id_editora 
-                WHERE p.titulo LIKE :busca_nome";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
-    }
-
+// Verifica se foi passado ID via GET (do link do buscar_livro.php)
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor, p.id_fornecedor 
+            FROM produto p 
+            LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
+            LEFT JOIN autor a ON p.id_autor = a.id_autor 
+            LEFT JOIN editora e ON p.id_editora = e.id_editora 
+            LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor 
+            WHERE p.id_produto = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$produto) {
         echo "<script>alert('Livro não encontrado');</script>";
     }
+} else {
+    // BUSCA DE PRODUTO
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca_produto'])) {
+        $busca = trim($_POST['busca_produto']);
+
+        if (is_numeric($busca)) {
+            $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor, p.id_fornecedor 
+                    FROM produto p 
+                    LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
+                    LEFT JOIN autor a ON p.id_autor = a.id_autor 
+                    LEFT JOIN editora e ON p.id_editora = e.id_editora 
+                    LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor 
+                    WHERE p.id_produto = :busca";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+        } else {
+            $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor, p.id_fornecedor 
+                    FROM produto p 
+                    LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
+                    LEFT JOIN autor a ON p.id_autor = a.id_autor 
+                    LEFT JOIN editora e ON p.id_editora = e.id_editora 
+                    LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor 
+                    WHERE p.titulo LIKE :busca_nome";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+        }
+
+        $stmt->execute();
+        $produto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$produto) {
+            echo "<script>alert('Livro não encontrado');</script>";
+        }
+    }
 }
 
 // CARREGA CATEGORIAS PARA O SELECT
 $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria ORDER BY nome_categoria")->fetchAll(PDO::FETCH_ASSOC);
+
+// CARREGA FORNECEDORES PARA O SELECT
+$fornecedores = $pdo->query("SELECT id_fornecedor, nome_fantasia FROM fornecedor ORDER BY nome_fantasia")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +81,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alterar livros</title>
     <link rel="stylesheet" href="../CSS/styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css    " rel="stylesheet">
     <style>
         .container { max-width: 800px; }
         .form-group { margin-bottom: 1rem; }
@@ -188,6 +213,20 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
                        required>
             </div>
 
+            
+            <div class="form-group">
+                <label for="id_fornecedor">Fornecedor:</label>
+                <select name="id_fornecedor" id="id_fornecedor" class="form-control" required>
+                    <option value="">Selecione um fornecedor...</option>
+                    <?php foreach ($fornecedores as $forn): ?>
+                        <option value="<?= $forn['id_fornecedor'] ?>"
+                            <?= ($forn['id_fornecedor'] == $produto['id_fornecedor']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($forn['nome_fantasia']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success">Atualizar Livro</button>
                 <button type="reset" class="btn btn-secondary">Limpar</button>
@@ -195,8 +234,6 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         </form>
         <?php endif; ?>
     </div>
-
-
 
     <!-- BOTÃO DE LOGOUT -->
     <div class="logout text-center mt-3">

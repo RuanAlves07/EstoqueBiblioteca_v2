@@ -180,3 +180,9 @@ ALTER TABLE emprestimo CHANGE COLUMN id_cliente id_usuario INT NOT NULL;
 
 ALTER TABLE emprestimo 
 MODIFY COLUMN id_funcionario INT NULL DEFAULT NULL;
+
+
+-- comunica o produto com o fornecedor 
+
+ALTER TABLE produto ADD COLUMN id_fornecedor INT NULL DEFAULT NULL AFTER quantidade_estoque;
+ALTER TABLE produto ADD CONSTRAINT fk_produto_fornecedor FOREIGN KEY (id_fornecedor) REFERENCES fornecedor (id_fornecedor);

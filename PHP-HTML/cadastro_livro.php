@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ano_publicacao = $_POST['ano_publicacao'] ?: null;
     $edicao = trim($_POST['edicao']);
     $quantidade_estoque = (int)$_POST['quantidade_estoque'];
+    $id_fornecedor = (int)$_POST['id_fornecedor']; // Novo campo
 
     try {
         $pdo->beginTransaction();
@@ -52,9 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_editora = $pdo->lastInsertId();
         }
 
-        // Inserir produto
-        $sql = "INSERT INTO produto (titulo, isbn, id_categoria, id_autor, id_editora, ano_publicacao, edicao, quantidade_estoque) 
-                VALUES (:titulo, :isbn, :id_categoria, :id_autor, :id_editora, :ano_publicacao, :edicao, :quantidade_estoque)";
+        // Inserir produto (agora com id_fornecedor)
+        $sql = "INSERT INTO produto (titulo, isbn, id_categoria, id_autor, id_editora, ano_publicacao, edicao, quantidade_estoque, id_fornecedor) 
+                VALUES (:titulo, :isbn, :id_categoria, :id_autor, :id_editora, :ano_publicacao, :edicao, :quantidade_estoque, :id_fornecedor)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':titulo', $titulo);
         $stmt->bindParam(':isbn', $isbn);
@@ -64,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':ano_publicacao', $ano_publicacao);
         $stmt->bindParam(':edicao', $edicao);
         $stmt->bindParam(':quantidade_estoque', $quantidade_estoque);
+        $stmt->bindParam(':id_fornecedor', $id_fornecedor); // Vincula o fornecedor
         $stmt->execute();
 
         $pdo->commit();
@@ -76,6 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Carregar categorias para o select
 $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria ORDER BY nome_categoria")->fetchAll(PDO::FETCH_ASSOC);
+
+// Carregar fornecedores para o select
+$fornecedores = $pdo->query("SELECT id_fornecedor, nome_fantasia FROM fornecedor ORDER BY nome_fantasia")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +90,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de livros</title>
     <link rel="stylesheet" href="../CSS/styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 </head>
 <body>
 
@@ -121,6 +126,16 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
 
         <label for="nome_editora">Nome da Editora:</label>
         <input type="text" id="nome_editora" name="nome_editora" required placeholder="Ex: Editora Abril">
+
+        <label for="id_fornecedor">Fornecedor:</label>
+        <select id="id_fornecedor" name="id_fornecedor" required>
+            <option value="">Selecione um fornecedor...</option>
+            <?php foreach ($fornecedores as $forn): ?>
+                <option value="<?= $forn['id_fornecedor'] ?>">
+                    <?= htmlspecialchars($forn['nome_fantasia']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
         <label for="edicao">Edição:</label>
         <input type="text" id="edicao" name="edicao" placeholder="Ex: 2ª edição">

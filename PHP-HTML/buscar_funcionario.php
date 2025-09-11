@@ -44,7 +44,7 @@ if (isset($_GET['busca']) && !empty($_GET['busca'])) {
     <title>Buscar Funcionário</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Corrigido: removido espaços no final do URL -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet">
 </head>
 <body>
 
@@ -109,7 +109,7 @@ if (isset($_GET['busca']) && !empty($_GET['busca'])) {
     </div>
 
     <!-- Scripts no final -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js  "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js  "></script>
 </body>
 </html>

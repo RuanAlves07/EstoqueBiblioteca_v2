@@ -13,29 +13,43 @@ if ($_SESSION['perfil'] != 1) {
 $funcionario = null;
 $busca = null;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!empty($_POST['busca_funcionario'])) {
-        $busca = trim($_POST['busca_funcionario']);
+// Verifica se foi passado ID via GET (do link do buscar_funcionario.php)
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $sql = "SELECT * FROM funcionario WHERE id_funcionario = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$funcionario) {
+        echo "<script>alert('Funcionário não encontrado');</script>";
     }
+} else {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (!empty($_POST['busca_funcionario'])) {
+            $busca = trim($_POST['busca_funcionario']);
+        }
 
-    // VERIFICA SE A BUSCA É UM NÚMERO (ID) OU UM NOME
-    if ($busca !== null && is_numeric($busca)) {
-        $sql = "SELECT * FROM funcionario WHERE id_funcionario = :busca";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
-    } elseif ($busca !== null) {
-        $sql = "SELECT * FROM funcionario WHERE nome_completo LIKE :busca_nome";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
-    }
+        // VERIFICA SE A BUSCA É UM NÚMERO (ID) OU UM NOME
+        if ($busca !== null && is_numeric($busca)) {
+            $sql = "SELECT * FROM funcionario WHERE id_funcionario = :busca";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+        } elseif ($busca !== null) {
+            $sql = "SELECT * FROM funcionario WHERE nome_completo LIKE :busca_nome";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+        }
 
-    if (isset($stmt)) {
-        $stmt->execute();
-        $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (isset($stmt)) {
+            $stmt->execute();
+            $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // SE O FUNCIONÁRIO NÃO FOR ENCONTRADO, EXIBE UM ALERTA
-        if (!$funcionario) {
-            echo "<script>alert('Funcionário não encontrado');</script>";
+            // SE O FUNCIONÁRIO NÃO FOR ENCONTRADO, EXIBE UM ALERTA
+            if (!$funcionario) {
+                echo "<script>alert('Funcionário não encontrado');</script>";
+            }
         }
     }
 }
@@ -49,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Alterar Funcionário</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <script src="validacoes.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="scripts.js"></script>
     <style>
         .container { max-width: 800px; }

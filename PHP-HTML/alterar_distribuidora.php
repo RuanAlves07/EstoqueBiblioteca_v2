@@ -13,29 +13,43 @@ if ($_SESSION['perfil'] != 1) {
 $fornecedor = null;
 $busca = null;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!empty($_POST['busca_fornecedor'])) {
-        $busca = trim($_POST['busca_fornecedor']);
+// Verifica se foi passado ID via GET (do link do buscar_distribuidora.php)
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $sql = "SELECT * FROM fornecedor WHERE id_fornecedor = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $fornecedor = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$fornecedor) {
+        echo "<script>alert('Distribuidora não encontrado');</script>";
     }
+} else {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (!empty($_POST['busca_fornecedor'])) {
+            $busca = trim($_POST['busca_fornecedor']);
+        }
 
-    // VERIFICA SE A BUSCA É POR ID (numérico) OU POR NOME (empresa ou fantasia)
-    if ($busca !== null && is_numeric($busca)) {
-        $sql = "SELECT * FROM fornecedor WHERE id_fornecedor = :busca";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
-    } elseif ($busca !== null) {
-        $sql = "SELECT * FROM fornecedor WHERE nome_empresa LIKE :busca_nome OR nome_fantasia LIKE :busca_nome";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
-    }
+        // VERIFICA SE A BUSCA É POR ID (numérico) OU POR NOME (empresa ou fantasia)
+        if ($busca !== null && is_numeric($busca)) {
+            $sql = "SELECT * FROM fornecedor WHERE id_fornecedor = :busca";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+        } elseif ($busca !== null) {
+            $sql = "SELECT * FROM fornecedor WHERE nome_empresa LIKE :busca_nome OR nome_fantasia LIKE :busca_nome";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+        }
 
-    if (isset($stmt)) {
-        $stmt->execute();
-        $fornecedor = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (isset($stmt)) {
+            $stmt->execute();
+            $fornecedor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // SE NÃO ENCONTRAR
-        if (!$fornecedor) {
-            echo "<script>alert('Distribuidora não encontrado');</script>";
+            // SE NÃO ENCONTRAR
+            if (!$fornecedor) {
+                echo "<script>alert('Distribuidora não encontrado');</script>";
+            }
         }
     }
 }
@@ -48,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alterar Distribuidora</title>
     <link rel="stylesheet" href="../CSS/styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="scripts.js"></script>
     <style>
         .container { max-width: 800px; }

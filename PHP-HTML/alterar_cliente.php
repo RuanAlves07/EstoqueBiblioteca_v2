@@ -13,29 +13,43 @@ if ($_SESSION['perfil'] != 1) {
 $cliente = null;
 $busca = null;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!empty($_POST['busca_cliente'])) {
-        $busca = trim($_POST['busca_cliente']);
+// Verifica se foi passado ID via GET (do link do buscar_cliente.php)
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $sql = "SELECT * FROM cliente WHERE id_cliente = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$cliente) {
+        echo "<script>alert('Cliente não encontrado');</script>";
     }
+} else {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (!empty($_POST['busca_cliente'])) {
+            $busca = trim($_POST['busca_cliente']);
+        }
 
-    // VERIFICA SE A BUSCA É UM NÚMERO (ID) OU UM NOME
-    if ($busca !== null && is_numeric($busca)) {
-        $sql = "SELECT * FROM cliente WHERE id_cliente = :busca";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
-    } elseif ($busca !== null) {
-        $sql = "SELECT * FROM cliente WHERE nome_completo LIKE :busca_nome";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
-    }
+        // VERIFICA SE A BUSCA É UM NÚMERO (ID) OU UM NOME
+        if ($busca !== null && is_numeric($busca)) {
+            $sql = "SELECT * FROM cliente WHERE id_cliente = :busca";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':busca', $busca, PDO::PARAM_INT);
+        } elseif ($busca !== null) {
+            $sql = "SELECT * FROM cliente WHERE nome_completo LIKE :busca_nome";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
+        }
 
-    if (isset($stmt)) {
-        $stmt->execute();
-        $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (isset($stmt)) {
+            $stmt->execute();
+            $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // SE O CLIENTE NÃO FOR ENCONTRADO, EXIBE UM ALERTA
-        if (!$cliente) {
-            echo "<script>alert('Cliente não encontrado');</script>";
+            // SE O CLIENTE NÃO FOR ENCONTRADO, EXIBE UM ALERTA
+            if (!$cliente) {
+                echo "<script>alert('Cliente não encontrado');</script>";
+            }
         }
     }
 }
@@ -48,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alterar Cliente</title>
     <link rel="stylesheet" href="../CSS/styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet">
     <script src="scripts.js"></script>
 
 </head>
