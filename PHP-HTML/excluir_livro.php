@@ -10,13 +10,14 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Busca todos os produtos com informações de categoria, autor e editora
+// Busca todos os produtos com informações de categoria, autor, editora e fornecedor
 try {
-    $sql = "SELECT p.id_produto, p.titulo, p.isbn, c.nome_categoria, a.nome_autor, e.nome_editora, p.ano_publicacao, p.edicao, p.quantidade_estoque 
+    $sql = "SELECT p.id_produto, p.titulo, p.isbn, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor, p.ano_publicacao, p.edicao, p.quantidade_estoque 
             FROM produto p
             LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
             LEFT JOIN autor a ON p.id_autor = a.id_autor
             LEFT JOIN editora e ON p.id_editora = e.id_editora
+            LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor
             ORDER BY p.titulo ASC";
     $stmt = $pdo->query($sql);
     $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -78,7 +79,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <title>Excluir livros</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet"
           integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <style>
         .container { max-width: 1000px; }
@@ -117,6 +118,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <th>Categoria</th>
                             <th>Autor</th>
                             <th>Editora</th>
+                            <th>Fornecedor</th> 
                             <th>Ano</th>
                             <th>Edição</th>
                             <th>Estoque</th>
@@ -132,6 +134,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <td><?= htmlspecialchars($produto['nome_categoria'] ?? '—') ?></td>
                             <td><?= htmlspecialchars($produto['nome_autor'] ?? '—') ?></td>
                             <td><?= htmlspecialchars($produto['nome_editora'] ?? '—') ?></td>
+                            <td><?= htmlspecialchars($produto['nome_fornecedor'] ?? '—') ?></td> 
                             <td><?= htmlspecialchars($produto['ano_publicacao'] ?? '—') ?></td>
                             <td><?= htmlspecialchars($produto['edicao'] ?? '—') ?></td>
                             <td><?= htmlspecialchars($produto['quantidade_estoque']) ?></td>
@@ -155,10 +158,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js  "
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
             crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js  "
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
 

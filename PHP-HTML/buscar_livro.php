@@ -18,10 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $busca = trim($_POST['busca']);
     if (!empty($busca)) {
         // Busca por ID ou título
-        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora FROM produto p
+        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor 
+                FROM produto p
                 LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
                 LEFT JOIN autor a ON p.id_autor = a.id_autor
                 LEFT JOIN editora e ON p.id_editora = e.id_editora
+                LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor
                 WHERE p.id_produto = :busca OR p.titulo LIKE :titulo_busca 
                 ORDER BY p.titulo ASC";
         $stmt = $pdo->prepare($sql);
@@ -29,19 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':titulo_busca', "%$busca%", PDO::PARAM_STR);
     } else {
         // Se não houver busca, traz todos
-        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora FROM produto p
+        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor 
+                FROM produto p
                 LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
                 LEFT JOIN autor a ON p.id_autor = a.id_autor
                 LEFT JOIN editora e ON p.id_editora = e.id_editora
+                LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor
                 ORDER BY p.titulo ASC";
         $stmt = $pdo->prepare($sql);
     }
 } else {
     // Se não for POST, traz todos os produtos
-    $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora FROM produto p
+    $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor 
+            FROM produto p
             LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
             LEFT JOIN autor a ON p.id_autor = a.id_autor
             LEFT JOIN editora e ON p.id_editora = e.id_editora
+            LEFT JOIN fornecedor f ON p.id_fornecedor = f.id_fornecedor
             ORDER BY p.titulo ASC";
     $stmt = $pdo->prepare($sql);
 }
@@ -58,7 +64,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Buscar Livros</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Corrigido: removido espaços no final do URL -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css    " rel="stylesheet">
 </head>
 <body>
 
@@ -88,6 +94,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Categoria</th>
                             <th>Autor</th>
                             <th>Editora</th>
+                            <th>Fornecedor</th> 
                             <th>Ano de Publicação</th>
                             <th>Edição</th>
                             <th>Quantidade</th>
@@ -103,6 +110,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($produto['nome_categoria'] ?? $produto['id_categoria']) ?></td>
                             <td><?= htmlspecialchars($produto['nome_autor'] ?? $produto['id_autor']) ?></td>
                             <td><?= htmlspecialchars($produto['nome_editora'] ?? $produto['id_editora']) ?></td>
+                            <td><?= htmlspecialchars($produto['nome_fornecedor'] ?? '—') ?></td>
                             <td><?= htmlspecialchars($produto['ano_publicacao']) ?></td>
                             <td><?= htmlspecialchars($produto['edicao']) ?></td>
                             <td><?= htmlspecialchars($produto['quantidade_estoque']) ?></td>
@@ -127,14 +135,12 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <br>
-        <center>
-            <a href="dashboard.php" class="btn btn-secondary">Voltar</a>
-        </center>
+
     </div>
 
     <!-- Scripts no final -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js  "></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js  "></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js    "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js    "></script>
  
 </body>
 </html>

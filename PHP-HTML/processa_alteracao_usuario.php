@@ -4,9 +4,7 @@ require_once 'conexao.php';
 
 // Verifica se é POST e se tem ID
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['id_usuario'])) {
-    $_SESSION['mensagem'] = "Acesso inválido.";
-    $_SESSION['msg_tipo'] = "danger";
-    header("Location: alterar_usuario.php");
+    echo "<script>alert('Acesso inválido.'); window.location.href='alterar_usuario.php';</script>";
     exit();
 }
 
@@ -18,9 +16,7 @@ $senha = trim($_POST['senha']);
 
 // Validação básica
 if (empty($nome) || !$email || !in_array($id_perfil, [1, 2, 3, 4])) {
-    $_SESSION['mensagem'] = "Dados inválidos.";
-    $_SESSION['msg_tipo'] = "danger";
-    header("Location: alterar_usuario.php?busca_usuario=" . urlencode($_POST['nome']));
+    echo "<script>alert('Dados inválidos.'); window.location.href='alterar_usuario.php?id=" . $id_usuario . "';</script>";
     exit();
 }
 
@@ -46,15 +42,14 @@ try {
     }
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
 
-    $_SESSION['mensagem'] = "Usuário <strong>$nome</strong> atualizado com sucesso!";
-    $_SESSION['msg_tipo'] = "success";
+    if ($stmt->execute($params)) { // 👈 Aqui estava faltando o $params!
+        echo "<script>alert('Usuário atualizado com sucesso!'); window.location.href='buscar_usuario.php';</script>";
+    } else {
+        echo "<script>alert('Erro ao atualizar o usuário.'); window.location.href='alterar_usuario.php?id=" . $id_usuario . "';</script>";
+    }
 
 } catch (PDOException $e) {
-    $_SESSION['mensagem'] = "Erro ao atualizar: " . $e->getMessage();
-    $_SESSION['msg_tipo'] = "danger";
+    echo "<script>alert('Erro ao atualizar o usuário: " . addslashes($e->getMessage()) . "'); window.location.href='alterar_usuario.php?id=" . $id_usuario . "';</script>";
 }
-
-header("Location: alterar_usuario.php");
 exit();
