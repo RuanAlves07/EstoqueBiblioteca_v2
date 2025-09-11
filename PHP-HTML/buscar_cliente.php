@@ -45,7 +45,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Cliente</title>
     <link rel="stylesheet" href="../CSS/styles.css">
-    <!-- Corrigido: removido espaços extras no URL -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
