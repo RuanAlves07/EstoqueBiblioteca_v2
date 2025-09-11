@@ -1,37 +1,42 @@
 <?php 
 session_start(); 
 require_once 'conexao.php'; 
-require_once 'funcoes_email.php'; // Arquivo com funções que geram a senha e silulam o envio 
- 
-// Verifica se o usuário existe 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
-    $email = $_POST['email']; 
- 
-    // Verifica se o usuário existe 
-    $sql ="SELECT * FROM usuario WHERE email = :email"; 
-    $stmt = $pdo->prepare($sql); 
-    $stmt->bindParam(':email', $email); 
-    $stmt->execute(); 
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC); 
- 
+require_once 'funcoes_email.php';
+
+$mensagem = '';
+$codigo_exibido = '';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
+
+    $sql = "SELECT * FROM usuario WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if ($usuario) {
-        // Gera uma nova senha temporária
+        // Gera senha temporária e código de recuperação
         $senha_temporaria = gerarSenhaTemporaria();
-        $senha_hash = password_hash($senha_temporaria, PASSWORD_DEFAULT);
+        $codigo_recuperacao = gerarCodigoRecuperacao();
         
-        // Atualiza a senha do usuário no banco de dados
+        $senha_hash = password_hash($senha_temporaria, PASSWORD_DEFAULT);
+
+        // Atualiza a senha e marca como temporária
         $sql = "UPDATE usuario SET senha = :senha, senha_temporaria = TRUE WHERE email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':senha', $senha_hash);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
-        // Envia a nova senha para o e-mail do usuário
-        simularEnvioEmail($email, $senha_temporaria);
-        echo "<script>alert('Uma nova senha temporaria foi gerada e enviada (simulação). Verifique o arquivo emails_simulados.txt');window.location.href='index.php';</script>";
+        // Envia email simulado com senha e código
+        simularEnvioEmail($email, $senha_temporaria, $codigo_recuperacao);
+
+        $mensagem = "Instruções enviadas! Verifique o arquivo emails_simulados.txt";
+        $codigo_exibido = $codigo_recuperacao;
 
     } else {
-        echo "<script>alert('E-mail não encontrado.');</script>";
+        $mensagem = "E-mail não encontrado.";
     }
 }
 ?>
@@ -65,6 +70,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 Enviar Instruções
             </button>
         </form>
+
+        <!-- Exibe a mensagem -->
+        <?php if ($mensagem): ?>
+            <div class="alert alert-info mt-3 text-center">
+                <?php echo $mensagem; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Exibe o código de recuperação -->
+        <?php if ($codigo_exibido): ?>
+            <div class="code-display mt-3 text-center" style="background-color: #f8f9fa; border: 1px dashed #3a66ff; padding: 15px; border-radius: 8px;">
+                <p><strong>Código de Recuperação:</strong> <span style="font-size: 1.2em; color: #3a66ff;"><?php echo $codigo_exibido; ?></span></p>
+                <small>Use este código para redefinir sua senha.</small>
+            </div>
+        <?php endif; ?>
 
         <div class="back-link">
             <a href="index.php">← Voltar para o login</a>
