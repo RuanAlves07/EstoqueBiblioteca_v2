@@ -23,28 +23,28 @@ $nome_perfil = $perfil['nome_perfil'] ?? 'Desconhecido';
 // DEFINIÇÃO DAS PERMISSÕES POR PERFIL
 $permissoes = [
     1 => [
-        "Cadastrar"   => ["cadastro_usuario.php", "cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_produto.php", "cadastro_funcionario.php"],
-        "Buscar"      => ["buscar_usuario.php", "buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php", "buscar_funcionario.php"],
-        "Alterar"     => ["alterar_usuario.php", "alterar_cliente.php", "alterar_fornecedor.php", "alterar_produto.php", "alterar_funcionario.php"],
-        "Excluir"     => ["excluir_usuario.php", "excluir_cliente.php", "excluir_fornecedor.php", "excluir_produto.php", "excluir_funcionario.php"],
+        "Cadastrar"   => ["cadastro_usuario.php", "cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_livro.php", "cadastro_funcionario.php"],
+        "Buscar"      => ["buscar_usuario.php", "buscar_cliente.php", "buscar_fornecedor.php", "buscar_livro.php", "buscar_funcionario.php"],
+        "Alterar"     => ["alterar_usuario.php", "alterar_cliente.php", "alterar_fornecedor.php", "alterar_livro.php", "alterar_funcionario.php"],
+        "Excluir"     => ["excluir_usuario.php", "excluir_cliente.php", "excluir_fornecedor.php", "excluir_livro.php", "excluir_funcionario.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
     2 => [
-        "Cadastrar"   => ["cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_produto.php"],
-        "Buscar"      => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar"     => ["alterar_cliente.php", "alterar_fornecedor.php", "alterar_produto.php"],
-        "Excluir"     => ["excluir_cliente.php", "excluir_fornecedor.php", "excluir_produto.php"],
+        "Cadastrar"   => ["cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_livro.php"],
+        "Buscar"      => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_livro.php"],
+        "Alterar"     => ["alterar_cliente.php", "alterar_fornecedor.php", "alterar_livro.php"],
+        "Excluir"     => ["excluir_cliente.php", "excluir_fornecedor.php", "excluir_livro.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
     3 => [
-        "Cadastrar"   => ["cadastro_fornecedor.php", "cadastro_produto.php"],
-        "Buscar"      => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_produto.php"],
-        "Alterar"     => ["alterar_fornecedor.php", "alterar_produto.php"],
-        "Excluir"     => ["excluir_produto.php"],
+        "Cadastrar"   => ["cadastro_fornecedor.php", "cadastro_livro.php"],
+        "Buscar"      => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_livro.php"],
+        "Alterar"     => ["alterar_fornecedor.php", "alterar_livro.php"],
+        "Excluir"     => ["excluir_livro.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
     4 => [
-        "Buscar"      => ["buscar_produto.php"],
+        "Buscar"      => ["buscar_livro.php"],
         "Alterar"     => ["alterar_usuario.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],

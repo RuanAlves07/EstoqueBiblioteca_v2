@@ -37,7 +37,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $produto = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
     if (!$produto) {
-        $_SESSION['mensagem'] = "Produto não encontrado.";
+        $_SESSION['mensagem'] = "Livro não encontrado.";
         $_SESSION['msg_tipo'] = "warning";
     } else {
         try {
@@ -46,10 +46,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $stmt_delete->bindParam(':id', $id_produto, PDO::PARAM_INT);
 
             if ($stmt_delete->execute()) {
-                $_SESSION['mensagem'] = "Produto <strong>" . htmlspecialchars($produto['titulo']) . "</strong> excluído com sucesso!";
+                $_SESSION['mensagem'] = "Livro <strong>" . htmlspecialchars($produto['titulo']) . "</strong> excluído com sucesso!";
                 $_SESSION['msg_tipo'] = "success";
             } else {
-                $_SESSION['mensagem'] = "Erro ao excluir o produto.";
+                $_SESSION['mensagem'] = "Erro ao excluir o livro.";
                 $_SESSION['msg_tipo'] = "danger";
             }
         } catch (PDOException $e) {
@@ -64,7 +64,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     }
 
     // Redireciona para evitar reexclusão ao atualizar a página
-    header("Location: excluir_produto.php");
+    header("Location: excluir_livro.php");
     ob_end_clean();
     exit();
 }
@@ -100,7 +100,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     <!-- Conteúdo Principal -->
     <div class="container mt-4">
-        <h2 class="text-center mb-4">Excluir Produto</h2>
+        <h2 class="text-center mb-4">Excluir Livro</h2>
 
         <?php if (!empty($erro)): ?>
             <div class="alert alert-danger text-center"><?= htmlspecialchars($erro) ?></div>
@@ -137,8 +137,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <td><?= htmlspecialchars($produto['quantidade_estoque']) ?></td>
                             <td>
                                 <a class="btn btn-sm btn-danger" 
-                                   href="excluir_produto.php?id=<?= (int)$produto['id_produto'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+                                   href="excluir_livro.php?id=<?= (int)$produto['id_produto'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir este livro?')">
                                    Excluir
                                 </a>
                             </td>
@@ -148,7 +148,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </table>
             </center>
         <?php else: ?>
-            <center><p class="text-muted">Nenhum produto encontrado.</p></center>
+            <center><p class="text-muted">Nenhum livro encontrado.</p></center>
         <?php endif; ?>
 
 

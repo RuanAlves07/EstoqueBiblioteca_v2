@@ -55,7 +55,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Produtos</title>
+    <title>Buscar Livros</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Corrigido: removido espaços no final do URL -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet">
@@ -68,7 +68,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Formulário de busca -->
         <form method="POST" action="">
             <div class="mb-3">
-                <label for="busca" class="form-label">Digite o ID ou Nome do produto (opcional)</label>
+                <label for="busca" class="form-label">Digite o ID ou Nome do livro (opcional)</label>
                 <input type="text" class="form-control" id="busca" name="busca" value="<?= htmlspecialchars($busca) ?>">
             </div>
             <center><button type="submit" class="btn btn-primary">Pesquisar</button></center>
@@ -108,12 +108,12 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($produto['quantidade_estoque']) ?></td>
                             <td>
                                 <a class="btn btn-sm btn-warning"
-                                   href="alterar_produto.php?id=<?= (int)$produto['id_produto'] ?>">
+                                   href="alterar_livro.php?id=<?= (int)$produto['id_produto'] ?>">
                                    Alterar
                                 </a>
                                 <a class="btn btn-sm btn-danger"
-                                   href="excluir_produto.php?id=<?= (int)$produto['id_produto'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+                                   href="excluir_livro.php?id=<?= (int)$produto['id_produto'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir este livro?')">
                                    Excluir
                                 </a>
                             </td>
@@ -123,7 +123,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </table>
             </center>
         <?php else: ?>
-            <center><p class="text-muted">Nenhum produto encontrado.</p></center>
+            <center><p class="text-muted">Nenhum livro encontrado.</p></center>
         <?php endif; ?>
 
         <br>

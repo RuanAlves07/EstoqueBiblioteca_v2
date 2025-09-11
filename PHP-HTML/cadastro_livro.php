@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
 
         $pdo->commit();
-        $sucesso = "Produto cadastrado com sucesso!";
+        $sucesso = "Livro cadastrado com sucesso!";
     } catch (Exception $e) {
         $pdo->rollback();
         $erro = "Erro ao cadastrar: " . $e->getMessage();
@@ -99,7 +99,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         <center><div class="alert alert-success"><?= $sucesso ?></div></center>
     <?php endif; ?>
 
-    <form action="cadastro_produto.php" method="POST">
+    <form action="cadastro_livro.php" method="POST">
         <label for="titulo">Título do Livro:</label>
         <input type="text" id="titulo" name="titulo" required>
 

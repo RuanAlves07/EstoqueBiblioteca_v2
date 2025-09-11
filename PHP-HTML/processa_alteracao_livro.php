@@ -75,16 +75,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->execute()) {
             $pdo->commit();
-            echo "<script>alert('Produto atualizado com sucesso!');window.location.href='buscar_produto.php';</script>";
+            echo "<script>alert('Livro atualizado com sucesso!');window.location.href='buscar_livro.php';</script>";
         } else {
             $pdo->rollback();
-            echo "<script>alert('Erro ao atualizar o produto.');window.location.href='alterar_produto.php';</script>";
+            echo "<script>alert('Erro ao atualizar o Livro.');window.location.href='alterar_livro.php';</script>";
         }
 
     } catch (Exception $e) {
         $pdo->rollback();
-        error_log("Erro na alteração do produto: " . $e->getMessage());
-        echo "<script>alert('Erro interno. Tente novamente.');window.location.href='alterar_produto.php';</script>";
+        error_log("Erro na alteração do livro: " . $e->getMessage());
+        echo "<script>alert('Erro interno. Tente novamente.');window.location.href='alterar_livro.php';</script>";
     }
 }
 ?>

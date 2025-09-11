@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['busca_produto'])) {
     $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$produto) {
-        echo "<script>alert('Produto não encontrado');</script>";
+        echo "<script>alert('Livro não encontrado');</script>";
     }
 }
 
@@ -78,16 +78,16 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
                        name="busca_produto"
                        value="<?= htmlspecialchars($busca ?? '') ?>"
                        class="form-control"
-                       placeholder="Digite o ID ou título do produto"
+                       placeholder="Digite o ID ou título do livro"
                        required>
             </div>
-            <button type="submit" class="btn btn-primary">Buscar Produto</button>
+            <button type="submit" class="btn btn-primary">Buscar Livro</button>
         </form>
 
         <!-- FORMULÁRIO DE ALTERAÇÃO (APARECE SE ENCONTRAR) -->
         <?php if ($produto): ?>
         <hr>
-        <form action="processa_alteracao_produto.php" method="POST" onsubmit="return validarProduto();">
+        <form action="processa_alteracao_livro.php" method="POST" onsubmit="return validarProduto();">
             <input type="hidden" name="id_produto" value="<?= htmlspecialchars($produto['id_produto']) ?>">
 
             <!-- Título -->
@@ -190,7 +190,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success">Atualizar Produto</button>
+                <button type="submit" class="btn btn-success">Atualizar Livro</button>
                 <button type="reset" class="btn btn-secondary">Limpar</button>
             </div>
         </form>
