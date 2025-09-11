@@ -54,7 +54,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alterar Produto</title>
+    <title>Alterar livros</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -66,7 +66,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
 </head>
 <body>
 
-    <center><h2 class="mb-4">Alterar Produto</h2></center>
+    <center><h2 class="mb-4">Alterar Livros</h2></center>
 
     <div class="container mt-4">
         <!-- FORMULÁRIO DE BUSCA -->

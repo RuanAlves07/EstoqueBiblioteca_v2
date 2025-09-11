@@ -63,7 +63,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
     <div class="container mt-4">
-        <center><h2>Lista de Produtos</h2></center>
+        <center><h2>Lista de livros</h2></center>
 
         <!-- Formulário de busca -->
         <form method="POST" action="">
