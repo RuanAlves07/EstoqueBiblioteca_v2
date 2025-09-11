@@ -53,23 +53,23 @@ try {
 // DEFINIÇÃO DAS PERMISSÕES POR PERFIL
 $permissoes = [
     1 => [
-        "Cadastrar"   => ["cadastro_usuario.php", "cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_livro.php", "cadastro_funcionario.php"],
-        "Buscar"      => ["buscar_usuario.php", "buscar_cliente.php", "buscar_fornecedor.php", "buscar_livro.php", "buscar_funcionario.php"],
-        "Alterar"     => ["alterar_usuario.php", "alterar_cliente.php", "alterar_fornecedor.php", "alterar_livro.php", "alterar_funcionario.php"],
-        "Excluir"     => ["excluir_usuario.php", "excluir_cliente.php", "excluir_fornecedor.php", "excluir_livro.php", "excluir_funcionario.php"],
+        "Cadastrar"   => ["cadastro_usuario.php", "cadastro_cliente.php", "cadastro_distribuidora.php", "cadastro_livro.php", "cadastro_funcionario.php"],
+        "Buscar"      => ["buscar_usuario.php", "buscar_cliente.php", "buscar_distribuidora.php", "buscar_livro.php", "buscar_funcionario.php"],
+        "Alterar"     => ["alterar_usuario.php", "alterar_cliente.php", "alterar_distribuidora.php", "alterar_livro.php", "alterar_funcionario.php"],
+        "Excluir"     => ["excluir_usuario.php", "excluir_cliente.php", "excluir_distribuidora.php", "excluir_livro.php", "excluir_funcionario.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
     2 => [
-        "Cadastrar"   => ["cadastro_cliente.php", "cadastro_fornecedor.php", "cadastro_livro.php"],
-        "Buscar"      => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_livro.php"],
-        "Alterar"     => ["alterar_cliente.php", "alterar_fornecedor.php", "alterar_livro.php"],
-        "Excluir"     => ["excluir_cliente.php", "excluir_fornecedor.php", "excluir_livro.php"],
+        "Cadastrar"   => ["cadastro_cliente.php", "cadastro_distribuidora.php", "cadastro_livro.php"],
+        "Buscar"      => ["buscar_cliente.php", "buscar_distribuidora.php", "buscar_livro.php"],
+        "Alterar"     => ["alterar_cliente.php", "alterar_distribuidora.php", "alterar_livro.php"],
+        "Excluir"     => ["excluir_cliente.php", "excluir_distribuidora.php", "excluir_livro.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
     3 => [
-        "Cadastrar"   => ["cadastro_fornecedor.php", "cadastro_livro.php"],
-        "Buscar"      => ["buscar_cliente.php", "buscar_fornecedor.php", "buscar_livro.php"],
-        "Alterar"     => ["alterar_fornecedor.php", "alterar_livro.php"],
+        "Cadastrar"   => ["cadastro_distribuidora.php", "cadastro_livro.php"],
+        "Buscar"      => ["buscar_cliente.php", "buscar_distribuidora.php", "buscar_livro.php"],
+        "Alterar"     => ["alterar_distribuidora.php", "alterar_livro.php"],
         "Excluir"     => ["excluir_livro.php"],
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
@@ -172,7 +172,7 @@ $opcoes_menu = $permissoes[$id_perfil];
                     </div>
                     <div class="stat-info">
                         <h3><?= $totalFornecedores ?></h3>
-                        <p>Fornecedores</p>
+                        <p>Distribuidoras</p>
                     </div>
                 </div>
                 

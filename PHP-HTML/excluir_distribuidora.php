@@ -17,7 +17,7 @@ try {
     $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $fornecedores = [];
-    $erro = "Erro ao carregar fornecedores: " . $e->getMessage();
+    $erro = "Erro ao carregar distribuidoras: " . $e->getMessage();
 }
 
 // Processa exclusão
@@ -32,7 +32,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $fornecedor = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
     if (!$fornecedor) {
-        $_SESSION['mensagem'] = "Fornecedor não encontrado.";
+        $_SESSION['mensagem'] = "distribuidor não encontrado.";
         $_SESSION['msg_tipo'] = "warning";
     } else {
         try {
@@ -41,15 +41,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $stmt_delete->bindParam(':id', $id_fornecedor, PDO::PARAM_INT);
 
             if ($stmt_delete->execute()) {
-                $_SESSION['mensagem'] = "Fornecedor <strong>" . htmlspecialchars($fornecedor['nome_empresa']) . "</strong> excluído com sucesso!";
+                $_SESSION['mensagem'] = "Distribuidora <strong>" . htmlspecialchars($fornecedor['nome_empresa']) . "</strong> excluído com sucesso!";
                 $_SESSION['msg_tipo'] = "success";
             } else {
-                $_SESSION['mensagem'] = "Erro ao excluir fornecedor.";
+                $_SESSION['mensagem'] = "Erro ao excluir distribuidor.";
                 $_SESSION['msg_tipo'] = "danger";
             }
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
-                $_SESSION['mensagem'] = "Não é possível excluir: este fornecedor está vinculado a produtos ou outros registros.";
+                $_SESSION['mensagem'] = "Não é possível excluir: este distribuidor está vinculado a produtos ou outros registros.";
             } else {
                 $_SESSION['mensagem'] = "Erro ao excluir: " . $e->getMessage();
             }
@@ -58,7 +58,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     }
 
     // Redireciona para evitar reexclusão
-    header("Location: excluir_fornecedor.php");
+    header("Location: excluir_distribuidora.php");
     ob_end_clean();
     exit();
 }
@@ -69,7 +69,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir Fornecedor</title>
+    <title>Excluir Distribuidor</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -123,7 +123,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     <!-- Conteúdo Principal -->
     <div class="container mt-4">
-        <h2 class="text-center mb-4">Excluir Fornecedor</h2>
+        <h2 class="text-center mb-4">Excluir Distribuidor</h2>
 
         <?php if (!empty($erro)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
@@ -158,8 +158,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <td class="text-truncate"><?= htmlspecialchars($fornecedor['endereco']) ?></td>
                             <td class="text-center">
                                 <a class="btn-excluir"
-                                   href="excluir_fornecedor.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')">
+                                   href="excluir_distribuidora.php?id=<?= (int)$fornecedor['id_fornecedor'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir este distribuidor?')">
                                    Excluir
                                 </a>
                             </td>
@@ -169,7 +169,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </table>
             </div>
         <?php else: ?>
-            <center><p class="text-muted">Nenhum fornecedor encontrado.</p></center>
+            <center><p class="text-muted">Nenhum distribuidor encontrado.</p></center>
         <?php endif; ?>
 
 
