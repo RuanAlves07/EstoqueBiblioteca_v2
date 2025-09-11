@@ -133,7 +133,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        name="telefone" 
                        id="telefone" 
                        value="<?= htmlspecialchars($fornecedor['telefone']) ?>" 
-                       class="form-control" 
+                       class="form-control"
+                       maxlength="15"
                        placeholder="(00) 00000-0000">
             </div>
 
@@ -173,28 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 
-    <!-- VALIDAÇÃO JS -->
-    <script>
-        function validarFornecedor() {
-            const nomeEmp = document.getElementById('nome_empresa').value.trim();
-            const nomeFant = document.getElementById('nome_fantasia').value.trim();
-            const cnpj = document.getElementById('cnpj').value.replace(/\D/g, '');
-            if (nomeEmp === '' || nomeFant === '' || cnpj.length !== 14) {
-                alert('Nome empresarial, nome fantasia e CNPJ (14 dígitos) são obrigatórios!');
-                return false;
-            }
-            return true;
-        }
-
-        // Máscara de CNPJ
-        document.getElementById('cnpj').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 14) {
-                value = value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-            }
-            e.target.value = value;
-        });
-    </script>
+    <script src="../JS/validacoes.js"></script>
 
 </body>
 </html>

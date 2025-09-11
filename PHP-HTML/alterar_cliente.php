@@ -88,14 +88,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- CPF -->
             <div class="form-group">
                 <label for="cpf">CPF:</label>
-                <input type="text" name="cpf" id="cpf"
+                <input type="text" name="cpf" id="cpf" maxlength="14"
                     value="<?= htmlspecialchars($cliente['cpf']) ?>" class="form-control" placeholder="000.000.000-00" required>
             </div>
 
             <!-- Telefone -->
             <div class="form-group">
                 <label for="telefone">Telefone:</label>
-                <input type="text" name="telefone" id="telefone"
+                <input type="text" name="telefone" id="telefone" maxlength="15"
                     value="<?= htmlspecialchars($cliente['telefone']) ?>" class="form-control" placeholder="(00) 00000-0000" required>
             </div>
 
