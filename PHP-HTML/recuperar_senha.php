@@ -4,7 +4,7 @@ require_once 'conexao.php';
 require_once 'funcoes_email.php';
 
 $mensagem = '';
-$codigo_exibido = '';
+$senha_exibida = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
@@ -16,24 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($usuario) {
-        // Gera senha temporária e código de recuperação
+        // Gera senha temporária
         $senha_temporaria = gerarSenhaTemporaria();
-        $codigo_recuperacao = gerarCodigoRecuperacao();
-        
         $senha_hash = password_hash($senha_temporaria, PASSWORD_DEFAULT);
 
-        // Atualiza a senha e marca como temporária
-        $sql = "UPDATE usuario SET senha = :senha, senha_temporaria = TRUE WHERE email = :email";
+        // Atualiza a senha no banco
+        $sql = "UPDATE usuario SET senha = :senha, senha_temporaria = 1 WHERE email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':senha', $senha_hash);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
-        // Envia email simulado com senha e código
-        simularEnvioEmail($email, $senha_temporaria, $codigo_recuperacao);
+        // Simula envio de email com senha
+        simularEnvioEmail($email, $senha_temporaria);
 
-        $mensagem = "Instruções enviadas! Verifique o arquivo emails_simulados.txt";
-        $codigo_exibido = $codigo_recuperacao;
+        // Armazena a senha para exibir na tela
+        $mensagem = "Nova senha temporária gerada!";
+        $senha_exibida = $senha_temporaria;
 
     } else {
         $mensagem = "E-mail não encontrado.";
@@ -61,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <p class="subtitle">Digite seu email para receber as instruções de recuperação de senha</p>
         </div>
 
-        <form method="POST" action="recuperar_senha.php">
+        <form method="POST" action="">
             <div class="form-group">
                 <input type="email" id="email" name="email" class="input" placeholder="Digite seu email" required>
             </div>
@@ -78,15 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         <?php endif; ?>
 
-        <!-- Exibe o código de recuperação -->
-        <?php if ($codigo_exibido): ?>
-            <div class="code-display mt-3 text-center" style="background-color: #f8f9fa; border: 1px dashed #3a66ff; padding: 15px; border-radius: 8px;">
-                <p><strong>Código de Recuperação:</strong> <span style="font-size: 1.2em; color: #3a66ff;"><?php echo $codigo_exibido; ?></span></p>
-                <small>Use este código para redefinir sua senha.</small>
+        <!-- Exibe a senha temporária -->
+        <?php if ($senha_exibida): ?>
+            <div class="senha-display">
+                <p><span class="senha-label">Sua nova senha temporária:</span></p>
+                <p><strong><?php echo $senha_exibida; ?></strong></p>
+                <small>Use esta senha para fazer login.</small>
             </div>
         <?php endif; ?>
 
-        <div class="back-link">
+        <div class="back-link mt-3">
             <a href="index.php">← Voltar para o login</a>
         </div>
     </div>

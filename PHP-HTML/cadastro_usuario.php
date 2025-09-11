@@ -66,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -81,10 +82,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <!-- Exibe mensagens de erro ou sucesso -->
         <?php if ($erro): ?>
-            <div class="alert alert-danger"><?= $erro ?></div>
+            <center><div class="alert alert-danger"><?= $erro ?></div></center>
         <?php endif; ?>
         <?php if ($sucesso): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div>
+            <center><div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div></center>
         <?php endif; ?>
 
         <!-- Formulário de cadastro -->

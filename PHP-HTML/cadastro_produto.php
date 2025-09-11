@@ -93,10 +93,10 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
     <center><h2>Cadastrar Livros</h2></center>
 
     <?php if (isset($erro)): ?>
-        <div class="alert alert-danger"><?= $erro ?></div>
+        <center><div class="alert alert-danger"><?= $erro ?></div></center>
     <?php endif; ?>
     <?php if (isset($sucesso)): ?>
-        <div class="alert alert-success"><?= $sucesso ?></div>
+        <center><div class="alert alert-success"><?= $sucesso ?></div></center>
     <?php endif; ?>
 
     <form action="cadastro_produto.php" method="POST">

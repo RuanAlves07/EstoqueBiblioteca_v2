@@ -77,10 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <center><h2>Cadastro de Fornecedor</h2></center>
 
         <?php if (!empty($erro)): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
+            <center><div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div></center>
         <?php endif; ?>
         <?php if (!empty($sucesso)): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div>
+            <center><div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div></center>
         <?php endif; ?>
 
         <form method="POST" action="">

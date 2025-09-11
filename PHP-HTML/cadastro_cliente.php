@@ -51,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Exibir mensagens -->
         <?php if ($erro): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
+            <center><div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div></center>
         <?php endif; ?>
         <?php if ($sucesso): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div>
+            <center><div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div></center>
         <?php endif; ?>
 
         <form action="cadastro_cliente.php" method="POST">

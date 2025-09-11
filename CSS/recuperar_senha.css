@@ -168,3 +168,20 @@ body {
         display: none;
     }
 }
+
+        .senha-display {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px dashed #007bff;
+            border-radius: 8px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.2em;
+            color: #007bff;
+            letter-spacing: 1px;
+        }
+        .senha-label {
+            font-weight: bold;
+            color: #333;
+        }
