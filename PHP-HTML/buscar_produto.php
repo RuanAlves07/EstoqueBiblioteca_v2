@@ -18,18 +18,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $busca = trim($_POST['busca']);
     if (!empty($busca)) {
         // Busca por ID ou título
-        $sql = "SELECT * FROM produto WHERE id_produto = :busca OR titulo LIKE :titulo_busca ORDER BY titulo ASC";
+        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora FROM produto p
+                LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
+                LEFT JOIN autor a ON p.id_autor = a.id_autor
+                LEFT JOIN editora e ON p.id_editora = e.id_editora
+                WHERE p.id_produto = :busca OR p.titulo LIKE :titulo_busca 
+                ORDER BY p.titulo ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':busca', $busca, PDO::PARAM_INT);
         $stmt->bindValue(':titulo_busca', "%$busca%", PDO::PARAM_STR);
     } else {
         // Se não houver busca, traz todos
-        $sql = "SELECT * FROM produto ORDER BY titulo ASC";
+        $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora FROM produto p
+                LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
+                LEFT JOIN autor a ON p.id_autor = a.id_autor
+                LEFT JOIN editora e ON p.id_editora = e.id_editora
+                ORDER BY p.titulo ASC";
         $stmt = $pdo->prepare($sql);
     }
 } else {
     // Se não for POST, traz todos os produtos
-    $sql = "SELECT * FROM produto ORDER BY titulo ASC";
+    $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora FROM produto p
+            LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
+            LEFT JOIN autor a ON p.id_autor = a.id_autor
+            LEFT JOIN editora e ON p.id_editora = e.id_editora
+            ORDER BY p.titulo ASC";
     $stmt = $pdo->prepare($sql);
 }
 
@@ -45,7 +58,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Buscar Produtos</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Corrigido: removido espaços no final do URL -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet">
 </head>
 <body>
 
@@ -87,9 +100,9 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($produto['id_produto']) ?></td>
                             <td><?= htmlspecialchars($produto['titulo']) ?></td>
                             <td><?= htmlspecialchars($produto['isbn']) ?></td>
-                            <td><?= htmlspecialchars($produto['id_categoria']) ?></td>
-                            <td><?= htmlspecialchars($produto['id_autor']) ?></td>
-                            <td><?= htmlspecialchars($produto['id_editora']) ?></td>
+                            <td><?= htmlspecialchars($produto['nome_categoria'] ?? $produto['id_categoria']) ?></td>
+                            <td><?= htmlspecialchars($produto['nome_autor'] ?? $produto['id_autor']) ?></td>
+                            <td><?= htmlspecialchars($produto['nome_editora'] ?? $produto['id_editora']) ?></td>
                             <td><?= htmlspecialchars($produto['ano_publicacao']) ?></td>
                             <td><?= htmlspecialchars($produto['edicao']) ?></td>
                             <td><?= htmlspecialchars($produto['quantidade_estoque']) ?></td>
@@ -120,8 +133,8 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Scripts no final -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js  "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js  "></script>
  
 </body>
 </html>

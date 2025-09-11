@@ -113,8 +113,6 @@ INSERT INTO `categoria` (`id_categoria`, `nome_categoria`, `descricao`) VALUES
 CREATE TABLE IF NOT EXISTS `autor` (
   `id_autor` INT NOT NULL AUTO_INCREMENT,
   `nome_autor` VARCHAR(150) NOT NULL,
-  `nacionalidade` VARCHAR(50),
-  `data_nascimento` DATE,
   PRIMARY KEY (`id_autor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -122,9 +120,6 @@ CREATE TABLE IF NOT EXISTS `autor` (
 CREATE TABLE IF NOT EXISTS `editora` (
   `id_editora` INT NOT NULL AUTO_INCREMENT,
   `nome_editora` VARCHAR(150) NOT NULL,
-  `cnpj` VARCHAR(18) UNIQUE,
-  `telefone` VARCHAR(20),
-  `email` VARCHAR(100),
   PRIMARY KEY (`id_editora`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

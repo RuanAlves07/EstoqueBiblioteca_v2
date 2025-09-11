@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="mb-3">
                 <label for="cnpj" class="form-label">CNPJ:</label>
-                <input type="text" class="form-control" id="cnpj" name="cnpj" 
+                <input type="text" class="form-control" id="cnpj" name="cnpj" maxlength="18"
                        value="<?= htmlspecialchars($_POST['cnpj'] ?? '') ?>" required>
             </div>
 
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="mb-3">
                 <label for="telefone" class="form-label">Telefone:</label>
-                <input type="text" class="form-control" id="telefone" name="telefone" 
+                <input type="text" class="form-control" id="telefone" name="telefone" maxlength="15"
                        value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>" required>
             </div>
 
@@ -131,24 +131,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="reset" class="btn btn-danger">Cancelar</button>
             </div>
         </form>
-
-
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
-    <script src="validacoes.js"></script>
-
-    <!-- Máscara opcional para CNPJ  -->
-    <script>
-        document.getElementById('cnpj').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 14) {
-                value = value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-            }
-            e.target.value = value;
-        });
-    </script>
+    <script src="../JS/validacoes.js"></script>
 </body>
 </html>

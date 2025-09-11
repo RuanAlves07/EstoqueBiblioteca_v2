@@ -136,9 +136,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <td><?= htmlspecialchars($produto['edicao'] ?? '—') ?></td>
                             <td><?= htmlspecialchars($produto['quantidade_estoque']) ?></td>
                             <td>
-                                <a class="btn btn-sm btn-danger"
+                                <a class="btn btn-sm btn-danger" 
                                    href="excluir_produto.php?id=<?= (int)$produto['id_produto'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir o produto \"<?= addslashes($produto['titulo']) ?>\"?');">
+                                   onclick="return confirm('Tem certeza que deseja excluir este produto?')">
                                    Excluir
                                 </a>
                             </td>

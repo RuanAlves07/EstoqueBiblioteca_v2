@@ -123,9 +123,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <td><?= htmlspecialchars($cliente['telefone']) ?></td>
                             <td><?= date('d/m/Y', strtotime($cliente['data_nascimento'])) ?></td>
                             <td>
-                                <a class="btn btn-sm btn-danger"
+                                <a class="btn btn-sm btn-danger" 
                                    href="excluir_cliente.php?id=<?= (int)$cliente['id_cliente'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir o cliente \"<?= addslashes($cliente['nome_completo']) ?>\"?');">
+                                   onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
                                    Excluir
                                 </a>
                             </td>
