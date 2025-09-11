@@ -123,7 +123,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        name="telefone" 
                        id="telefone" 
                        value="<?= htmlspecialchars($funcionario['telefone']) ?>" 
-                       class="form-control" 
+                       class="form-control"
+                       maxlength="15"
                        placeholder="(00) 00000-0000">
             </div>
 
@@ -154,27 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 
-    <!-- VALIDAÇÃO JS (exemplo básico) -->
-    <script>
-        function validarFuncionario() {
-            const nome = document.getElementById('nome_completo').value.trim();
-            const cpf = document.getElementById('cpf').value.trim();
-            if (nome === '' || cpf === '') {
-                alert('Nome e CPF são obrigatórios!');
-                return false;
-            }
-            return true;
-        }
-
-        // Máscara de CPF (opcional)
-        document.getElementById('cpf').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-            }
-            e.target.value = value;
-        });
-    </script>
+    <script src="../JS/validacoes.js"></script>
 
 </body>
 </html>

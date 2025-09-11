@@ -101,7 +101,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
                        required>
             </div>
 
-            <!-- ISBN (Opcional, mas obrigatório se preenchido) -->
+            <!-- ISBN -->
             <div class="form-group">
                 <label for="isbn">ISBN:</label>
                 <input type="text"
@@ -110,7 +110,6 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
                        value="<?= htmlspecialchars($produto['isbn'] ?? '') ?>"
                        class="form-control"
                        placeholder="978-0-123-45678-9">
-                <small class="text-muted">Opcional, mas recomendado para livros.</small>
             </div>
 
             <!-- Categoria -->
@@ -206,59 +205,7 @@ $categorias = $pdo->query("SELECT id_categoria, nome_categoria FROM categoria OR
         </form>
     </div>
 
-    <!-- VALIDAÇÃO JAVASCRIPT -->
-    <script>
-        function validarProduto() {
-            const titulo = document.getElementById('titulo').value.trim();
-            const nomeAutor = document.getElementById('nome_autor').value.trim();
-            const nomeEditora = document.getElementById('nome_editora').value.trim();
-            const ano = document.getElementById('ano_publicacao').value;
-            const estoque = document.getElementById('quantidade_estoque').value;
-
-            if (titulo === '') {
-                alert('O título é obrigatório.');
-                return false;
-            }
-            if (nomeAutor === '') {
-                alert('O nome do autor é obrigatório.');
-                return false;
-            }
-            if (nomeEditora === '') {
-                alert('O nome da editora é obrigatório.');
-                return false;
-            }
-            if (ano === '' || ano < 1000 || ano > <?= date('Y') + 1 ?>) {
-                alert('Ano de publicação inválido.');
-                return false;
-            }
-            if (estoque === '' || estoque < 0) {
-                alert('A quantidade em estoque deve ser um número válido.');
-                return false;
-            }
-
-            // Validar ISBN (opcional)
-            const isbn = document.getElementById('isbn').value.trim();
-            if (isbn !== '' && !validarISBN(isbn)) {
-                alert('ISBN inválido. Use formato como: 978-0-123-45678-9');
-                return false;
-            }
-
-            return true;
-        }
-
-        // Função simples de validação de ISBN-13
-        function validarISBN(isbn) {
-            isbn = isbn.replace(/[^0-9X]/g, '');
-            if (isbn.length !== 13) return false;
-
-            let soma = 0;
-            for (let i = 0; i < 12; i++) {
-                soma += parseInt(isbn[i]) * (i % 2 === 0 ? 1 : 3);
-            }
-            let digito = (10 - (soma % 10)) % 10;
-            return digito === parseInt(isbn[12]);
-        }
-    </script>
+    <script src="../JS/validacoes.js"></script>
 
 </body>
 </html>
