@@ -94,7 +94,7 @@ $opcoes_menu = $permissoes[$id_perfil];
     <link rel="stylesheet" href="../CSS/dashboard.css">
 </head>
 <body>
-    <!-- Sidebar -->
+    <!-- Menu lateral -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4><i class="fas fa-book"></i> Biblioteca</h4>
@@ -124,7 +124,7 @@ $opcoes_menu = $permissoes[$id_perfil];
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Conteudo principal -->
     <div class="main-content">
         <!-- Top Header -->
         <header class="top-header">
@@ -152,9 +152,9 @@ $opcoes_menu = $permissoes[$id_perfil];
             </div>
         </header>
 
-        <!-- Dashboard Content -->
+        <!-- Conteudo da dashboard -->
         <div class="dashboard-content">
-            <!-- Statistics Cards -->
+            
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon books">
@@ -197,7 +197,7 @@ $opcoes_menu = $permissoes[$id_perfil];
                 </div>
             </div>
 
-            <!-- Quick Actions -->
+            <!-- Atalhos da dashboard -->
             <div class="quick-actions">
                 <h3>Ações Rápidas</h3>
                 <div class="actions-grid">
