@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindValue(':busca_nome', "%$busca%", PDO::PARAM_STR);
     }
 
+    //if
     if (isset($stmt)) {
         $stmt->execute();
         $fornecedor = $stmt->fetch(PDO::FETCH_ASSOC);
