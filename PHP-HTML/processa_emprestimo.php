@@ -2,7 +2,6 @@
 session_start();
 require_once 'conexao.php';
 
-
 $id_usuario = $_SESSION['id_usuario'];
 $email_digitado = $_POST['email'] ?? '';
 $senha_digitada = $_POST['senha'] ?? '';
@@ -39,9 +38,8 @@ $data_devolucao = date('Y-m-d', strtotime('+14 days'));
 try {
     $pdo->beginTransaction();
 
-    // Cria o empréstimo: id_funcionario é NULL (cliente fez sozinho)
-    $sql_emp = "INSERT INTO emprestimo (id_usuario, id_funcionario, data_devolucao_prevista, status) 
-                VALUES (:id_usuario, NULL, :data_devolucao, 'emprestado')";
+    $sql_emp = "INSERT INTO emprestimo (id_usuario, data_devolucao_prevista, status) 
+                VALUES (:id_usuario, :data_devolucao, 'emprestado')";
     $stmt_emp = $pdo->prepare($sql_emp);
     $stmt_emp->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
     $stmt_emp->bindParam(':data_devolucao', $data_devolucao, PDO::PARAM_STR);

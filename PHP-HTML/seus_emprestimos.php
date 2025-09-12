@@ -1,15 +1,18 @@
-<!-- seus_emprestimos.php -->
 <?php
 session_start();
 require_once 'conexao.php';
 require_once 'Menu.php';
 
-
-
 $id_usuario = $_SESSION['id_usuario'];
 
-// Busca os empréstimos e os livros associados
-$sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao_prevista, e.data_devolucao_real, e.status, p.id_produto, p.titulo FROM emprestimo e INNER JOIN item_emprestimo i ON e.id_emprestimo = i.id_emprestimo INNER JOIN produto p ON i.id_produto = p.id_produto WHERE e.id_usuario = :id_usuario ORDER BY e.data_emprestimo DESC";
+// Busca os empréstimos, livros e o nome do usuário
+$sql = "SELECT e.id_emprestimo, e.data_emprestimo, e.data_devolucao_prevista, e.data_devolucao_real, e.status, p.id_produto, p.titulo, u.nome AS nome_usuario
+        FROM emprestimo e 
+        INNER JOIN item_emprestimo i ON e.id_emprestimo = i.id_emprestimo 
+        INNER JOIN produto p ON i.id_produto = p.id_produto 
+        INNER JOIN usuario u ON e.id_usuario = u.id_usuario 
+        WHERE e.id_usuario = :id_usuario 
+        ORDER BY e.data_emprestimo DESC";
 
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
@@ -36,6 +39,7 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Usuário</th>
                         <th>ID do Livro</th>
                         <th>Título</th>
                         <th>Empréstimo</th>
@@ -46,6 +50,7 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php foreach ($emprestimos as $emp): ?>
                         <tr>
+                            <td><?= htmlspecialchars($emp['nome_usuario']) ?></td>
                             <td><?= $emp['id_produto'] ?></td>
                             <td><?= htmlspecialchars($emp['titulo']) ?></td>
                             <td><?= date('d/m/Y', strtotime($emp['data_emprestimo'])) ?></td>
@@ -63,8 +68,6 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
         <?php endif; ?>
     </div>
-
-
 
 </body>
 </html>
