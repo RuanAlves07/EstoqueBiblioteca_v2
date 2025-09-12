@@ -209,3 +209,11 @@ Para: admin@biblioteca.com
 Olá! Sua nova senha temporária é: 6bNYv3zg
 
 ----------------------
+Para: func@biblioteca.com
+Olá! Sua nova senha temporária é: chNp3fUK
+
+----------------------
+Para: func@biblioteca.com
+Olá! Sua nova senha temporária é: HNa4zJyW
+
+----------------------

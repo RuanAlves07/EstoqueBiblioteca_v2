@@ -10,30 +10,41 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
+// Pega o ID do usuário logado
+$usuario_logado_id = $_SESSION['id_usuario'] ?? null;
 
-// Busca todos os fornecedores
+// Busca todos os usuários
 try {
     $sql = "SELECT * FROM usuario ORDER BY nome ASC";
     $stmt = $pdo->query($sql);
     $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $usuarios = [];
-    $erro = "Erro ao carregar usuario: " . $e->getMessage();
+    $erro = "Erro ao carregar usuário: " . $e->getMessage();
 }
 
 // Processa exclusão
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_usuario = (int)$_GET['id'];
 
-    // Verifica se o fornecedor existe
+    
+    if ($id_usuario === $usuario_logado_id) {
+        $_SESSION['mensagem'] = "Você não pode excluir sua própria conta enquanto estiver logado.";
+        $_SESSION['msg_tipo'] = "warning";
+        header("Location: excluir_usuario.php");
+        ob_end_clean();
+        exit();
+    }
+
+    // Verifica se o usuário existe
     $sql_check = "SELECT nome FROM usuario WHERE id_usuario = :id";
     $stmt_check = $pdo->prepare($sql_check);
     $stmt_check->bindParam(':id', $id_usuario, PDO::PARAM_INT);
     $stmt_check->execute();
-    $usuarios = $stmt_check->fetch(PDO::FETCH_ASSOC);
+    $usuario = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-    if (!$usuarios) {
-        $_SESSION['mensagem'] = "Usuario não encontrado.";
+    if (!$usuario) {
+        $_SESSION['mensagem'] = "Usuário não encontrado.";
         $_SESSION['msg_tipo'] = "warning";
     } else {
         try {
@@ -42,15 +53,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $stmt_delete->bindParam(':id', $id_usuario, PDO::PARAM_INT);
 
             if ($stmt_delete->execute()) {
-                $_SESSION['mensagem'] = "usuario <strong>" . htmlspecialchars($usuarios['nome']) . "</strong> excluído com sucesso!";
+                $_SESSION['mensagem'] = "Usuário <strong>" . htmlspecialchars($usuario['nome']) . "</strong> excluído com sucesso!";
                 $_SESSION['msg_tipo'] = "success";
             } else {
-                $_SESSION['mensagem'] = "Erro ao excluir usuario.";
+                $_SESSION['mensagem'] = "Erro ao excluir usuário.";
                 $_SESSION['msg_tipo'] = "danger";
             }
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
-                $_SESSION['mensagem'] = "Não é possível excluir: este usuario está vinculado a produtos ou outros registros.";
+                $_SESSION['mensagem'] = "Não é possível excluir: este usuário está vinculado a empréstimos ou outros registros.";
             } else {
                 $_SESSION['mensagem'] = "Erro ao excluir: " . $e->getMessage();
             }
@@ -58,23 +69,23 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         }
     }
 
-    // Redireciona para evitar reexclusão ao atualizar
+    // Redireciona para evitar reexclusão ao atualizar a página
     header("Location: excluir_usuario.php");
     ob_end_clean();
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir Usuario</title>
+    <title>Excluir Usuário</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css  " rel="stylesheet"
           integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <!-- Estilo personalizado -->
 </head>
 <body>
 
@@ -89,7 +100,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     <!-- Conteúdo Principal -->
     <div class="container">
-        <center><h2>Excluir Usuario</h2></center>
+        <center><h2>Excluir Usuário</h2></center>
 
         <?php if (!empty($erro)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
@@ -115,7 +126,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <td>
                                 <a class="btn btn-sm btn-danger" 
                                    href="excluir_usuario.php?id=<?= (int)$usuario['id_usuario'] ?>"
-                                   onclick="return confirm('Tem certeza que deseja excluir este Usuario?')">
+                                   onclick="return confirm('Tem certeza que deseja excluir este usuário?')">
                                    Excluir
                                 </a>
                             </td>
@@ -125,17 +136,16 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </table>
             </center>
         <?php else: ?>
-            <center><p class="text-muted">Nenhum usuario encontrado.</p></center>
+            <center><p class="text-muted">Nenhum usuário encontrado.</p></center>
         <?php endif; ?>
-
 
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js  "
             integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
             crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js  "
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
 </body>

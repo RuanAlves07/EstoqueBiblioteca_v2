@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS biblioteca_estoquev2;
 USE biblioteca_estoquev2;
 
--- Dropa tabela se já existir algo
+-- Dropa tabelas se já existirem (ordem correta para evitar violação de FK)
 DROP TABLE IF EXISTS `item_emprestimo`;
 DROP TABLE IF EXISTS `emprestimo`;
 DROP TABLE IF EXISTS `produto`;
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `perfil` (
   UNIQUE KEY `uk_perfil_nome` (`nome_perfil`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insert de cada permissão
+-- Insere perfis padrão
 INSERT INTO `perfil` (`id_perfil`, `nome_perfil`) VALUES
 (1, 'Administrador'),
 (2, 'Superior'),
@@ -46,12 +46,12 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 
 -- Usuários de exemplo
 INSERT INTO `usuario` (`nome`, `email`, `senha`, `id_perfil`, `senha_temporaria`) VALUES
-('Admin ', 'admin@biblioteca.com', '$2y$10$exemplohashseguro', 1, 0),
+('Admin', 'admin@biblioteca.com', '$2y$10$exemplohashseguro', 1, 0),
 ('Superior', 'super@biblioteca.com', '$2y$10$exemplohashseguro', 2, 1),
 ('Funcionario', 'func@biblioteca.com', '$2y$10$exemplohashseguro', 3, 1),
 ('Cliente', 'cliente@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1);
 
--- Tabela de clientes
+-- Tabela de clientes 
 CREATE TABLE IF NOT EXISTS `cliente` (
   `id_cliente` INT NOT NULL AUTO_INCREMENT,
   `nome_completo` VARCHAR(150) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`id_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabela dos funcionarios
+-- Tabela dos funcionários
 CREATE TABLE IF NOT EXISTS `funcionario` (
   `id_funcionario` INT NOT NULL AUTO_INCREMENT,
   `nome_completo` VARCHAR(150) NOT NULL,
@@ -94,20 +94,18 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   UNIQUE KEY `uk_categoria_nome` (`nome_categoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Usuários de exemplo
+-- Insere categorias padrão
 INSERT INTO `categoria` (`id_categoria`, `nome_categoria`, `descricao`) VALUES
-('1', 'ficção', 'livros sobre ficção'),
-('2', 'Romance', 'livros sobre romance'),
-('3', 'conto', 'livros sobre conto'),
-('4', 'fantasia', 'livros sobre fantasia'),
-('5', 'Terror', 'livros sobre terror'),
-('6', 'Horror', 'livros sobre horror'),
-('7', 'Biografia', 'livros sobre biografia'),
-('8', 'História', 'livros sobre história'),
-('9', 'AutoAjuda', 'livros sobre AutoAjuda'),
-('10', 'Outros', 'outros livros');
-
-
+(1, 'ficção', 'livros sobre ficção'),
+(2, 'Romance', 'livros sobre romance'),
+(3, 'conto', 'livros sobre conto'),
+(4, 'fantasia', 'livros sobre fantasia'),
+(5, 'Terror', 'livros sobre terror'),
+(6, 'Horror', 'livros sobre horror'),
+(7, 'Biografia', 'livros sobre biografia'),
+(8, 'História', 'livros sobre história'),
+(9, 'AutoAjuda', 'livros sobre AutoAjuda'),
+(10, 'Outros', 'outros livros');
 
 -- Autor
 CREATE TABLE IF NOT EXISTS `autor` (
@@ -116,14 +114,14 @@ CREATE TABLE IF NOT EXISTS `autor` (
   PRIMARY KEY (`id_autor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabela da editora
+-- Editora
 CREATE TABLE IF NOT EXISTS `editora` (
   `id_editora` INT NOT NULL AUTO_INCREMENT,
   `nome_editora` VARCHAR(150) NOT NULL,
   PRIMARY KEY (`id_editora`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabela de produtos
+-- Produto (livros)
 CREATE TABLE IF NOT EXISTS `produto` (
   `id_produto` INT NOT NULL AUTO_INCREMENT,
   `titulo` VARCHAR(255) NOT NULL,
@@ -144,24 +142,33 @@ CREATE TABLE IF NOT EXISTS `produto` (
   CONSTRAINT `fk_produto_editora` FOREIGN KEY (`id_editora`) REFERENCES `editora` (`id_editora`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabela de emprestimos
+-- Vincula produto ao fornecedor
+ALTER TABLE produto 
+ADD COLUMN id_fornecedor INT NULL DEFAULT NULL AFTER quantidade_estoque;
+
+ALTER TABLE produto 
+ADD CONSTRAINT fk_produto_fornecedor 
+FOREIGN KEY (id_fornecedor) REFERENCES fornecedor (id_fornecedor);
+
+-- Tabela de empréstimos — AGORA vinculada ao USUÁRIO (não ao cliente!)
 CREATE TABLE IF NOT EXISTS `emprestimo` (
   `id_emprestimo` INT NOT NULL AUTO_INCREMENT,
-  `id_cliente` INT NOT NULL,
-  `id_funcionario` INT NOT NULL,
+  `id_usuario` INT NOT NULL,                   
   `data_emprestimo` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `data_devolucao_prevista` DATE NOT NULL,
   `data_devolucao_real` DATETIME NULL,
   `status` ENUM('emprestado', 'devolvido', 'atrasado', 'renovado') DEFAULT 'emprestado',
   `multa` DECIMAL(10,2) DEFAULT 0.00,
   PRIMARY KEY (`id_emprestimo`),
-  KEY `fk_emprestimo_cliente` (`id_cliente`),
+  KEY `fk_emprestimo_usuario` (`id_usuario`),
   KEY `fk_emprestimo_funcionario` (`id_funcionario`),
-  CONSTRAINT `fk_emprestimo_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
-  CONSTRAINT `fk_emprestimo_funcionario` FOREIGN KEY (`id_funcionario`) REFERENCES `funcionario` (`id_funcionario`)
+  CONSTRAINT `fk_emprestimo_usuario` 
+    FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_emprestimo_funcionario` 
+    FOREIGN KEY (`id_funcionario`) REFERENCES `funcionario` (`id_funcionario`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- TABELA ITEM_EMPRESTIMO (relaciona empréstimo com produtos)
+-- Tabela de itens de empréstimo (relaciona empréstimo com livros)
 CREATE TABLE IF NOT EXISTS `item_emprestimo` (
   `id_item` INT NOT NULL AUTO_INCREMENT,
   `id_emprestimo` INT NOT NULL,
@@ -170,19 +177,8 @@ CREATE TABLE IF NOT EXISTS `item_emprestimo` (
   PRIMARY KEY (`id_item`),
   UNIQUE KEY `uk_item_emprestimo_produto` (`id_emprestimo`, `id_produto`),
   KEY `fk_item_produto` (`id_produto`),
-  CONSTRAINT `fk_item_emprestimo` FOREIGN KEY (`id_emprestimo`) REFERENCES `emprestimo` (`id_emprestimo`) ON DELETE CASCADE,
-  CONSTRAINT `fk_item_produto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_produto`)
+  CONSTRAINT `fk_item_emprestimo` 
+    FOREIGN KEY (`id_emprestimo`) REFERENCES `emprestimo` (`id_emprestimo`) ON DELETE CASCADE,
+  CONSTRAINT `fk_item_produto` 
+    FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_produto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Atualiza a tabela emprestimo para usar id_usuario diretamente
-ALTER TABLE emprestimo DROP FOREIGN KEY fk_emprestimo_cliente;
-ALTER TABLE emprestimo CHANGE COLUMN id_cliente id_usuario INT NOT NULL;
-
-ALTER TABLE emprestimo 
-MODIFY COLUMN id_funcionario INT NULL DEFAULT NULL;
-
-
--- comunica o produto com o fornecedor 
-
-ALTER TABLE produto ADD COLUMN id_fornecedor INT NULL DEFAULT NULL AFTER quantidade_estoque;
-ALTER TABLE produto ADD CONSTRAINT fk_produto_fornecedor FOREIGN KEY (id_fornecedor) REFERENCES fornecedor (id_fornecedor);

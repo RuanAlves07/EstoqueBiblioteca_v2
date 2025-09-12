@@ -284,3 +284,19 @@ function validarISBN(isbn) {
     
     return isbnRegex.test(isbn);
 }
+
+function validarSenhaForte($senha) {
+    // Mínimo 8 caracteres
+    if (strlen($senha) < 8) return false;
+    
+    // Pelo menos uma letra maiúscula
+    if (!preg_match('/[A-Z]/', $senha)) return false;
+    
+    // Pelo menos uma letra minúscula
+    if (!preg_match('/[a-z]/', $senha)) return false;
+    
+    // Pelo menos um caractere especial
+    if (!preg_match('/[!@#$%&*]/', $senha)) return false;
+    
+    return true;
+}
