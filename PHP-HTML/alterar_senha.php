@@ -17,27 +17,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($nova_senha !== $confirmar_senha) {
         echo "<script>alert('As senhas não coincidem!');</script>";
     }
-    // Validar comprimento mínimo
+    // Verifica se a senha nova tem ao menos 8 caracteres
     elseif (strlen($nova_senha) < 8) {
         echo "<script>alert('A senha deve ter pelo menos 8 caracteres.');</script>";
     }
-    // Validar se não é a senha temporária padrão
-    elseif ($nova_senha === "temp123") {
-        echo "<script>alert('Escolha uma senha diferente da temporária.');</script>";
-    }
-    // Validar se contém pelo menos uma letra maiúscula
+    // Verifica se tem ao menos uma letra maiuscula
     elseif (!preg_match('/[A-Z]/', $nova_senha)) {
         echo "<script>alert('A senha deve conter pelo menos uma letra maiúscula (A-Z).');</script>";
     }
-    // Validar se contém pelo menos uma letra minúscula
+    // Verifica se tem ao menos uma letra minuscula
     elseif (!preg_match('/[a-z]/', $nova_senha)) {
         echo "<script>alert('A senha deve conter pelo menos uma letra minúscula (a-z).');</script>";
     }
-    // Validar se contém pelo menos um caractere especial
+    // Verifica se a senha tem ao menos um caractere especial
     elseif (!preg_match('/[!@#$%&*]/', $nova_senha)) {
         echo "<script>alert('A senha deve conter pelo menos um caractere especial: !@#$%&*');</script>";
     }
-    // Tudo válido: atualiza no banco
+    // Se tudo validou corretamente, senha nova é passada para o banco
     else {
         $senha_hash = password_hash($nova_senha, PASSWORD_DEFAULT);
 
@@ -47,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(":id", $id_usuario);
 
         if ($stmt->execute()) {
-            session_destroy(); // Finaliza a sessão
+            session_destroy(); 
             echo "<script>alert('Senha alterada com sucesso!'); window.location.href='index.php';</script>";
         } else {
             echo "<script>alert('Erro ao alterar a senha!');</script>";
