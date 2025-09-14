@@ -67,7 +67,7 @@ $permissoes = [
         "Emprestimo"  => ["emprestimo_de_livros.php", "seus_emprestimos.php"]
     ],
     3 => [
-        "Cadastrar"   => ["cadastro_distribuidora.php", "cadastro_livro.php"],
+        "Cadastrar"   => ["cadastro_distribuidora.php", "cadastro_livro.php", "cadastro_cliente.php"],
         "Buscar"      => ["buscar_cliente.php", "buscar_distribuidora.php", "buscar_livro.php"],
         "Alterar"     => ["alterar_distribuidora.php", "alterar_livro.php"],
         "Excluir"     => ["excluir_livro.php"],

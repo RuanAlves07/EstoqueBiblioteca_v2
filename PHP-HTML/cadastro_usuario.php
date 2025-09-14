@@ -10,11 +10,11 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Recupera mensagens da sessão (para mostrar após redirecionamento)
+
+
+// Recupera mensagens da sessão
 $erro = $_SESSION['erro'] ?? null;
 $sucesso = $_SESSION['sucesso'] ?? null;
-
-// Limpa as mensagens da sessão após exibir
 unset($_SESSION['erro'], $_SESSION['sucesso']);
 
 // Processa o formulário quando enviado
@@ -32,11 +32,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    if ($id_perfil == 4) {
+        $_SESSION['erro'] = "Não é possível cadastrar cliente aqui. Use o cadastro de cliente.";
+        header("Location: cadastro_usuario.php");
+        ob_end_clean();
+        exit();
+    }
+
     try {
-        // Criptografa a senha
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-        // Insere no banco
         $sql = "INSERT INTO usuario (nome, email, senha, id_perfil) VALUES (:nome, :email, :senha, :id_perfil)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':nome', $nome);
@@ -46,14 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt->execute();
 
-        // Define mensagem de sucesso e redireciona
         $_SESSION['sucesso'] = "Usuário cadastrado com sucesso!";
         header("Location: cadastro_usuario.php");
         ob_end_clean();
         exit();
 
     } catch (PDOException $e) {
-        // Verifica se o erro é por e-mail duplicado
         if ($e->getCode() == 23000 || strpos($e->getMessage(), 'uk_usuario_email') !== false) {
             $_SESSION['erro'] = "O e-mail <strong>" . htmlspecialchars($email) . "</strong> já está cadastrado.";
         } else {
@@ -65,7 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -80,7 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <center><h2>Cadastro de Usuário</h2></center>
 
-        <!-- Exibe mensagens de erro ou sucesso -->
         <?php if ($erro): ?>
             <center><div class="alert alert-danger"><?= $erro ?></div></center>
         <?php endif; ?>
@@ -88,7 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <center><div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div></center>
         <?php endif; ?>
 
-        <!-- Formulário de cadastro -->
         <form method="POST" action="">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome do Usuário:</label>
@@ -112,9 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <select class="form-select" id="id_perfil" name="id_perfil" required>
                     <option value="">Selecione um perfil</option>
                     <option value="1" <?= ($_POST['id_perfil'] ?? '') == '1' ? 'selected' : '' ?>>Administrador</option>
-                    <option value="2" <?= ($_POST['id_perfil'] ?? '') == '2' ? 'selected' : '' ?>>Secretaria</option>
-                    <option value="3" <?= ($_POST['id_perfil'] ?? '') == '3' ? 'selected' : '' ?>>Almoxarife</option>
-                    <option value="4" <?= ($_POST['id_perfil'] ?? '') == '4' ? 'selected' : '' ?>>Cliente</option>
+                    <option value="2" <?= ($_POST['id_perfil'] ?? '') == '2' ? 'selected' : '' ?>>Superior</option>
+                    <option value="3" <?= ($_POST['id_perfil'] ?? '') == '3' ? 'selected' : '' ?>>Funcionário</option>
                 </select>
             </div>
 
@@ -123,11 +122,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="reset" class="btn btn-danger">Cancelar</button>
             </div>
         </form>
-
-
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
     <script src="../JS/validacoes.js"></script>

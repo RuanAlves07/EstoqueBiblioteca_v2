@@ -41,7 +41,7 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tr>
                         <th>Usuário</th>
                         <th>ID do Livro</th>
-                        <th>Título</th>
+                        <th>Livro</th>
                         <th>Empréstimo</th>
                         <th>Devolução Prevista</th>
                         <th>Status</th>

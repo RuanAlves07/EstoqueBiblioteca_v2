@@ -196,3 +196,5 @@ INSERT INTO `produto` (`titulo`, `isbn`, `id_categoria`, `id_autor`, `id_editora
 ('O Alienista', '978-85-359-0821-5', 1, 2, 2, 2017, '15ª edição', 9, 2),
 ('Breves Respostas para Grandes Questões', '978-85-8086-411-1', 10, 5, 4, 2018, '1ª edição', 6, 4),
 ('O Pequeno Príncipe', '978-85-8275-023-5', 1, 4, 5, 2019, '12ª edição', 12, 5);
+
+ALTER TABLE cliente ADD CONSTRAINT fk_cliente_usuario FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario) ON DELETE CASCADE;
