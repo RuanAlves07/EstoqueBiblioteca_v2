@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- CAIXA DE REQUISITOS (para o usuário identificar quais são as necessidades minimas) -->
 
             <div class="form-group">
-                <i><strong>Requisitos mínimos:</strong></i>
+                <i><u><strong>Requisitos mínimos:</strong></u></i>
                 <br>
                 <br>
                 <ul>
