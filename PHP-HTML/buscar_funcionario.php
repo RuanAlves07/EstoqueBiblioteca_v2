@@ -24,7 +24,7 @@ if (isset($_GET['busca']) && !empty($_GET['busca'])) {
     } else {
         $sql = "SELECT * FROM funcionario WHERE nome_completo LIKE :nome";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':nome', "%$busca%", PDO::PARAM_STR);
+        $stmt->bindValue(':nome', "%$busca", PDO::PARAM_STR);
     }
     
     $stmt->execute();

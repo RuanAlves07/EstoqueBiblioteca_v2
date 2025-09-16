@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 OR nome_empresa LIKE :nome_busca";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':busca', $busca, PDO::PARAM_INT);
-        $stmt->bindValue(':nome_busca', "$busca%", PDO::PARAM_STR);
+        $stmt->bindValue(':nome_busca', "%$busca", PDO::PARAM_STR);
     } else {
         // Se não houver busca, traz todos
         $sql = "SELECT * FROM fornecedor";

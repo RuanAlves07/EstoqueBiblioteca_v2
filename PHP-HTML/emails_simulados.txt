@@ -229,3 +229,7 @@ Para: admin@biblioteca.com
 Olá! Sua nova senha temporária é: 13su6z8n
 
 ----------------------
+Para: admin@biblioteca.com
+Olá! Sua nova senha temporária é: IRHa7oFL
+
+----------------------

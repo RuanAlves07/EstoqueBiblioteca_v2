@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ORDER BY p.titulo ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':busca', $busca, PDO::PARAM_INT);
-        $stmt->bindValue(':titulo_busca', "%$busca%", PDO::PARAM_STR);
+        $stmt->bindValue(':titulo_busca', "%$busca", PDO::PARAM_STR);
     } else {
         // Se não houver busca, traz todos
         $sql = "SELECT p.*, c.nome_categoria, a.nome_autor, e.nome_editora, f.nome_fantasia AS nome_fornecedor 
@@ -119,6 +119,7 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                    href="alterar_livro.php?id=<?= (int)$produto['id_produto'] ?>">
                                    Alterar
                                 </a>
+                                <br>
                                 <a class="btn btn-sm btn-danger"
                                    href="excluir_livro.php?id=<?= (int)$produto['id_produto'] ?>"
                                    onclick="return confirm('Tem certeza que deseja excluir este livro?')">
