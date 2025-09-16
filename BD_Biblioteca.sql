@@ -198,3 +198,13 @@ INSERT INTO `produto` (`titulo`, `isbn`, `id_categoria`, `id_autor`, `id_editora
 ('O Pequeno Príncipe', '978-85-8275-023-5', 1, 4, 5, 2019, '12ª edição', 12, 5);
 
 ALTER TABLE cliente ADD CONSTRAINT fk_cliente_usuario FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario) ON DELETE CASCADE;
+
+-- Adiciona coluna id_funcionario
+ALTER TABLE emprestimo 
+ADD COLUMN id_funcionario INT NULL DEFAULT NULL AFTER id_usuario;
+
+-- Adiciona chave estrangeira
+ALTER TABLE emprestimo 
+ADD CONSTRAINT fk_emprestimo_funcionario 
+FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario) 
+ON DELETE SET NULL;
