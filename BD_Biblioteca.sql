@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS biblioteca_estoquev2;
 USE biblioteca_estoquev2;
 
+-- Remover tabelas na ordem correta
 DROP TABLE IF EXISTS `item_emprestimo`;
 DROP TABLE IF EXISTS `emprestimo`;
 DROP TABLE IF EXISTS `produto`;
@@ -13,6 +14,7 @@ DROP TABLE IF EXISTS `cliente`;
 DROP TABLE IF EXISTS `usuario`;
 DROP TABLE IF EXISTS `perfil`;
 
+-- Criar tabela perfil primeiro (dependência)
 CREATE TABLE IF NOT EXISTS `perfil` (
   `id_perfil` INT NOT NULL AUTO_INCREMENT,
   `nome_perfil` VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -20,12 +22,14 @@ CREATE TABLE IF NOT EXISTS `perfil` (
   UNIQUE KEY `uk_perfil_nome` (`nome_perfil`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Inserir perfis
 INSERT INTO `perfil` (`id_perfil`, `nome_perfil`) VALUES
 (1, 'Administrador'),
 (2, 'Superior'),
 (3, 'Funcionario'),
 (4, 'Cliente');
 
+-- Criar tabela usuario antes de cliente (dependência)
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id_usuario` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -39,7 +43,14 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   CONSTRAINT `fk_usuario_perfil` FOREIGN KEY (`id_perfil`) REFERENCES `perfil` (`id_perfil`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Primeiro, cria todas as tabelas SEM as FKs
+-- Inserir usuários básicos
+INSERT INTO `usuario` (`nome`, `email`, `senha`, `id_perfil`, `senha_temporaria`) VALUES
+('Admin', 'admin@biblioteca.com', '$2y$10$exemplohashseguro', 1, 0),
+('Superior', 'super@biblioteca.com', '$2y$10$exemplohashseguro', 2, 1),
+('Funcionario', 'func@biblioteca.com', '$2y$10$exemplohashseguro', 3, 1),
+('Cliente', 'cliente@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1);
+
+-- Criar tabela cliente SEM FK inicialmente
 CREATE TABLE IF NOT EXISTS `cliente` (
   `id_cliente` INT NOT NULL AUTO_INCREMENT,
   `nome_completo` VARCHAR(150) NOT NULL,
@@ -49,9 +60,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`id_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- INSERÇÕES SOLICITADAS
-
--- 20 usuários clientes (perfil 4) - CRIE PRIMEIRO OS USUÁRIOS
+-- Criar os usuários clientes primeiro
 INSERT INTO `usuario` (`nome`, `email`, `senha`, `id_perfil`, `senha_temporaria`) VALUES
 ('Maria Silva Santos', 'maria.silva@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
 ('João Oliveira Costa', 'joao.oliveira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
@@ -74,7 +83,7 @@ INSERT INTO `usuario` (`nome`, `email`, `senha`, `id_perfil`, `senha_temporaria`
 ('Amanda Costa Silva', 'amanda.costa@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
 ('Bruno Almeida Pereira', 'bruno.pereira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1);
 
--- 20 clientes - AGORA INSIRA OS CLIENTES COM OS MESMOS IDs
+-- Agora inserir os clientes com os MESMOS IDs dos usuários
 INSERT INTO `cliente` (`id_cliente`, `nome_completo`, `cpf`, `telefone`, `data_nascimento`) VALUES
 (5, 'Maria Silva Santos', '123.456.789-09', '(11) 99999-0001', '1990-05-15'),
 (6, 'João Oliveira Costa', '234.567.890-10', '(11) 99999-0002', '1985-08-22'),
@@ -97,9 +106,10 @@ INSERT INTO `cliente` (`id_cliente`, `nome_completo`, `cpf`, `telefone`, `data_n
 (23, 'Amanda Costa Silva', '999.000.111-22', '(11) 99999-0019', '1988-04-17'),
 (24, 'Bruno Almeida Pereira', '000.111.222-33', '(11) 99999-0020', '1995-09-23');
 
--- AGORA, ADICIONE A CONSTRAINT DE FK (depois que os dados estão consistentes)
+-- AGORA ADICIONAR A FK (após os dados estarem consistentes)
 ALTER TABLE cliente ADD CONSTRAINT fk_cliente_usuario FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario) ON DELETE CASCADE;
 
+-- Continuar com as outras tabelas
 CREATE TABLE IF NOT EXISTS `funcionario` (
   `id_funcionario` INT NOT NULL AUTO_INCREMENT,
   `nome_completo` VARCHAR(150) NOT NULL,
@@ -203,6 +213,7 @@ CREATE TABLE IF NOT EXISTS `item_emprestimo` (
   CONSTRAINT `fk_item_produto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_produto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Dados restantes
 INSERT INTO `fornecedor` (`nome_empresa`, `nome_fantasia`, `cnpj`, `contato`, `telefone`, `email`, `endereco`) VALUES
 ('Editora Saraiva', 'Saraiva', '33.297.185/0001-22', 'Ana Silva', '(11) 98765-4321', 'contato@saraiva.com.br', 'Av. Paulista, 1000 - São Paulo, SP'),
 ('Companhia das Letras', 'Companhia das Letras', '33.456.789/0001-10', 'Carlos Mendes', '(11) 99876-5432', 'atendimento@companhiadasletras.com.br', 'R. Padre João Manuel, 123 - São Paulo, SP'),
@@ -243,8 +254,6 @@ INSERT INTO `produto` (`titulo`, `isbn`, `id_categoria`, `id_autor`, `id_editora
 ('Breves Respostas para Grandes Questões', '978-85-8086-411-1', 10, 5, 4, 2018, '1ª edição', 6, 4),
 ('O Pequeno Príncipe', '978-85-8275-023-5', 1, 4, 5, 2019, '12ª edição', 12, 5);
 
-ALTER TABLE cliente ADD CONSTRAINT fk_cliente_usuario FOREIGN KEY (id_cliente) REFERENCES usuario(id_usuario) ON DELETE CASCADE;
-
 -- Adiciona coluna id_funcionario
 ALTER TABLE emprestimo 
 ADD COLUMN id_funcionario INT NULL DEFAULT NULL AFTER id_usuario;
@@ -255,32 +264,7 @@ ADD CONSTRAINT fk_emprestimo_funcionario
 FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario) 
 ON DELETE SET NULL;
 
--- 20 usuários clientes (perfil 4)
-INSERT INTO `usuario` (`nome`, `email`, `senha`, `id_perfil`, `senha_temporaria`) VALUES
-('Maria Silva Santos', 'maria.silva@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('João Oliveira Costa', 'joao.oliveira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Ana Carolina Pereira', 'ana.pereira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Pedro Henrique Almeida', 'pedro.almeida@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Carla Maria Rodrigues', 'carla.rodrigues@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Roberto Carlos Mendes', 'roberto.mendes@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Juliana Ferreira Lima', 'juliana.lima@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Fernando Souza Silva', 'fernando.silva@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Camila Oliveira Santos', 'camila.santos@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Ricardo Almeida Costa', 'ricardo.costa@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Patrícia Gomes Mendes', 'patricia.mendes@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Maurício Santos Pereira', 'mauricio.pereira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Vanessa Costa Rodrigues', 'vanessa.rodrigues@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Thiago Alves Oliveira', 'thiago.oliveira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Débora Lima Santos', 'debora.santos@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Eduardo Santos Almeida', 'eduardo.santos@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Carla Mendonça Ferreira', 'carla.ferreira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Lucas Oliveira Costa', 'lucas.costa@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Amanda Costa Silva', 'amanda.costa@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Bruno Almeida Pereira', 'bruno.almeida@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1);
-
--- Vincula clientes aos usuários (cliente.id_cliente = usuario.id_usuario)
-UPDATE cliente SET id_cliente = (SELECT id_usuario FROM usuario WHERE usuario.email = CONCAT(REPLACE(LOWER(cliente.nome_completo COLLATE utf8mb4_unicode_ci), ' ', '.'), '@biblioteca.com') LIMIT 1);
--- 30 fornecedores
+-- 30 fornecedores adicionais
 INSERT INTO `fornecedor` (`nome_empresa`, `nome_fantasia`, `cnpj`, `contato`, `telefone`, `email`, `endereco`) VALUES
 ('Livraria Cultura', 'Cultura', '00.111.222/0001-33', 'Carlos Silva', '(11) 91111-1111', 'contato@cultura.com.br', 'Av. Paulista, 2000 - São Paulo, SP'),
 ('Livraria Nobel', 'Nobel', '11.222.333/0001-44', 'Maria Santos', '(11) 92222-2222', 'vendas@nobel.com.br', 'Rua Oscar Freire, 1000 - São Paulo, SP'),
@@ -325,32 +309,6 @@ INSERT INTO `categoria` (`nome_categoria`, `descricao`) VALUES
 ('Medicina', 'Livros sobre medicina e saúde'),
 ('Engenharia', 'Livros sobre engenharia e tecnologia'),
 ('Arte', 'Livros sobre arte e cultura');
-
--- 20 usuários adicionais (todos clientes - perfil 4)
-INSERT INTO `usuario` (`nome`, `email`, `senha`, `id_perfil`, `senha_temporaria`) VALUES
-('Ana Maria Silva', 'ana.silva@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Carlos Eduardo Santos', 'carlos.santos@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Fernanda Costa Oliveira', 'fernanda.oliveira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Roberto Almeida Pereira', 'roberto.pereira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Juliana Rodrigues Mendes', 'juliana.mendes@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Pedro Henrique Lima', 'pedro.lima@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Camila Souza Santos', 'camila.santos@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Ricardo Ferreira Almeida', 'ricardo.almeida@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Patrícia Gomes Costa', 'patricia.costa@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Maurício Pereira Silva', 'mauricio.silva@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Vanessa Oliveira Mendes', 'vanessa.mendes@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Thiago Santos Almeida', 'thiago.almeida@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Débora Lima Costa', 'debora.costa@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Eduardo Almeida Pereira', 'eduardo.pereira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Carla Ferreira Santos', 'carla.santos@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Lucas Costa Oliveira', 'lucas.oliveira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Amanda Silva Almeida', 'amanda.almeida@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Bruno Pereira Costa', 'bruno.costa@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Renata Mendes Santos', 'renata.santos@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1),
-('Marcelo Oliveira Ferreira', 'marcelo.ferreira@biblioteca.com', '$2y$10$exemplohashseguro', 4, 1);
-
--- Vincula novos clientes aos usuários
-UPDATE cliente SET id_cliente = (SELECT id_usuario FROM usuario WHERE usuario.email = CONCAT(REPLACE(LOWER(cliente.nome_completo), ' ', '.'), '@biblioteca.com') LIMIT 1) WHERE id_cliente IS NULL;
 
 -- 50 produtos adicionais
 INSERT INTO `produto` (`titulo`, `isbn`, `id_categoria`, `id_autor`, `id_editora`, `ano_publicacao`, `edicao`, `quantidade_estoque`, `id_fornecedor`) VALUES

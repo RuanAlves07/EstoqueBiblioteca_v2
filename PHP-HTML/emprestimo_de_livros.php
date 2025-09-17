@@ -9,12 +9,14 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-
 if (!isset($_SESSION['id_usuario'])) {
     die("<script>alert('Sessão inválida.'); window.location.href='dashboard.php';</script>");
 }
 
+// Recupera o perfil do usuário logado
 $id_usuario_logado = $_SESSION['id_usuario'];
+$id_perfil = $_SESSION['id_perfil'] ?? null; // <-- Adicionado para garantir que $id_perfil está definido
+
 $email_digitado = $_POST['email'] ?? '';
 $senha_digitada = $_POST['senha'] ?? '';
 $opcao_emprestimo = $_POST['opcao_emprestimo'] ?? '';
@@ -59,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // Define para quem será o empréstimo e quem fez o empréstimo
                         $id_usuario_emprestimo = null;
                         $id_funcionario = null;
-                        
+
                         if ($id_perfil == 4) {
                             // Cliente só pode emprestar para si mesmo
                             $id_usuario_emprestimo = $id_usuario_logado;
@@ -67,30 +69,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             // Perfis 1, 2, 3 podem escolher
                             if ($opcao_emprestimo === 'para_mim') {
                                 $id_usuario_emprestimo = $id_usuario_logado;
+
+                                // Verifica se o usuário logado é funcionário
+                                $stmt_func = $pdo->prepare("SELECT id_funcionario FROM funcionario WHERE id_funcionario = :id_func");
+                                $stmt_func->bindParam(':id_func', $id_usuario_logado, PDO::PARAM_INT);
+                                $stmt_func->execute();
+                                $funcionario = $stmt_func->fetch(PDO::FETCH_ASSOC);
+
+                                if ($funcionario) {
+                                    $id_funcionario = $funcionario['id_funcionario'];
+                                } else {
+                                    throw new Exception("Usuário não cadastrado como funcionário.");
+                                }
                             } elseif ($opcao_emprestimo === 'para_cliente') {
                                 if (empty($id_cliente)) {
                                     throw new Exception("Informe o ID do cliente.");
                                 }
 
-                                // ✅ VERIFICA SE O CLIENTE EXISTE NA TABELA CLIENTE E PEGA O ID_USUARIO CORRESPONDENTE
+                                // Verifica se o cliente existe na tabela cliente
                                 $stmt_cli = $pdo->prepare("SELECT id_cliente FROM cliente WHERE id_cliente = :id");
                                 $stmt_cli->bindParam(':id', $id_cliente, PDO::PARAM_INT);
                                 $stmt_cli->execute();
                                 $cliente = $stmt_cli->fetch(PDO::FETCH_ASSOC);
-                                
+
                                 if ($cliente) {
-                                    // Como id_cliente = id_usuario (devido à FK), usamos o mesmo ID
                                     $id_usuario_emprestimo = $id_cliente;
                                 } else {
                                     throw new Exception("Cliente inválido ou não encontrado.");
                                 }
-                                
-                                // ✅ VERIFICA SE O USUÁRIO LOGADO TEM REGISTRO NA TABELA FUNCIONARIO
+
+                                // Verifica se o usuário logado é funcionário
                                 $stmt_func = $pdo->prepare("SELECT id_funcionario FROM funcionario WHERE id_funcionario = :id_func");
                                 $stmt_func->bindParam(':id_func', $id_usuario_logado, PDO::PARAM_INT);
                                 $stmt_func->execute();
                                 $funcionario = $stmt_func->fetch(PDO::FETCH_ASSOC);
-                                
+
                                 if ($funcionario) {
                                     $id_funcionario = $funcionario['id_funcionario'];
                                 } else {
