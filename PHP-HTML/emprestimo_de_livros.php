@@ -15,7 +15,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
 // Recupera o perfil do usuário logado
 $id_usuario_logado = $_SESSION['id_usuario'];
-$id_perfil = $_SESSION['id_perfil'] ?? null; // <-- Adicionado para garantir que $id_perfil está definido
+$id_perfil = $_SESSION['id_perfil'] ?? null;
 
 $email_digitado = $_POST['email'] ?? '';
 $senha_digitada = $_POST['senha'] ?? '';
@@ -58,9 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         $pdo->beginTransaction();
 
-                        // Define para quem será o empréstimo e quem fez o empréstimo
+                        // Define para quem será o empréstimo
                         $id_usuario_emprestimo = null;
-                        $id_funcionario = null;
+                        $id_funcionario = null; // Por padrão é NULL
 
                         if ($id_perfil == 4) {
                             // Cliente só pode emprestar para si mesmo
@@ -69,17 +69,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             // Perfis 1, 2, 3 podem escolher
                             if ($opcao_emprestimo === 'para_mim') {
                                 $id_usuario_emprestimo = $id_usuario_logado;
+                                
+                                // Apenas usuários com perfil 3 (Funcionário) devem ter id_funcionario preenchido
+                                if ($id_perfil == 3) {
+                                    $stmt_func = $pdo->prepare("SELECT id_funcionario FROM funcionario WHERE id_funcionario = :id_func");
+                                    $stmt_func->bindParam(':id_func', $id_usuario_logado, PDO::PARAM_INT);
+                                    $stmt_func->execute();
+                                    $funcionario = $stmt_func->fetch(PDO::FETCH_ASSOC);
 
-                                // Verifica se o usuário logado é funcionário
-                                $stmt_func = $pdo->prepare("SELECT id_funcionario FROM funcionario WHERE id_funcionario = :id_func");
-                                $stmt_func->bindParam(':id_func', $id_usuario_logado, PDO::PARAM_INT);
-                                $stmt_func->execute();
-                                $funcionario = $stmt_func->fetch(PDO::FETCH_ASSOC);
-
-                                if ($funcionario) {
-                                    $id_funcionario = $funcionario['id_funcionario'];
-                                } else {
-                                    throw new Exception("Usuário não cadastrado como funcionário.");
+                                    if ($funcionario) {
+                                        $id_funcionario = $funcionario['id_funcionario'];
+                                    } else {
+                                        throw new Exception("Usuário não cadastrado como funcionário.");
+                                    }
                                 }
                             } elseif ($opcao_emprestimo === 'para_cliente') {
                                 if (empty($id_cliente)) {
@@ -98,16 +100,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     throw new Exception("Cliente inválido ou não encontrado.");
                                 }
 
-                                // Verifica se o usuário logado é funcionário
-                                $stmt_func = $pdo->prepare("SELECT id_funcionario FROM funcionario WHERE id_funcionario = :id_func");
-                                $stmt_func->bindParam(':id_func', $id_usuario_logado, PDO::PARAM_INT);
-                                $stmt_func->execute();
-                                $funcionario = $stmt_func->fetch(PDO::FETCH_ASSOC);
+                                // Apenas usuários com perfil 3 (Funcionário) devem ter id_funcionario preenchido
+                                if ($id_perfil == 3) {
+                                    $stmt_func = $pdo->prepare("SELECT id_funcionario FROM funcionario WHERE id_funcionario = :id_func");
+                                    $stmt_func->bindParam(':id_func', $id_usuario_logado, PDO::PARAM_INT);
+                                    $stmt_func->execute();
+                                    $funcionario = $stmt_func->fetch(PDO::FETCH_ASSOC);
 
-                                if ($funcionario) {
-                                    $id_funcionario = $funcionario['id_funcionario'];
-                                } else {
-                                    throw new Exception("Usuário não cadastrado como funcionário.");
+                                    if ($funcionario) {
+                                        $id_funcionario = $funcionario['id_funcionario'];
+                                    } else {
+                                        throw new Exception("Usuário não cadastrado como funcionário.");
+                                    }
                                 }
                             } else {
                                 throw new Exception("Opção inválida.");
@@ -117,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // Define data de devolução (14 dias)
                         $data_devolucao = date('Y-m-d', strtotime('+14 days'));
 
-                        // Insere o empréstimo com id_funcionario
+                        // Insere o empréstimo com id_funcionario (que pode ser NULL)
                         $sql_emp = "INSERT INTO emprestimo (id_usuario, id_funcionario, data_devolucao_prevista, status) 
                                     VALUES (:id_usuario, :id_funcionario, :data_devolucao, 'emprestado')";
                         $stmt_emp = $pdo->prepare($sql_emp);
@@ -167,10 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
-    <center><h2>Empréstimo de Livros</h2></center>
-
     <div class="container">
+        <center><h2>Empréstimo de Livros</h2></center>
 
         <?php if ($erro): ?>
             <center><div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div></center>
@@ -203,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </select>
                 </div>
 
-                <div class="mb-3" id="campo_id_cliente" style="display: none;">
+                <div class="mb-3" id="campo_id_cliente" style="<?= $opcao_emprestimo === 'para_cliente' ? 'display:block;' : 'display:none;' ?>">
                     <label for="id_cliente" class="form-label">ID do Cliente:</label>
                     <input type="number" name="id_cliente" id="id_cliente" class="form-control" 
                            value="<?= htmlspecialchars($id_cliente ?? '') ?>">
@@ -243,15 +245,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         campo.style.display = 'none';
                     }
                 });
-
-                // Mostra campo se já estava selecionado
-                if (document.getElementById('opcao_emprestimo').value === 'para_cliente') {
-                    document.getElementById('campo_id_cliente').style.display = 'block';
-                }
             </script>
         <?php endif; ?>
-
     </div>
-
 </body>
 </html>
