@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Simula envio de email com senha
         simularEnvioEmail($email, $senha_temporaria);
 
-        // Armazena a senha para exibir na tela
-        $mensagem = "Nova senha temporária gerada!";
+        
+        $mensagem = "Nova senha temporária gerada! Porfavor, verifique no emails_simulados.txt";
         $senha_exibida = $senha_temporaria;
 
     } else {
@@ -74,15 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if ($mensagem): ?>
             <div class="alert alert-info mt-3 text-center">
                 <?php echo $mensagem; ?>
-            </div>
-        <?php endif; ?>
-
-        <!-- Exibe a senha temporária -->
-        <?php if ($senha_exibida): ?>
-            <div class="senha-display">
-                <p><span class="senha-label">Sua nova senha temporária:</span></p>
-                <p><strong><?php echo $senha_exibida; ?></strong></p>
-                <small>Use esta senha para fazer login.</small>
             </div>
         <?php endif; ?>
 

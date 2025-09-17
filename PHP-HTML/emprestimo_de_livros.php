@@ -67,6 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $id_usuario_emprestimo = $id_usuario_logado;
                         } else {
                             // Perfis 1, 2, 3 podem escolher
+                            if (empty($opcao_emprestimo)) {
+                                throw new Exception("Selecione uma opção de empréstimo.");
+                            }
+                            
                             if ($opcao_emprestimo === 'para_mim') {
                                 $id_usuario_emprestimo = $id_usuario_logado;
                                 
@@ -209,6 +213,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="id_cliente" class="form-label">ID do Cliente:</label>
                     <input type="number" name="id_cliente" id="id_cliente" class="form-control" 
                            value="<?= htmlspecialchars($id_cliente ?? '') ?>">
+                </div>
+            <?php else: ?>
+                <!-- Para clientes (perfil 4), informamos que o empréstimo é para si mesmo -->
+                <div class="mb-3 alert alert-info">
+                    <i class="bi bi-info-circle"></i> Como você é um cliente, o empréstimo será realizado para você mesmo.
                 </div>
             <?php endif; ?>
 
