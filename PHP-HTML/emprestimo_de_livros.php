@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Garante que id_perfil existe na sessão
+
 if (!isset($_SESSION['id_usuario'])) {
     die("<script>alert('Sessão inválida.'); window.location.href='dashboard.php';</script>");
 }
@@ -56,7 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         $pdo->beginTransaction();
 
-                        // Define para quem será o empréstimo
+                        // Define para quem será o empréstimo e quem fez o empréstimo
+                        $id_usuario_emprestimo = null;
+                        $id_funcionario = null;
+                        
                         if ($id_perfil == 4) {
                             // Cliente só pode emprestar para si mesmo
                             $id_usuario_emprestimo = $id_usuario_logado;
@@ -69,14 +72,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     throw new Exception("Informe o ID do cliente.");
                                 }
 
-                                // Verifica se o cliente existe e é realmente um cliente (perfil 4)
-                                $stmt_cli = $pdo->prepare("SELECT id_usuario FROM usuario WHERE id_usuario = :id AND id_perfil = 4");
+                                // ✅ VERIFICA SE O CLIENTE EXISTE NA TABELA CLIENTE E PEGA O ID_USUARIO CORRESPONDENTE
+                                $stmt_cli = $pdo->prepare("SELECT id_cliente FROM cliente WHERE id_cliente = :id");
                                 $stmt_cli->bindParam(':id', $id_cliente, PDO::PARAM_INT);
                                 $stmt_cli->execute();
-                                if (!$stmt_cli->fetch()) {
+                                $cliente = $stmt_cli->fetch(PDO::FETCH_ASSOC);
+                                
+                                if ($cliente) {
+                                    // Como id_cliente = id_usuario (devido à FK), usamos o mesmo ID
+                                    $id_usuario_emprestimo = $id_cliente;
+                                } else {
                                     throw new Exception("Cliente inválido ou não encontrado.");
                                 }
-                                $id_usuario_emprestimo = $id_cliente;
+                                
+                                // ✅ VERIFICA SE O USUÁRIO LOGADO TEM REGISTRO NA TABELA FUNCIONARIO
+                                $stmt_func = $pdo->prepare("SELECT id_funcionario FROM funcionario WHERE id_funcionario = :id_func");
+                                $stmt_func->bindParam(':id_func', $id_usuario_logado, PDO::PARAM_INT);
+                                $stmt_func->execute();
+                                $funcionario = $stmt_func->fetch(PDO::FETCH_ASSOC);
+                                
+                                if ($funcionario) {
+                                    $id_funcionario = $funcionario['id_funcionario'];
+                                } else {
+                                    throw new Exception("Usuário não cadastrado como funcionário.");
+                                }
                             } else {
                                 throw new Exception("Opção inválida.");
                             }
@@ -85,11 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // Define data de devolução (14 dias)
                         $data_devolucao = date('Y-m-d', strtotime('+14 days'));
 
-                        // Insere o empréstimo
-                        $sql_emp = "INSERT INTO emprestimo (id_usuario, data_devolucao_prevista, status) 
-                                    VALUES (:id_usuario, :data_devolucao, 'emprestado')";
+                        // Insere o empréstimo com id_funcionario
+                        $sql_emp = "INSERT INTO emprestimo (id_usuario, id_funcionario, data_devolucao_prevista, status) 
+                                    VALUES (:id_usuario, :id_funcionario, :data_devolucao, 'emprestado')";
                         $stmt_emp = $pdo->prepare($sql_emp);
                         $stmt_emp->bindParam(':id_usuario', $id_usuario_emprestimo, PDO::PARAM_INT);
+                        $stmt_emp->bindParam(':id_funcionario', $id_funcionario, PDO::PARAM_INT);
                         $stmt_emp->bindParam(':data_devolucao', $data_devolucao, PDO::PARAM_STR);
                         $stmt_emp->execute();
                         $id_emprestimo = $pdo->lastInsertId();
@@ -111,7 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         $pdo->commit();
 
-                        // Simula envio de email de confirmação
                         $sucesso = "Empréstimo realizado com sucesso! Devolução prevista para " . date('d/m/Y', strtotime($data_devolucao));
 
                     } catch (Exception $e) {
