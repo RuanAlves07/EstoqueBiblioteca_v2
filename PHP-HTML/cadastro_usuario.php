@@ -10,8 +10,6 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-
-
 // Recupera mensagens da sessão
 $erro = $_SESSION['erro'] ?? null;
 $sucesso = $_SESSION['sucesso'] ?? null;
@@ -23,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
     $senha = trim($_POST['senha']);
     $id_perfil = $_POST['id_perfil'];
-
+    
     // Validação básica
     if (empty($nome) || empty($email) || empty($senha) || empty($id_perfil)) {
         $_SESSION['erro'] = "Todos os campos são obrigatórios e o e-mail deve ser válido.";
@@ -40,6 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
+        $pdo->beginTransaction();
+        
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO usuario (nome, email, senha, id_perfil) VALUES (:nome, :email, :senha, :id_perfil)";
@@ -50,13 +50,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':id_perfil', $id_perfil);
 
         $stmt->execute();
+        $id_usuario = $pdo->lastInsertId();
 
+        // Se for funcionário, insere na tabela funcionario também
+        if ($id_perfil == 3) {
+            $nome_completo = trim($_POST['nome_completo']);
+            $cpf = trim($_POST['cpf']);
+            $telefone = trim($_POST['telefone']);
+            $cargo = trim($_POST['cargo']);
+            $data_admissao = trim($_POST['data_admissao']);
+
+            // Validação dos campos adicionais
+            if (empty($nome_completo) || empty($cpf) || empty($telefone) || empty($cargo) || empty($data_admissao)) {
+                throw new Exception("Todos os campos de funcionário são obrigatórios.");
+            }
+
+            $sql_func = "INSERT INTO funcionario (id_funcionario, nome_completo, cpf, cargo, telefone, data_admissao) 
+                         VALUES (:id_funcionario, :nome_completo, :cpf, :cargo, :telefone, :data_admissao)";
+            $stmt_func = $pdo->prepare($sql_func);
+            $stmt_func->bindParam(':id_funcionario', $id_usuario);
+            $stmt_func->bindParam(':nome_completo', $nome_completo);
+            $stmt_func->bindParam(':cpf', $cpf);
+            $stmt_func->bindParam(':cargo', $cargo);
+            $stmt_func->bindParam(':telefone', $telefone);
+            $stmt_func->bindParam(':data_admissao', $data_admissao);
+            $stmt_func->execute();
+        }
+
+        $pdo->commit();
         $_SESSION['sucesso'] = "Usuário cadastrado com sucesso!";
         header("Location: cadastro_usuario.php");
         ob_end_clean();
         exit();
 
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        
         if ($e->getCode() == 23000 || strpos($e->getMessage(), 'uk_usuario_email') !== false) {
             $_SESSION['erro'] = "O e-mail <strong>" . htmlspecialchars($email) . "</strong> já está cadastrado.";
         } else {
@@ -77,6 +106,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Cadastro de Usuário</title>
     <link rel="stylesheet" href="../CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .funcionario-fields {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .funcionario-fields.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -89,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <center><div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div></center>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="" id="cadastroForm">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome do Usuário:</label>
                 <input type="text" class="form-control" id="nome" name="nome"
@@ -117,6 +158,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
 
+            <!-- Campos adicionais para Funcionário -->
+            <div class="funcionario-fields <?= ($_POST['id_perfil'] ?? '') == '3' ? 'show' : '' ?>" id="funcionarioFields">
+                <h4>Dados do Funcionário</h4>
+                <div class="mb-3">
+                    <label for="nome_completo" class="form-label">Nome Completo:</label>
+                    <input type="text" class="form-control" id="nome_completo" name="nome_completo"
+                           value="<?= htmlspecialchars($_POST['nome_completo'] ?? '') ?>">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="cpf" class="form-label">CPF:</label>
+                    <input type="text" class="form-control" id="cpf" name="cpf"
+                           value="<?= htmlspecialchars($_POST['cpf'] ?? '') ?>">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="telefone" class="form-label">Telefone:</label>
+                    <input type="text" class="form-control" id="telefone" name="telefone"
+                           value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="cargo" class="form-label">Cargo:</label>
+                    <input type="text" class="form-control" id="cargo" name="cargo"
+                           value="<?= htmlspecialchars($_POST['cargo'] ?? '') ?>">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="data_admissao" class="form-label">Data de Admissão:</label>
+                    <input type="date" class="form-control" id="data_admissao" name="data_admissao"
+                           value="<?= htmlspecialchars($_POST['data_admissao'] ?? '') ?>">
+                </div>
+            </div>
+
             <div class="text-center mt-3">
                 <button type="submit" class="btn btn-primary">Cadastrar</button>
                 <button type="reset" class="btn btn-danger">Cancelar</button>
@@ -126,6 +201,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
-    <script src="../JS/validacoes.js"></script>
+    <script>
+        // Mostrar/esconder campos de funcionário baseado no perfil selecionado
+        document.getElementById('id_perfil').addEventListener('change', function() {
+            const funcionarioFields = document.getElementById('funcionarioFields');
+            if (this.value == '3') {
+                funcionarioFields.classList.add('show');
+            } else {
+                funcionarioFields.classList.remove('show');
+            }
+        });
+
+        // Validação do formulário antes de enviar
+        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+            const perfil = document.getElementById('id_perfil').value;
+            if (perfil == '3') {
+                const nomeCompleto = document.getElementById('nome_completo').value;
+                const cpf = document.getElementById('cpf').value;
+                const telefone = document.getElementById('telefone').value;
+                const cargo = document.getElementById('cargo').value;
+                const dataAdmissao = document.getElementById('data_admissao').value;
+                
+                if (!nomeCompleto || !cpf || !telefone || !cargo || !dataAdmissao) {
+                    e.preventDefault();
+                    alert('Todos os campos de funcionário são obrigatórios!');
+                }
+            }
+        });
+
+        // Executa ao carregar a página para mostrar campos se já tiver selecionado funcionário
+        window.onload = function() {
+            const perfil = document.getElementById('id_perfil').value;
+            if (perfil == '3') {
+                document.getElementById('funcionarioFields').classList.add('show');
+            }
+        };
+    </script>
 </body>
 </html>

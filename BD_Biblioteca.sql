@@ -360,3 +360,14 @@ INSERT INTO `produto` (`titulo`, `isbn`, `id_categoria`, `id_autor`, `id_editora
 ('A Invenção da Querência', '978-85-359-2222-2', 1, 4, 2, 2023, '1ª edição', 5, 2),
 ('O Futuro da Humanidade', '978-85-8086-888-9', 8, 5, 4, 2022, '1ª edição', 7, 4),
 ('O Homem do Castelo Alto', '978-85-8086-999-0', 4, 6, 5, 2021, '1ª edição', 3, 5);
+
+-- Remover o AUTO_INCREMENT da tabela funcionario
+ALTER TABLE funcionario MODIFY id_funcionario INT NOT NULL;
+
+-- Garantir que a FK esteja correta
+ALTER TABLE funcionario 
+DROP FOREIGN KEY IF EXISTS fk_funcionario_usuario;
+
+ALTER TABLE funcionario 
+ADD CONSTRAINT fk_funcionario_usuario 
+FOREIGN KEY (id_funcionario) REFERENCES usuario(id_usuario) ON DELETE CASCADE;
