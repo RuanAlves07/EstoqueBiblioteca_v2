@@ -58,7 +58,7 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <center><div class="alert alert-info">Você ainda não fez nenhum empréstimo.</div></center>
         <?php else: ?>
             <table class="table table-striped">
-                <thead class="table-primary">
+                <thead>
                     <tr>
                         <th>Usuário</th>
                         <th>ID do Livro</th>
