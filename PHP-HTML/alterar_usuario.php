@@ -143,9 +143,8 @@ else {
                 <select name="id_perfil" id="id_perfil" class="form-control" 
                     <?= $perfil_logado == 4 ? 'disabled' : '' ?> required>
                     <option value="1" <?= $usuario['id_perfil'] == 1 ? 'selected' : '' ?>>Administrador</option>
-                    <option value="2" <?= $usuario['id_perfil'] == 2 ? 'selected' : '' ?>>Gerente</option>
-                    <option value="3" <?= $usuario['id_perfil'] == 3 ? 'selected' : '' ?>>Operador</option>
-                    <option value="4" <?= $usuario['id_perfil'] == 4 ? 'selected' : '' ?>>Cliente</option>
+                    <option value="2" <?= $usuario['id_perfil'] == 2 ? 'selected' : '' ?>>Superior</option>
+                    <option value="3" <?= $usuario['id_perfil'] == 3 ? 'selected' : '' ?>>Funcionário</option>
                 </select>
                 <?php if ($perfil_logado == 4): ?>
                     <input type="hidden" name="id_perfil" value="4">
