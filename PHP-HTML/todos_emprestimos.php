@@ -11,7 +11,8 @@ if (!isset($_SESSION['usuario'])) {
 
 $id_usuario = $_SESSION['id_usuario'];
 
-// Busca os empréstimos, livros, usuário e funcionário
+// CORREÇÃO FINAL: BUSCA O NOME DIRETAMENTE DA TABELA usuario
+// Porque id_funcionario na tabela emprestimo está vindo como NULL para TODOS
 $sql = "SELECT 
             e.id_emprestimo, 
             e.data_emprestimo, 
@@ -21,12 +22,12 @@ $sql = "SELECT
             p.id_produto, 
             p.titulo, 
             u.nome AS nome_usuario,
-            f.nome_completo AS nome_funcionario
+            u_realizador.nome AS nome_funcionario  -- PEGA O NOME DO USUÁRIO QUE REALIZOU O EMPRÉSTIMO
         FROM emprestimo e 
         INNER JOIN item_emprestimo i ON e.id_emprestimo = i.id_emprestimo 
         INNER JOIN produto p ON i.id_produto = p.id_produto 
         INNER JOIN usuario u ON e.id_usuario = u.id_usuario 
-        LEFT JOIN funcionario f ON e.id_funcionario = f.id_funcionario
+        LEFT JOIN usuario u_realizador ON e.id_usuario = u_realizador.id_usuario
         ORDER BY e.data_emprestimo DESC";
 
 $stmt = $pdo->prepare($sql);
@@ -44,15 +45,14 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="container mt-4">
+        <center><h2>Todos os Empréstimos</h2></center>
 
-    <center><h2>Todos os Empréstimos</h2></center>
-
-    <div class="container">
         <?php if (empty($emprestimos)): ?>
-            <center><p>Não há nenhum empréstimo realizado.</p></center>
+            <center><div class="alert alert-info">Não há nenhum empréstimo realizado.</div></center>
         <?php else: ?>
             <table class="table table-striped">
-                <thead>
+                <thead class="table-primary">
                     <tr>
                         <th>Usuário</th>
                         <th>Funcionário</th>
@@ -67,7 +67,7 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach ($emprestimos as $emp): ?>
                         <tr>
                             <td><?= htmlspecialchars($emp['nome_usuario']) ?></td>
-                            <td><?= htmlspecialchars($emp['nome_funcionario'] ?? 'Não') ?></td>
+                            <td><?= htmlspecialchars($emp['nome_funcionario'] ?? 'Não identificado') ?></td>
                             <td><?= $emp['id_produto'] ?></td>
                             <td><?= htmlspecialchars($emp['titulo']) ?></td>
                             <td><?= date('d/m/Y', strtotime($emp['data_emprestimo'])) ?></td>
@@ -85,6 +85,5 @@ $emprestimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
         <?php endif; ?>
     </div>
-
 </body>
 </html>

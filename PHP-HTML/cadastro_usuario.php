@@ -235,6 +235,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById('funcionarioFields').classList.add('show');
             }
         };</script>
-    
+    <script src="../JS/validacoes.js"></script>
 </body>
 </html>

@@ -257,3 +257,7 @@ Para: admin@biblioteca.com
 Olá! Sua nova senha temporária é: bqrJt6Y1
 
 ----------------------
+Para: admin@biblioteca.com
+Olá! Sua nova senha temporária é: DtRQdpfz
+
+----------------------
