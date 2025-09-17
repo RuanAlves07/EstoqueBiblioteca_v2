@@ -169,13 +169,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 <div class="mb-3">
                     <label for="cpf" class="form-label">CPF:</label>
-                    <input type="text" class="form-control" id="cpf" name="cpf"
+                    <input type="text" class="form-control" id="cpf" name="cpf" maxlength="14"
                            value="<?= htmlspecialchars($_POST['cpf'] ?? '') ?>">
                 </div>
                 
                 <div class="mb-3">
                     <label for="telefone" class="form-label">Telefone:</label>
-                    <input type="text" class="form-control" id="telefone" name="telefone"
+                    <input type="text" class="form-control" id="telefone" name="telefone" maxlength="15"
                            value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>">
                 </div>
                 
@@ -201,8 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
-    <script>
-        // Mostrar/esconder campos de funcionário baseado no perfil selecionado
+    <script>        // Mostrar/esconder campos de funcionário baseado no perfil selecionado
         document.getElementById('id_perfil').addEventListener('change', function() {
             const funcionarioFields = document.getElementById('funcionarioFields');
             if (this.value == '3') {
@@ -235,8 +234,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (perfil == '3') {
                 document.getElementById('funcionarioFields').classList.add('show');
             }
-        };
-    </script>
-    <script src="../JS/validacoes.js"></script>
+        };</script>
+    
 </body>
 </html>

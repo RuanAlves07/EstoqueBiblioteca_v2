@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        value="<?= htmlspecialchars($_POST['nome_completo'] ?? '') ?>" required>
 
                 <label for="cpf">CPF:</label>
-                <input type="text" id="cpf" name="cpf"
+                <input type="text" id="cpf" name="cpf" maxlength="14"
                        value="<?= htmlspecialchars($_POST['cpf'] ?? '') ?>" required>
 
                 <label for="cargo" >cargo:</label>
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         value="<?= htmlspecialchars($_POST['cargo'] ?? '') ?>" required>
 
                 <label for="telefone">Telefone:</label>
-                <input type="text" id="telefone" name="telefone"
+                <input type="text" id="telefone" name="telefone" maxlength="15"
                        value="<?= htmlspecialchars($_POST['telefone'] ?? '') ?>" required>
 
                 <label for="data_admissao" >Data de Admissão:</label>

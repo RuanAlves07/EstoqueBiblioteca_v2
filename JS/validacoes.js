@@ -300,3 +300,38 @@ function validarSenhaForte($senha) {
     
     return true;
 }
+
+        // Mostrar/esconder campos de funcionário baseado no perfil selecionado
+        document.getElementById('id_perfil').addEventListener('change', function() {
+            const funcionarioFields = document.getElementById('funcionarioFields');
+            if (this.value == '3') {
+                funcionarioFields.classList.add('show');
+            } else {
+                funcionarioFields.classList.remove('show');
+            }
+        });
+
+        // Validação do formulário antes de enviar
+        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+            const perfil = document.getElementById('id_perfil').value;
+            if (perfil == '3') {
+                const nomeCompleto = document.getElementById('nome_completo').value;
+                const cpf = document.getElementById('cpf').value;
+                const telefone = document.getElementById('telefone').value;
+                const cargo = document.getElementById('cargo').value;
+                const dataAdmissao = document.getElementById('data_admissao').value;
+                
+                if (!nomeCompleto || !cpf || !telefone || !cargo || !dataAdmissao) {
+                    e.preventDefault();
+                    alert('Todos os campos de funcionário são obrigatórios!');
+                }
+            }
+        });
+
+        // Executa ao carregar a página para mostrar campos se já tiver selecionado funcionário
+        window.onload = function() {
+            const perfil = document.getElementById('id_perfil').value;
+            if (perfil == '3') {
+                document.getElementById('funcionarioFields').classList.add('show');
+            }
+        };
